@@ -1,0 +1,5 @@
+D:\workspace\WWW\shopwind.byhh.com>git add -A
+
+D:\workspace\WWW\shopwind.byhh.com>git commit -m 'inits';
+
+D:\workspace\WWW\shopwind.byhh.com>git push -u origin master
