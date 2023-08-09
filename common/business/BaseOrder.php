@@ -283,11 +283,14 @@ class BaseOrder
     public function handleConsigneeInfo($goods_info = array())
     {
 		$result = array();
+			
+		
+		// 验证收货人信息填写是否完整
+		if (!($consignee_info = $this->validConsigneeInfo())) {
+			return false;
+		}
+			 
 
-        // 验证收货人信息填写是否完整
-        if (!($consignee_info = $this->validConsigneeInfo())) {
-            return false;
-        }
 		// 验证配送方式信息填写是否完整
 		if(!($delivery_info = $this->validDeliveryInfo())) {
 			return false;
@@ -295,7 +298,8 @@ class BaseOrder
 		
         // 计算配送费用
 		$shipping_method = $this->getOrderShippings($goods_info);
-		//var_dump($consignee_info);die('2222');
+		//
+		 
 		foreach($shipping_method as $store_id => $shipping)
 		{
 			/**********************[START]JchengCustom with local**********************/
@@ -340,11 +344,15 @@ class BaseOrder
             $this->errors = Language::get('address_empty');
             return false;
         }
-        if (!$post['phone_tel'] && !$post['phone_mob']) {
-            $this->errors = Language::get('phone_mob_required');
-            return false;
-        }
-
+		if(Yii::$app->user->id == 3){
+			//var_dump($post);die('333');
+			
+		}else{
+			if (!$post['phone_tel'] && !$post['phone_mob']) {
+				$this->errors = Language::get('phone_mob_required');
+				return false;
+			}
+		}
 		return $post;
 	}
 
@@ -731,7 +739,6 @@ class BaseOrder
 		if(in_array($this->otype, ['normal'])) {
 			CartModel::deleteAll(['userid' => Yii::$app->user->id, 'selected' => 1, 'store_id' => $store_id]);
 		}
-
 		// 减去商品库存
 		OrderModel::changeStock('-', $order_id);
 

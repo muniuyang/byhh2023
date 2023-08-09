@@ -68,11 +68,23 @@ class OrderController extends \common\controllers\BaseUserController
 	private function build($otype = 'normal', $redirect = null)
 	{
 		$get = Basewind::trimAll(Yii::$app->request->get(), true, ['store_id', 'id']);
-	
-		//  收货地址判断
-		if(!AddressModel::find()->where(['userid' => Yii::$app->user->id])->exists()) {
-			return Message::warning(Language::get('please_add_address'), false, ['label' => Language::get('add_address'), 'url' => Url::toRoute(['my_address/index', 'redirect' => $redirect])]);
+
+		$userid = Yii::$app->user->id;//$this->params['visitor']['userid']
+		/*********************[START]JchengCustom with local**********************/
+		// var_dump($userid);die('dddd');
+		if($userid ==3){
+			//  收货地址判断
+			if(!AddressModel::find()->exists()) {
+			//	return Message::warning(Language::get('please_add_address'), false, ['label' => Language::get('add_address'), 'url' => Url::toRoute(['my_address/index', 'redirect' => $redirect])]);
+			} 
+		}else{
+			//  收货地址判断
+			if(!AddressModel::find()->where(['userid' => $userid])->exists()) {
+				return Message::warning(Language::get('please_add_address'), false, ['label' => Language::get('add_address'), 'url' => Url::toRoute(['my_address/index', 'redirect' => $redirect])]);
+			}
 		}
+		/**********************[END]JchengCustom with local**********************/
+		
 		
 		$model = new \frontend\models\OrderForm(['otype' => $otype]);
 		if(($goods_info = $model->getGoodsInfo($get)) === false) {
@@ -83,17 +95,18 @@ class OrderController extends \common\controllers\BaseUserController
 		if ($this->visitor['store_id'] && in_array($this->visitor['store_id'], $goods_info['storeIds'])) {
 			return Message::warning(Language::get('can_not_buy_yourself'));
 		}
+		
 		//var_dump($goods_info);die;
 		if(!Yii::$app->request->isPost)
 		{
 			// 获取订单模型
             $order_type = Business::getInstance('order')->build($otype);
-			
             // 获取表单数据
             if(($form = $order_type->formData($goods_info)) === false) {
 				return Message::warning($order_type->errors);
 			}
-			//var_dump($form);
+			//var_dump($form);die('form_next');
+			
 			$this->params = array_merge($this->params, ['goods_info' => $goods_info, 'redirect' => $redirect], $form);
 			//var_dump($this->params);die;
 			$this->params['_foot_tags'] = Resource::import([
@@ -115,7 +128,7 @@ class OrderController extends \common\controllers\BaseUserController
 		else
 		{
 			$post = Basewind::trimAll(Yii::$app->request->post(), true);
-			//var_dump($post);
+			//var_dump($post);die;
 	 
 			// 获取订单模型
             $order_type = Business::getInstance('order')->build($otype, $post);
@@ -123,7 +136,6 @@ class OrderController extends \common\controllers\BaseUserController
 			$result = $order_type->submit(array(
 				'goods_info' => $goods_info
 			));
-			//var_dump($goods_info);die('333');
 			//var_dump($result);die('555');
 			if(empty($result)) {
 				return Message::warning($order_type->errors);

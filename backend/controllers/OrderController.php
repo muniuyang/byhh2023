@@ -64,11 +64,12 @@ class OrderController extends \common\controllers\BaseAdminController
 			//$query = OrderModel::find()->select('order_id,order_sn,buyer_name,seller_name as store_name,order_amount,payment_name,status,add_time,pay_time,finished_time');
 			//$query = $this->getConditions($post, $query)->orderBy(['order_id' => SORT_DESC]);
 			
-			$query = OrderModel::find()->alias('o')->select('o.order_id,o.order_sn,o.buyer_name,o.seller_name as store_name,o.order_amount,o.payment_name,o.status,o.add_time,o.pay_time,o.finished_time,oe.signature as real_name');
+			$query = OrderModel::find()->alias('o')->select('o.order_id,o.order_sn,o.buyer_name,o.seller_name as store_name,o.order_amount,o.payment_name,o.status,o.add_time,o.pay_time,o.finished_time,
+			,obi.real_name');//oe.signature as real_name
 			$query = $this->getConditions($post, $query)
-			->joinWith('orderExtm oe', false)
+			//->joinWith('orderExtm oe', false)
+			->joinWith('orderBuyerInfo obi', false)
 			->orderBy(['o.order_id' => SORT_DESC]);
-			//->orderBy(['order_id' => SORT_DESC]);
 			
 			$page = Page::getPage($query->count(), $post->limit ? $post->limit : 10);
 			$list = $query->offset($page->offset)->limit($page->limit)->asArray()->all();
@@ -220,8 +221,11 @@ class OrderController extends \common\controllers\BaseAdminController
 		$post = Basewind::trimAll(Yii::$app->request->get(), true);
 		if($post->id) $post->id = explode(',', $post->id);
 		
-		$query = OrderModel::find()->alias('o')->select('o.order_id,o.order_sn,o.buyer_name,o.seller_name as store_name,o.order_amount,o.status,o.add_time,o.pay_time,o.ship_time,o.finished_time,o.payment_name,o.express_no,o.postscript,o.pay_message,oe.consignee,oe.region_name,oe.address,oe.phone_mob')
+		$query = OrderModel::find()->alias('o')->select('o.order_id,o.order_sn,o.buyer_name,o.seller_name as store_name,
+		o.order_amount,o.status,o.add_time,o.pay_time,o.ship_time,o.finished_time,o.payment_name,o.express_no,o.postscript,o.pay_message,
+		oe.consignee,oe.region_name,oe.address,oe.phone_mob')
 			->joinWith('orderExtm oe', false)
+			//->joinWith('orderBuyerInfo obi', false)
 			->orderBy(['o.order_id' => SORT_DESC]);
 		if(!empty($post->id)) {
 			$query->andWhere(['in', 'o.order_id', $post->id]);

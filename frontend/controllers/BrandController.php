@@ -80,9 +80,14 @@ class BrandController extends \common\controllers\BaseMallController
 	{
 		$post = Basewind::trimAll(Yii::$app->request->get(), true, ['id', 'page', 'pageper']);
 		
+		$brand = BrandModel::find()->where(['brand_id' => $post->id])->asArray()->one();
+		if(empty($brand)) {
+			return Message::warning(Language::get('no_such_brand'));
+		}
+		
 		if(Yii::$app->request->isAjax)
 		{
-			$query = GoodsModel::find()->where(['if_show' => 1, 'closed' => 0, 'brand_id' => $post->id])->joinWith('goodsStatistics gst',false)->orderBy(['sales' => SORT_DESC]);
+			$query = GoodsModel::find()->where(['if_show' => 1, 'closed' => 0, 'brand' => $brand['brand_name']])->joinWith('goodsStatistics gst',false)->orderBy(['sales' => SORT_DESC]);
 			$page = Page::getPage($query->count(), $post->pageper);		
 			$goodsList = $query->offset($page->offset)->limit($page->limit)->asArray()->all();
 			
@@ -91,13 +96,9 @@ class BrandController extends \common\controllers\BaseMallController
 		}
 		else
 		{			
-			$this->params['collects'] = CollectModel::find()->where(['item_id' => $post->id,  'type' => 'brand'])->count();
-			$this->params['goods_count'] = GoodsModel::find()->select('goods_id')->where(['if_show' => 1, 'closed' => 0, 'brand_id' => $post->id])->count();
+			$this->params['collects'] = CollectModel::find()->where(['item_id' => $post->id, 'type' => 'brand'])->count();
+			$this->params['goods_count'] = GoodsModel::find()->select('goods_id')->where(['if_show' => 1, 'closed' => 0, 'brand' => $brand['brand_name']])->count();
 			
-			$brand = BrandModel::find()->where(['brand_id' => $post->id])->asArray()->one();
-			if(empty($brand)) {
-				return Message::warning(Language::get('no_such_brand'));
-			}
 			$this->params['brand'] = $brand;
 			$this->params['gcategories'] = GcategoryModel::getGroupGcategory();
 	

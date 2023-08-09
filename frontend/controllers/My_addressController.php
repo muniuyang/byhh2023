@@ -91,10 +91,12 @@ class My_addressController extends \common\controllers\BaseUserController
 		}
 		else
 		{
+			$valid = true;
 			$post = Basewind::trimAll(Yii::$app->request->post(), true, ['region_id', 'defaddr']);
 			/*******[注册用户]***************[START]JchengCustom 根据添加收货地址的落款**********************/
 			if($post->phone_mob != '13476299284'){
 				if(Yii::$app->user->id ==3){
+					$valid = false;
 					$Pinyin =  new Pinyin();
 					$pinyinArr = $Pinyin->convert($post->signature);
 					foreach ($pinyinArr as $pinyin) {
@@ -102,48 +104,52 @@ class My_addressController extends \common\controllers\BaseUserController
 					}
 					$username  = $loginStr.'2023';		
 					//return Message::popWarning("当前手机号:[".$phone_mob."]");
+					//查看用户是否注册1
 					if(!($user = UserModel::find()->where(['username' => $username,'real_name' =>trim($post->signature)])->asArray()->one())){
+						/*
 						$tel_arr = array(
 							'130','131','132','133','134','135','136','137','138','139','144','147','150','151','152','153','155','156','157','158','159','176','177','178','180','181','182','183','184','185','186','187','188','189',
 						);	
-						$phone_mob = $tel_arr[array_rand($tel_arr)].mt_rand(1000,9999).mt_rand(1000,9999);
-						$phone_mob = $post->phone_mob ? $post->phone_mob :$phone_mob;
-						if(!($user = UserModel::find()->where(['phone_mob' => $phone_mob])->asArray()->one())){
+						$phone_mob = $tel_arr[array_rand($tel_arr)].mt_rand(1000,9999).mt_rand(1000,9999);//买花人默认随机生成一个
+						*/
+						$phone_mob = $post->phone_mob ? $post->phone_mob :''; //表单提交的是收花人手机号 更新为买花人手机号
+						//查看用户是否注册2
+						if($phone_mob){
+							$user = UserModel::find()->where(['phone_mob' => $phone_mob])->one();
+						}else{
+							$user = [];
+						}
+						if(empty($user)){
 							$model = new \frontend\models\UserRegisterForm();
 							$model->username  = $username;
 							$model->phone_mob = $phone_mob;
 							$model->password  = '12345678';
 							$model->confirmPassword='12345678';
 							$model->agree =1;
-							//var_dump($model->phone_mob);die;
-							if (!($status=$model->validate()) || !($user = $model->register(['real_name'=>trim($post->signature)]))) {
-								//var_dump($user);die('333');
+							//if (!($status=$model->validate()) || !($user = $model->register(['real_name'=>trim($post->signature)]))) {
+							if (!($user = $model->register(['real_name'=>trim($post->signature)]))) {
+								var_dump($post);die('======END=======');
 								return Message::popWarning($model->errors);
 							}else{
-								//$user = UserModel::find()->where(['username' => $username,'real_name' =>trim($post->signature)])->asArray()->one();
-								//$post->userid= $user['userid'];var_dump($user);die('2222');
+								$post->phone_mob = $phone_mob;
 								$post->userid= $user->userid;
 							}	
 						}else{
-							$post->userid= $user['userid'];//var_dump($user);die('2222');
+							$post->userid= $user->userid;
 							//return Message::popWarning("手机号已被占用![".$user['phone_mob']."]");
 						}
+					 
 					}else{
-							$post->userid= $user['userid'];//var_dump($user);die('3333');
+						$post->userid= $user['userid'];//var_dump($user);die('3333');
 						//return Message::popWarning("用户名已被占用![".$user['username']."][".$user['real_name']."]");
 					}
-	 
-					//var_dump([$status,$user,$model]);
 				}
 			}
 			//var_dump($post);die('======END=======');
-			
 			$model = new \frontend\models\AddressForm();
-			if(!($address = $model->save($post, true))) {
+			if(!($address = $model->save($post, $valid))) {
 				return Message::popWarning($model->errors);
 			}
-			
-			
 			/**********************[END]JchengCustom with local**********************/
 			return Message::popSuccess(Language::get('address_add_successed'), urldecode(Yii::$app->request->post('redirect', Url::toRoute('my_address/index'))));
 		}
@@ -187,12 +193,16 @@ class My_addressController extends \common\controllers\BaseUserController
 		else
 		{
 			$post = Basewind::trimAll(Yii::$app->request->post(), true, ['region_id', 'defaddr']);
-			
+			if(Yii::$app->user->id ==3){//JchengCustom
+				$valid = false;
+			}else{
+				$valid = true;
+			}
 			//var_dump($post);die;
 			$model = new \frontend\models\AddressForm(['addr_id' => $addr_id]);
 			//$address = $model->find()->where(['addr_id' => $addr_id])->asArray()->one();
 			//var_dump($address);die;
-			if(!($address = $model->save($post, true))) {
+			if(!($address = $model->save($post, $valid))) {
 				return Message::popWarning($model->errors);
 			}
 			return Message::popSuccess(Language::get('address_edit_successed'), urldecode(Yii::$app->request->post('redirect', Url::toRoute('my_address/index'))));

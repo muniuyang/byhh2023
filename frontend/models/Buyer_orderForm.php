@@ -36,11 +36,15 @@ class Buyer_orderForm extends Model
 	{
 		/**********************[START]JchengCustom with local**********************/
 		$userid = Yii::$app->user->id;
-		if($userid ==3 ){	
-			$query = OrderModel::find()->alias('o')->select('o.*,oe.shipping_fee')->orderBy(['o.order_id' => SORT_DESC])->joinWith('orderExtm oe', false);
+		if($userid ==3 ){
+			$query = OrderModel::find()->alias('o')->select('o.*,oe.shipping_fee,obi.real_name')
+			->orderBy(['o.order_id' => SORT_DESC])
+			->joinWith('orderExtm oe', false)
+			->joinWith('orderBuyerInfo obi', false);
+			
 		}else{
-		$query = OrderModel::find()->alias('o')->select('o.*,oe.shipping_fee')->where(['buyer_id' => $userid])->orderBy(['o.order_id' => SORT_DESC])->joinWith('orderExtm oe', false);
-
+			$query = OrderModel::find()->alias('o')->select('o.*,oe.shipping_fee')->where(['buyer_id' => $userid])
+			->orderBy(['o.order_id' => SORT_DESC])->joinWith('orderExtm oe', false);
 		}
 		/**********************[START]JchengCustom with local**********************/
 		

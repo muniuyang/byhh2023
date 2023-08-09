@@ -120,7 +120,7 @@ class UserRegisterForm extends Model
 		/**********************[START]JchengCustom **********************/
 		$userid = Yii::$app->user->id;
 		if($userid == 3){
-			var_dump($user);die;
+			//var_dump($user);die;
 			return $user;
 		}
 		/**********************[END]JchengCustom with local**********************/

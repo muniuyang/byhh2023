@@ -49,7 +49,7 @@ class Buyer_orderController extends \common\controllers\BaseUserController
 		
 		$model = new \frontend\models\Buyer_orderForm();
 		list($orders, $page) = $model->formData($post, 20);
-			
+		//var_dump($orders);die;
 		$this->params['orders'] = $orders;
 		$this->params['pagination'] = Page::formatPage($page);
 		$this->params['filtered'] = $model->getConditions($post);
@@ -66,6 +66,12 @@ class Buyer_orderController extends \common\controllers\BaseUserController
 		$this->params['_usermenu'] = Page::setMenu('my_order', $curmenu);
 		
 		$this->params['page'] = Page::seo(['title' => Language::get($curmenu)]);
+		
+		//var_dump($this->params['lang']);die;
+		if(Yii::$app->user->id ==3){//Yii::$app->user->id
+			$this->params['redirect'] = Url::toRoute(['buyer_order/view', 'order_id' => $post->order_id]);
+			return $this->render('../buyer_order.nearindex.html', $this->params); 
+		}
         return $this->render('../buyer_order.index.html', $this->params);
 	}
 	
@@ -75,7 +81,7 @@ class Buyer_orderController extends \common\controllers\BaseUserController
 		
 		$model = new \frontend\models\Buyer_orderViewForm();
 		if(!($orderInfo = $model->formData($post))) {
-			var_dump($orderInfo);die('333');
+			//var_dump($orderInfo);die('333');
 			return Message::warning($model->errors);
 		}
 		$this->params['order'] = $orderInfo;

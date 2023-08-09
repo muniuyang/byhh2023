@@ -43,7 +43,6 @@ class NormalOrder extends BaseOrder
 
 		// 获取我的收货地址
 		$result['my_address'] = $this->getMyAddress();
-
 		// 配送方式
 		$shipping_method = $this->getOrderShippings($goods_info);
 		$result['shipping_methods'] = $shipping_method;
@@ -64,6 +63,8 @@ class NormalOrder extends BaseOrder
 			$result['regions'] = RegionModel::find()->select('region_id,region_name')->where(['parent_id' => 0])->indexBy('region_id')->column();
 
 			if (!($shipping_method = $this->getOrderShippings($goods_info))) {
+				
+				
 				$this->errors = Language::get('no_shipping_methods');
 				return false;
 			}
@@ -98,12 +99,13 @@ class NormalOrder extends BaseOrder
 		if (!($base_info = parent::handleOrderInfo($goods_info))) {
 			return false;
 		}
- 
+
 		// 处理订单收货人信息
 		if (!($consignee_info = $this->handleConsigneeInfo($goods_info))) {
 			return false;
 		}
- 
+
+  
 		/*****[注册用户]*****************[START]JchengCustom with local[提交订单替人下单]**********************/
 		if (!($base_info = parent::handleUserInsert($base_info, $consignee_info))) {
 			return false;
