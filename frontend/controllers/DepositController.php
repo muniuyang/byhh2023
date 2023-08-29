@@ -48,9 +48,11 @@ class DepositController extends \common\controllers\BaseUserController
 
     public function actionIndex()
     {
+
 		if(!($account = DepositAccountModel::find()->where(['userid' => Yii::$app->user->id])->asArray()->one())) {
 			$account = ArrayHelper::toArray(DepositAccountModel::createDepositAccount(Yii::$app->user->id));
 		}
+		
 		$this->params['deposit_account'] = $account;
 		
 		$query = BankModel::find()->where(['userid' => Yii::$app->user->id]);

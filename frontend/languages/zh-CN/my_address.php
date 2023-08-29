@@ -12,6 +12,7 @@ return array(
     'region_desc'  => '请选择您所在的地区',
     'address_desc'  => '不必重复填写地区',
 	'signature_desc'  => '卡片落款人信息*必填项*',
+	'subscriber_desc'  => '不填默认是落款人',
     'zipcode_desc'  => '如实填写您的邮政编码',
     'consignee_required'  => '请填写收货人姓名',
     'region_required'  => '请选择所在地区',

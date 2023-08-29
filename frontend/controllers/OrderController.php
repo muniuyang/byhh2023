@@ -75,7 +75,7 @@ class OrderController extends \common\controllers\BaseUserController
 		if($userid ==3){
 			//  收货地址判断
 			if(!AddressModel::find()->exists()) {
-			//	return Message::warning(Language::get('please_add_address'), false, ['label' => Language::get('add_address'), 'url' => Url::toRoute(['my_address/index', 'redirect' => $redirect])]);
+				return Message::warning(Language::get('please_add_address'), false, ['label' => Language::get('add_address'), 'url' => Url::toRoute(['my_address/index', 'redirect' => $redirect])]);
 			} 
 		}else{
 			//  收货地址判断

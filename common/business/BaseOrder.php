@@ -85,6 +85,7 @@ class BaseOrder
 	 */
 	public function insertOrder($order_info = array())
 	{
+		//var_dump($order_info);die;
 		$model = new OrderModel();
 		foreach($order_info as $key => $value) {
 			$model->$key = $value;
@@ -143,6 +144,7 @@ class BaseOrder
 	 */
 	public function insertOrderData($base_info = array(), $goods_info = array(), $consignee_info = array()) 
 	{
+		//var_dump($base_info);die('ddd');
 		$insertFail = 0;
 		$result = array();
 		foreach ($base_info as $store_id => $store) {
@@ -228,18 +230,26 @@ class BaseOrder
 		return $result;
     }
 	/**
-	 * JchengCustom根据地址落款信息signature添加新用户
+	 * JchengCustom根据订花人名称信息subscriber添加新用户
 	 */
 	public function handleUserInsert($base_info, $consignee_info)
 	{
          $consignee_info = array_values($consignee_info);
 		 $loginUid = Yii::$app->user->id;
-		 if(!$consignee_info[0]['signature']) return false;
+		 $consignee_info = $consignee_info[0];
+		
+		 if($consignee_info['subscriber']){
+			$subscriber = $consignee_info['subscriber'];
+		 }else{
+			$subscriber = $consignee_info['signature']; 
+		 }
+		 //var_dump($subscriber);die;
+		 if(!$subscriber) return false;
 		 $Pinyin =  new Pinyin();
 		 foreach($base_info as $store_id => $order)
 		 {
-			if($consignee_info[0]['signature'] && $loginUid ==3 ){//JchengCustomUser
-				$pinyinArr = $Pinyin->convert($consignee_info[0]['signature']);
+			if($subscriber && $loginUid ==3 ){//JchengCustomUser
+				/*$pinyinArr = $Pinyin->convert($subscriber);
 				foreach ($pinyinArr as $pinyin) {
 					$loginStr .= substr($pinyin, 0, 1);
 				}
@@ -248,33 +258,31 @@ class BaseOrder
 				$numArr2 = [1,2,3,4,5,6,7,8,9];
 				$numArr2 = array_rand($numArr2,2);
 				$username = $loginStr.'2023';
+				*/
+				$username = $subscriber;
 				$password = '12345678';
-				$phone_mob = '1'.implode('',$numArr2).implode('',$numArr8);
-
-
-
-					
 				if(!empty($username) && ($user = UserModel::find()->where(['username' => $username])->asArray()->one())) {
 					$base_info[$store_id]['buyer_id'] = $user['userid'];
 					$base_info[$store_id]['buyer_name'] = $user['username']; 
 					$base_info[$store_id]['buyer_email'] = $user['email'];	
 				}else{
 					$model = new \frontend\models\UserRegisterForm();
-					//$model->setAttributes($data);//$model->->attributes = $data;
 					$model->username  = $username;
-					$model->phone_mob = $phone_mob;
+					$model->phone_mob = $consignee_info['phone_mob'] ? $consignee_info['phone_mob'] :'';
 					$model->password  = $password;
 					$model->confirmPassword=$password;
 					$model->agree =1;
-					if ($model->validate() && ($user = $model->register(['real_name'=>$postscript]))) {
+					if ($user = $model->register(['real_name'=>$username])) {
 						$base_info[$store_id]['buyer_id'] =  $user->userid;
 						$base_info[$store_id]['buyer_name'] = $user->username;
 						$base_info[$store_id]['buyer_email'] = $user->email;
 					} 
+					//var_dump($model->errors);die;
 				}
 				 	
 			}
 		}
+		//var_dump($base_info);die;
 		return $base_info;
 	}
 	/**
@@ -304,6 +312,7 @@ class BaseOrder
 		{
 			/**********************[START]JchengCustom with local**********************/
 			//'signature' 	=>  $consignee_info['signature']
+			//'subscriber' 	=>  $consignee_info['subscriber'],
 			/**********************[END]JchengCustom with local**********************/
         	$result[$store_id] = array(
 				'consignee'     =>  $consignee_info['consignee'],
@@ -311,6 +320,7 @@ class BaseOrder
 				'region_name'   =>  $consignee_info['region_name'],
 				'address'       =>  $consignee_info['address'],
 				'signature' 	=>  $consignee_info['signature'],
+				'subscriber' 	=>  $consignee_info['subscriber'],
 				'zipcode'       =>  $consignee_info['zipcode'],
 				'phone_tel'     =>  $consignee_info['phone_tel'],
 				'phone_mob'     =>  $consignee_info['phone_mob'],

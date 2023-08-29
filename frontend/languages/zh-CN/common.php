@@ -184,6 +184,7 @@ return array(
     'region'      => '所在地区',
     'address'      => '详细地址',
 	'signature'      => '落款签名',
+	'subscriber'      => '订货人名称',
     'zipcode'      => '邮政编码',
     'phone'      => '电话/手机',
     'phone_tel'      => '电话号码',

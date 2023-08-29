@@ -190,11 +190,14 @@
 				<input type="checkbox" name="addr_id" value="{$address.addr_id}" {if $smarty.foreach.fe_address.first} checked="checked" {/if}/>
 				<b>{$address.region_name} ( {$address.consignee|escape} {$lang.shou} )</b> <ins class="deftip" {if $address.defaddr} style="display:block"{/if}>{$lang.default_addr}</ins>
 			</dt>
-			<dd class="addr-bd"> {$address.address|escape}  <br/>订货人:<span style="font-weight: bold;">{$address.signature|escape}</span>&nbsp;&nbsp;{$address.phone_mob|default:$address.phone_tel} 
+			<dd class="addr-bd"> {$address.address|escape}  <br/>落款:<span style="font-weight: bold;">{$address.signature|escape}</span>
+			&nbsp;&nbsp;{$address.phone_mob|default:$address.phone_tel} 
 			</dd>
 			<dd class="addr-toolbar">
 				<i class="curmarker"></i>
-				<a href="javascript:;" class="btn-modify"  ectype="dialog" dialog_id="my_address_edit" dialog_width="600" dialog_title="{$lang.edit_address}" uri="{url route='my_address/edit' redirect=$redirect addr_id=$address.addr_id}">{$lang.modify}</a>
+				订花人:<span style="font-weight: bold;">{$address.subscriber|escape}</span>
+				&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;<a href="javascript:;" class="btn-modify"  ectype="dialog" dialog_id="my_address_edit" dialog_width="600" dialog_title="{$lang.edit_address}" uri="{url route='my_address/edit' redirect=$redirect addr_id=$address.addr_id}">{$lang.modify}</a>
+				 
 			</dd>
 		</dl>
 		<!--{/foreach}-->

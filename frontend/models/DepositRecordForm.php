@@ -37,12 +37,17 @@ class DepositRecordForm extends Model
 			$this->errors = Language::get('no_records');
 			return false;
 		}
+		if(in_array(Yii::$app->user->id,Yii::$app->params['customRights'])){//权限判断[START]JchengCustom
 		
-		//  这笔交易既不是买家，也不是卖家，则认为当前用户跟这笔交易无关，无法访问交易信息
-		if(!in_array(Yii::$app->user->id, array($record['buyer_id'], $record['seller_id']))){
-			$this->errors = Language::get('no_priv_view_record');
-			return false;
+		}else{
+			//  这笔交易既不是买家，也不是卖家，则认为当前用户跟这笔交易无关，无法访问交易信息
+			if(!in_array(Yii::$app->user->id, array($record['buyer_id'], $record['seller_id']))){
+				$this->errors = Language::get('no_priv_view_record');
+				return false;
+			}	
 		}
+
+
 		
 		// 交易的对方
 		$record['partyInfo'] = DepositTradeModel::getPartyInfoByRecord(Yii::$app->user->id, $record);

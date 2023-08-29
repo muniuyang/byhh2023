@@ -35,9 +35,22 @@ class Buyer_orderCancelForm extends Model
 	
 	public function formData($post = null)
 	{
-		if(!$post->order_id || !($orders = OrderModel::find()->where(['in', 'order_id', explode(',', $post->order_id)])->andWhere(['buyer_id' => Yii::$app->user->id])->andWhere(['in', 'status', [Def::ORDER_SUBMITTED, Def::ORDER_PENDING]])->indexBy('order_id')->asArray()->all())) {
-			$this->errors = Language::get('no_such_order');
-			return false;
+		if(in_array(Yii::$app->user->id,Yii::$app->params['customRights'])){//权限判断[START]JchengCustom
+			if(!$post->order_id || !($orders = OrderModel::find()->where(['in', 'order_id', explode(',', $post->order_id)])
+			//->andWhere(['buyer_id' => Yii::$app->user->id])
+			->andWhere(['in', 'status', [Def::ORDER_SUBMITTED, Def::ORDER_PENDING]])
+			->indexBy('order_id')->asArray()->all())) {
+				$this->errors = Language::get('no_such_order');
+				return false;
+			}
+		}else{
+			if(!$post->order_id || !($orders = OrderModel::find()->where(['in', 'order_id', explode(',', $post->order_id)])
+			->andWhere(['buyer_id' => Yii::$app->user->id])
+			->andWhere(['in', 'status', [Def::ORDER_SUBMITTED, Def::ORDER_PENDING]])
+			->indexBy('order_id')->asArray()->all())) {
+				$this->errors = Language::get('no_such_order');
+				return false;
+			}	
 		}
 		return $orders;
 	}
@@ -65,7 +78,11 @@ class Buyer_orderCancelForm extends Model
 			// 记录订单操作日志
 			$model = new OrderLogModel();
 			$model->order_id = $order_id;
-			$model->operator = addslashes(Yii::$app->user->identity->username);
+			if(in_array(Yii::$app->user->id,Yii::$app->params['customRights'])){//权限判断[START]JchengCustom
+				$model->operator = $orderInfo['buyer_name'];
+			}else{
+				$model->operator = addslashes(Yii::$app->user->identity->username);
+			}
 			$model->order_status = Def::getOrderStatus($orderInfo['status']);
 			$model->changed_status = Def::getOrderStatus(Def::ORDER_CANCELED);
 			$model->remark = $post->remark ? $post->remark : $post->cancel_reason;

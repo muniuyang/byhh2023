@@ -108,23 +108,22 @@ class NormalOrder extends BaseOrder
   
 		/*****[注册用户]*****************[START]JchengCustom with local[提交订单替人下单]**********************/
 		if (!($base_info = parent::handleUserInsert($base_info, $consignee_info))) {
+			//var_dump($base_info);
 			return false;
 		}
 		/**********************[END]JchengCustom with local**********************/
-
+		//var_dump($base_info);die;
 		// 获取订单折扣信息
 		if (($discount_info = $this->getAllDiscountByPost($goods_info)) === false) {
 			return false;
 		}
-		//var_dump($base_info);die;
 
-		
 		// 检验折扣信息和订单总价的合理性
 		if (!isset($goods_info['integralExchange']['rate'])) $goods_info['integralExchange']['rate'] = 0;
 		if (!$this->checkAllDiscountForOrderAmount($base_info, $discount_info, $consignee_info, $goods_info['integralExchange']['rate'])) {
 			return false;
 		}
-		//var_dump($base_info);die('ddd');
+		
 		// 至此说明订单的信息都是可靠的，可以开始入库了
 		if(($result = parent::insertOrderData($base_info, $goods_info, $consignee_info)) === false) {
 			return false;

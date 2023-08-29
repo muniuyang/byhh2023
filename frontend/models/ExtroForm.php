@@ -70,7 +70,10 @@ class ExtroForm extends Model
 		$model->zipcode 	= $post->zipcode ? $post->zipcode : '';
 		$model->phone_tel	= $post->phone_tel ? $post->phone_tel : '';
 		$model->phone_mob 	= $post->phone_mob;
-		$model->signature 	= $post->signature;
+		/**********************[START]JchengCustom with local**********************/
+		$model->signature 	= $post->signature;//落款
+		$model->subscriber 	= $post->subscriber;//订花人
+		/**********************[START]JchengCustom with local**********************/
 		if(!$model->save()) {
 			$this->errors = $model->errors;
 			return false;

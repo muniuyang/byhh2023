@@ -34,7 +34,8 @@
           <!--{/foreach}--> 
 
           <div class="transportation">{$lang.carriage}&nbsp;:&nbsp;<span>{$order.orderExtm.shipping_fee|price_format}<strong>({$order.orderExtm.shipping_name|escape})</strong></span>{$lang.preference}&nbsp;:&nbsp;<span>{$order.discount|price_format}</span>{$lang.total_price}&nbsp;:&nbsp;<b>{$order.order_amount|price_format}</b></div>
-          <ul class="order_detail_list">
+			 
+		  <ul class="order_detail_list">
             <!--{if $order.payment_code}-->
             <li>{$lang.payment_name}&nbsp;:&nbsp;{$order.payment_name|escape}<!--{if $order.status eq Def::ORDER_PENDING}-->&nbsp;&nbsp;(&nbsp;<a href="{url route='cashier/index' order_id=$order.order_id}">{$lang.pay}</a>&nbsp;)<!--{/if}--></li>
             <!--{/if}--> 
@@ -52,14 +53,17 @@
             <li>{$lang.finished_time}&nbsp;:&nbsp;{$order.finished_time|date_format:"%Y.%m.%d %H:%M:%S"}</li>
             <!--{/if}-->
           </ul>
+		  
         </div>
       </div>
       <h3>{$lang.consigness}</h3>
       <div class="goods"> {$lang.consignee_address}&nbsp;:&nbsp;<span style="font-weight: bold;font-size:20px;">{$order.orderExtm.consignee|escape}</span>
-	  <!--{if $order.orderExtm.phone_mob}-->, &nbsp;{$order.orderExtm.phone_mob}<!--{/if}-->
-	  <!--{if $order.orderExtm.phone_tel}-->,&nbsp;{$order.orderExtm.phone_tel}<!--{/if}--> 
+	  <!--{if $order.orderExtm.phone_mob}-->, &nbsp;<span style="font-weight: bold;font-size:20px;">{$order.orderExtm.phone_mob}</span><!--{/if}-->
+	  <!--{if $order.orderExtm.phone_tel}-->,&nbsp;<span style="font-weight: bold;font-size:20px;">{$order.orderExtm.phone_tel}</span><!--{/if}--> 
         ,&nbsp;{$order.orderExtm.region_name|escape}&nbsp;<span style="font-weight: bold;font-size:20px;">{$order.orderExtm.address|escape} </span><br /><br />
 		{$lang.signature}&nbsp;:&nbsp;<span style="font-weight: bold;font-size:20px;">{$order.orderExtm.signature|escape} </span><br /><br />
+		{$lang.subscriber}&nbsp;:&nbsp;<span style="font-weight: bold;font-size:20px;">{$order.orderExtm.subscriber|escape} </span><br /><br />
+		
 		<form method="post" id="extro_form">
 			<input type="hidden" name="order_id" value="{$order.orderExtm.order_id}" checked="checked">
 		

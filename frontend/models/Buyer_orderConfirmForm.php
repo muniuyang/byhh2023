@@ -39,17 +39,34 @@ class Buyer_orderConfirmForm extends Model
 	
 	public function formData($post = null)
 	{
-		// 订单信息 
-		if(!$post->order_id || !($orderInfo = OrderModel::find()->where(['order_id' => $post->order_id, 'buyer_id' => Yii::$app->user->id])->andWhere(['in', 'status', [Def::ORDER_SHIPPED]])->indexBy('order_id')->asArray()->one())) {
-			$this->errors = Language::get('no_such_order');
-			return false;
-		}
 		
-		// 交易信息 
-		if(!($tradeInfo = DepositTradeModel::find()->where(['bizIdentity' => Def::TRADE_ORDER, 'bizOrderId' => $orderInfo['order_sn'], 'buyer_id' => Yii::$app->user->id])->asArray()->one())) {
-           	$this->errors = Language::get('no_such_order');
-			return false;
-        }
+		if(in_array(Yii::$app->user->id,Yii::$app->params['customRights'])){//权限判断[START]JchengCustom
+			// 订单信息
+			if(!$post->order_id || !($orderInfo = OrderModel::find()->where(['order_id' => $post->order_id])->andWhere(['in', 'status', [Def::ORDER_SHIPPED]])->indexBy('order_id')->asArray()->one())) {
+				$this->errors = Language::get('no_such_order');
+				return false;
+			}
+			
+			// 交易信息 
+			if(!($tradeInfo = DepositTradeModel::find()->where(['bizIdentity' => Def::TRADE_ORDER, 'bizOrderId' => $orderInfo['order_sn']])->asArray()->one())) {
+				$this->errors = Language::get('no_such_order');
+				return false;
+			}
+		}else{
+			// 订单信息
+			if(!$post->order_id || !($orderInfo = OrderModel::find()->where(['order_id' => $post->order_id, 'buyer_id' => Yii::$app->user->id])->andWhere(['in', 'status', [Def::ORDER_SHIPPED]])->indexBy('order_id')->asArray()->one())) {
+				$this->errors = Language::get('no_such_order');
+				return false;
+			}
+			
+			// 交易信息 
+			if(!($tradeInfo = DepositTradeModel::find()->where(['bizIdentity' => Def::TRADE_ORDER, 'bizOrderId' => $orderInfo['order_sn'], 'buyer_id' => Yii::$app->user->id])->asArray()->one())) {
+			   	$this->errors = Language::get('no_such_order');
+				return false;
+			}
+		}
+
+		
 		return array($orderInfo, $tradeInfo);
 	}
 	
@@ -116,7 +133,11 @@ class Buyer_orderConfirmForm extends Model
 		// 记录订单操作日志 
 		$model = new OrderLogModel();
 		$model->order_id = $orderInfo['order_id'];
-		$model->operator = addslashes(Yii::$app->user->identity->username);
+		if(in_array(Yii::$app->user->id,Yii::$app->params['customRights'])){//权限判断[START]JchengCustom
+			$model->operator = $orderInfo['buyer_name'];
+		}else{
+			$model->operator = addslashes(Yii::$app->user->identity->username);
+		}
 		$model->order_status = Def::getOrderStatus($orderInfo['status']);
 		$model->changed_status = Def::getOrderStatus(Def::ORDER_FINISHED);
 		$model->remark = Language::get('buyer_confirm');

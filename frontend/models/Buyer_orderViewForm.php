@@ -33,9 +33,10 @@ class Buyer_orderViewForm extends Model
 	
 	public function formData($post = null)
 	{
+		
 		/**********************[START]JchengCustom with local**********************/
 		$userid = Yii::$app->user->id;
-		if($userid ==3 ){	
+		if(in_array($userid,Yii::$app->params['customRights'])){
 			$orderInfo = OrderModel::find()->alias('o')
 			->select('o.order_id,o.buyer_id,o.seller_id,o.order_amount,o.discount,o.payment_code,o.payment_name,o.pay_message,o.pay_time,
 			o.ship_time,o.finished_time,o.express_no,o.postscript,o.status,o.order_sn,o.add_time as order_add_time,

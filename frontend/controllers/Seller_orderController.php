@@ -73,6 +73,10 @@ class Seller_orderController extends \common\controllers\BaseSellerController
 
 		$this->params['page'] = Page::seo(['title' => Language::get($curmenu)]);
 
+		if(in_array(Yii::$app->user->id,$this->params['customRights'])){//权限判断[START]JchengCustom 
+			$this->params['redirect'] = Url::toRoute(['seller_order/index', 'order_id' => $post->order_id]);
+			return $this->render('../seller_order.nearindex.html', $this->params); 
+		}
 		
         return $this->render('../seller_order.index.html', $this->params);
 	}
@@ -94,6 +98,17 @@ class Seller_orderController extends \common\controllers\BaseSellerController
 		$this->params['_usermenu'] = Page::setMenu('seller_order', 'order_detail');
 
 		$this->params['page'] = Page::seo(['title' => Language::get('order_detail')]);
+		
+		//var_dump($this->params);die;
+		if(in_array(Yii::$app->user->id,$this->params['customRights'])){//权限判断[START]JchengCustom 
+		
+			$this->params['_foot_tags'] = Resource::import([
+			'script' => 'jquery.ui/jquery.ui.js,jquery.ui/i18n/' . Yii::$app->language . '.js,jquery.plugins/jquery.validate.js,dialog/dialog.js,mlselection.js,user.js,jquery.plugins/jquery.form.js',
+			'style' =>  'jquery.ui/themes/smoothness/jquery.ui.css,dialog/dialog.css'
+			]);
+			$this->params['redirect'] = Url::toRoute(['seller_order/view', 'order_id' => $post->order_id]);
+			return $this->render('../seller_order.nearview.html', $this->params); 
+		}
         return $this->render('../seller_order.view.html', $this->params);
 	}
 	
@@ -116,6 +131,7 @@ class Seller_orderController extends \common\controllers\BaseSellerController
 		
 			// 当前用户中心菜单
 			//$this->params['_usermenu'] = Page::setMenu('seller_order', 'adjust_fee');
+			$this->params['redirect']  = Url::toRoute(['seller_order/view', 'order_id' => $post->order_id]);
 
 			$this->params['page'] = Page::seo(['title' => Language::get('adjust_fee')]);
 			return $this->render('../seller_order.adjust_fee.html', $this->params);
@@ -127,6 +143,7 @@ class Seller_orderController extends \common\controllers\BaseSellerController
 				return Message::popWarning($model->errors);
 			}
             return Message::popSuccess();
+			
         }
     }
 	

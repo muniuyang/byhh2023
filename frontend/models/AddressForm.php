@@ -83,7 +83,8 @@ class AddressForm extends Model
 		$model->phone_mob 	= $post->phone_mob;
 		$model->defaddr 	= $post->defaddr ? $post->defaddr : 0;
 		/**********************[START]JchengCustom with local**********************/
-		$model->signature 	= $post->signature;
+		$model->signature 	= $post->signature;//落款
+		$model->subscriber 	= $post->subscriber;//订花人
 		/**********************[START]JchengCustom with local**********************/
 		if(!$model->save()) {
 			$this->errors = $model->errors;
