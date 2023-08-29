@@ -270,12 +270,15 @@ class OrderController extends \common\controllers\BaseAdminController
 	{
 	
 		if($post->field == 'real_name'){
+			/*
 			$Pinyin =  new Pinyin();
 			$pinyinArr = $Pinyin->convert($post->search_name);
 			foreach ($pinyinArr as $pinyin) {
 				$loginStr .= substr($pinyin, 0, 1);
 			}
 			$username  = $loginStr.'2023';	
+			*/
+			$username = $post->search_name;
 			$post->field = 'buyer_name';
 			$post->search_name = $username;
 			//var_dump($username);die;

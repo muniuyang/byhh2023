@@ -53,6 +53,7 @@ class OrderExportForm extends Model
 
 		$amount = $quantity = 0;
 		$record_value = array();
+		//var_dump($list);die;
 		foreach($list as $key => $value)
     	{
 			$quantity++;
@@ -63,7 +64,7 @@ class OrderExportForm extends Model
 					$value[$k] = Timezone::localDate('Y/m/d H:i:s', $value[$k]);
 				}
 				if($k == 'address') {
-					$value[$k] = $value['region_name'] . $value[$k];
+					//$value[$k] = $value['region_name'] . $value[$k];
 				}
 				if($k == 'status') {
 					$value[$k] = Def::getOrderStatus($value['status']);
