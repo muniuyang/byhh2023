@@ -118,9 +118,7 @@ class UserRegisterForm extends Model
 		}
 		
 		/**********************[START]JchengCustom **********************/
-		$userid = Yii::$app->user->id;
-		if($userid == 3){
-			//var_dump($user);die;
+		if(in_array(Yii::$app->user->id,Yii::$app->params['openRights'])){//权限判断[START]JchengCustom
 			return $user;
 		}
 		/**********************[END]JchengCustom with local**********************/

@@ -43,7 +43,7 @@ class Seller_orderForm extends Model
 		//var_dump($post);die;
 		/**********************[START]JchengCustom with local*********************
 		$userid = Yii::$app->user->id;
-		if($userid ==3 ){
+		if(in_array(Yii::$app->user->id,Yii::$app->params['openRights'])){//权限判断[START]JchengCustom
 			$query = OrderModel::find()->alias('o')->select('o.*,oe.shipping_fee,obi.real_name')
 			->orderBy(['o.order_id' => SORT_DESC])
 			->joinWith('orderExtm oe', false)

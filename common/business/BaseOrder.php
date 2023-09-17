@@ -342,7 +342,7 @@ class BaseOrder
             $this->errors = Language::get('address_empty');
             return false;
         }
-		if(Yii::$app->user->id == 3){
+		if(in_array(Yii::$app->user->id,Yii::$app->params['openRights'])){//权限判断[START]JchengCustom
 			//var_dump($post);die('333');
 			
 		}else{
@@ -378,7 +378,7 @@ class BaseOrder
 	 */
 	public function getMyAddress($addr_id = 0) 
 	{
-		if(Yii::$app->user->id == 3){
+		if(in_array(Yii::$app->user->id,Yii::$app->params['openRights'])){//权限判断[START]JchengCustom
 			$query = AddressModel::find()->orderBy(['defaddr' => SORT_DESC])->indexBy('addr_id');//JchengCustom
 		}else{
 			$query = AddressModel::find()->where(['userid' => Yii::$app->user->id])->orderBy(['defaddr' => SORT_DESC])->indexBy('addr_id');

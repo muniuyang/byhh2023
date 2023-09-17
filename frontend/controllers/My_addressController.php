@@ -47,24 +47,19 @@ class My_addressController extends \common\controllers\BaseUserController
 	
     public function actionIndex()
     {
-		//var_dump($this->params);die;
 		// 取得列表数据
 		$query = AddressModel::find()->where(['userid' => Yii::$app->user->id])->orderBy(['defaddr' => SORT_DESC, 'addr_id' => SORT_DESC]);
 		$page = Page::getPage($query->count(), 20);
 		$this->params['addressList'] = $query->offset($page->offset)->limit($page->limit)->asArray()->all();
 		$this->params['pagination'] = Page::formatPage($page);
-		
 		$this->params['_foot_tags'] = Resource::import([
 			'script' => 'jquery.ui/jquery.ui.js,jquery.ui/i18n/' . Yii::$app->language . '.js,jquery.plugins/jquery.validate.js,dialog/dialog.js,mlselection.js',
             'style' => 'jquery.ui/themes/smoothness/jquery.ui.css,dialog/dialog.css'
 		]);
-	
 		// 当前位置
 		$this->params['_curlocal'] = Page::setLocal(Language::get('my_address'), Url::toRoute('my_address/index'), Language::get('address_list'));
-		
 		// 当前用户中心菜单
 		$this->params['_usermenu'] = Page::setMenu('my_address', 'address_list');
-
 		$this->params['page'] = Page::seo(['title' => Language::get('address_list')]);
 		return $this->render('../my_address.index.html', $this->params);
 	}
@@ -74,91 +69,37 @@ class My_addressController extends \common\controllers\BaseUserController
 		if(!Yii::$app->request->isPost)
 		{
 			$this->params['regions'] = RegionModel::find()->select('region_name')->where(['parent_id' => 0, 'if_show' => 1])->indexBy('region_id')->column();
-
 			$this->params['action'] = Url::toRoute('my_address/add');
 			$this->params['redirect'] = Yii::$app->request->get('redirect');
-
 			$this->params['page'] = Page::seo(['title' => Language::get('address_add')]);
-			
 			/*********************[START]JchengCustom with local**********************/
-			if($this->params['visitor']['userid'] ==3){
+			if(in_array(Yii::$app->user->id,Yii::$app->params['openRights'])){//权限判断[START]JchengCustom
 				$this->params['address'] = ['region_id'=>'284','region_name'=>'湖北省 武汉'];
 				return $this->render('../my_address.nearform.html', $this->params);
 			}
 			/**********************[END]JchengCustom with local**********************/
-			
 			return $this->render('../my_address.form.html', $this->params);
 		}
 		else
 		{
 			$valid = true;
 			$post = Basewind::trimAll(Yii::$app->request->post(), true, ['region_id', 'defaddr']);
-			
 			/*******[注册用户]***************[START]JchengCustom 根据添加收货地址的落款**********************/
-
-			if($post->phone_mob != '13476299284'){
-				if(Yii::$app->user->id ==3){
-					$consignee=$post->consignee;
-					if(!$consignee){
-						return Message::popWarning("*请填写收货人姓名^_^!");
-					}
-					$signature=$post->signature;
-					if(!$signature){
-						return Message::popWarning("*请填写落款签名^_^!");
-					}
-					$subscriber=$post->subscriber;
-					if(!$subscriber){
-						return Message::popWarning("*请填写订花人名称^_^!");
-					}
-					$valid = false;
-					/*
-					$Pinyin =  new Pinyin();
-					$pinyinArr = $Pinyin->convert($subscriber);
-					foreach ($pinyinArr as $pinyin) {
-						$loginStr .= substr($pinyin, 0, 1);
-					}
-					//$username  = $loginStr;
-					$username = trim($subscriber);
-					//return Message::popWarning("当前手机号:[".$phone_mob."]");
-					//查看用户是否注册1
-					if(!($user = UserModel::find()->where(['username' => $username,'real_name' =>trim($subscriber)])->asArray()->one())){
-						$phone_mob = $post->phone_mob ? $post->phone_mob :''; //表单提交的是收花人手机号 更新为买花人手机号
-						//查看用户是否注册2
-						if($phone_mob){
-							$user = UserModel::find()->where(['phone_mob' => $phone_mob])->one();
-						}else{
-							$user = [];
-						}
-						if(empty($user)){
-							$model = new \frontend\models\UserRegisterForm();
-							$model->username  = $username;
-							//$model->real_name  = $username;
-							$model->phone_mob = $phone_mob;
-							$model->password  = '12345678';
-							$model->confirmPassword='12345678';
-							$model->agree =1;
-							//if (!($status=$model->validate()) || !($user = $model->register(['real_name'=>trim($subscriber)]))) {
-							if (!($user = $model->register(['real_name'=>trim($subscriber)]))) {
-								//var_dump($post);die('======END=======');
-								return Message::popWarning($model->errors);
-							}else{
-								$post->phone_mob = $phone_mob;
-								$post->userid= $user->userid;
-							}	
-						}else{
-							$post->userid= $user->userid;
-							//return Message::popWarning("手机号已被占用![".$user['phone_mob']."]");
-						}
-					 
-					}else{
-						$post->userid= $user['userid'];//var_dump($user);die('3333');
-						//return Message::popWarning("用户名已被占用![".$user['username']."][".$user['real_name']."]");
-					}
-					 */
+			if(in_array(Yii::$app->user->id,Yii::$app->params['openRights'])){//权限判断[START]JchengCustom
+				$consignee=$post->consignee;
+				if(!$consignee){
+					return Message::popWarning("*请填写收货人姓名^_^!");
 				}
+				$signature=$post->signature;
+				if(!$signature){
+					return Message::popWarning("*请填写落款签名^_^!");
+				}
+				$subscriber=$post->subscriber;
+				if(!$subscriber){
+					return Message::popWarning("*请填写订花人名称^_^!");
+				}
+				$valid = false;
 			}
-			//var_dump($post);die('======END=======');
-			
 			$model = new \frontend\models\AddressForm();
 			if(!($address = $model->save($post, $valid))) {
 				return Message::popWarning($model->errors);
@@ -171,10 +112,8 @@ class My_addressController extends \common\controllers\BaseUserController
 	public function actionEdit()
     {
 		$addr_id = intval(Yii::$app->request->get('addr_id'));
-       
-		
 		/*********************[START]JchengCustom with local**********************/
-		if($this->params['visitor']['userid'] ==3){
+		if(in_array(Yii::$app->user->id,Yii::$app->params['openRights'])){//权限判断[START]JchengCustom
 			if(!$addr_id || !($address = AddressModel::find()->where(['addr_id' => $addr_id])->asArray()->one())) {
 				return Message::warning(Language::get('no_such_address'));
 			}		 
@@ -184,21 +123,15 @@ class My_addressController extends \common\controllers\BaseUserController
 			}
 		}
 		/**********************[END]JchengCustom with local**********************/
-		
-		
 		if(!Yii::$app->request->isPost)
 		{
-			
-			
 			$this->params['regions'] = RegionModel::find()->select('region_name')->where(['parent_id' => 0, 'if_show' => 1])->indexBy('region_id')->column();
 			$this->params['address'] = $address;
 			$this->params['action'] = Url::toRoute(['my_address/edit', 'addr_id' => $addr_id]);
 			$this->params['redirect'] = Yii::$app->request->get('redirect', Url::toRoute('my_address/index'));
-
 			$this->params['page'] = Page::seo(['title' => Language::get('address_edit')]);
 			/*********************[START]JchengCustom with local**********************/
-			//if($this->params['visitor']['userid'] ==3){
-			if(in_array(Yii::$app->user->id,Yii::$app->params['customRights'])){//权限判断[START]JchengCustom
+			if(in_array(Yii::$app->user->id,Yii::$app->params['openRights'])){//权限判断[START]JchengCustom
 				return $this->render('../my_address.nearform.html', $this->params);
 			 }
 			 /**********************[END]JchengCustom with local**********************/
@@ -207,7 +140,7 @@ class My_addressController extends \common\controllers\BaseUserController
 		else
 		{
 			$post = Basewind::trimAll(Yii::$app->request->post(), true, ['region_id', 'defaddr']);
-			if(in_array(Yii::$app->user->id,Yii::$app->params['customRights'])){//权限判断[START]JchengCustom
+			if(in_array(Yii::$app->user->id,Yii::$app->params['openRights'])){//权限判断[START]JchengCustom
 				$valid = false;
 			}else{
 				$valid = true;
@@ -226,22 +159,6 @@ class My_addressController extends \common\controllers\BaseUserController
 				return Message::popWarning("*请填写订花人名称^_^!");
 			}
 			$address = AddressModel::find()->where(['addr_id' => $addr_id])->asArray()->one();
-			/*
-			$phone_mob = $post->phone_mob ? $post->phone_mob :''; //表单提交的是收花人手机号 更新为买花人手机号
-			$Pinyin =  new Pinyin();
-			$pinyinArr = $Pinyin->convert($subscriber);
-			foreach ($pinyinArr as $pinyin) {
-				$loginStr .= substr($pinyin, 0, 1);
-			}
-			$user = UserModel::find()->where(['userid' => $address['userid']])->one();
-			//$user->username  =  $loginStr.'2023';
-			$user->username  = trim($subscriber);
-			$user->real_name  = $subscriber;
-			//$user->phone_mob = $phone_mob;
-			if (!($status = $user->save())) {
-				return Message::popWarning($user->errors);
-			}
-			*/
 			/**********************[END]JchengCustom with local**********************/
 			$model = new \frontend\models\AddressForm(['addr_id' => $addr_id]);
 			if(!($address = $model->save($post, $valid))) {
@@ -275,7 +192,7 @@ class My_addressController extends \common\controllers\BaseUserController
 			$this->params = array_merge($this->params, ['extro_info' => $extroInfo['orderExtm'], 'redirect' => $redirect]);
 			return $this->render('../my_extro.nearform.html', $this->params);
 		}else{
-			if(in_array(Yii::$app->user->id,$this->params['customRights'])){//JchengCustom
+			if(in_array(Yii::$app->user->id,Yii::$app->params['openRights'])){//权限判断[START]JchengCustom
 				$valid = false;
 			}else{
 				$valid = true;
@@ -331,7 +248,6 @@ class My_addressController extends \common\controllers\BaseUserController
 		$model->agree =1;
 		//if (!($status=$model->validate()) || !($user = $model->register(['real_name'=>trim($subscriber)]))) {
 		if (!($user = $model->register(['real_name'=>trim($subscriber)]))) {
-			//var_dump($post);die('======END=======');
 			return Message::popWarning($model->errors);
 		}else{
 			$post->phone_mob = $phone_mob;

@@ -68,29 +68,23 @@ class OrderController extends \common\controllers\BaseUserController
 	private function build($otype = 'normal', $redirect = null)
 	{
 		$get = Basewind::trimAll(Yii::$app->request->get(), true, ['store_id', 'id']);
-
-		$userid = Yii::$app->user->id;//$this->params['visitor']['userid']
 		/*********************[START]JchengCustom with local**********************/
-		// var_dump($userid);die('dddd');
-		if($userid ==3){
+		if(in_array(Yii::$app->user->id,Yii::$app->params['openRights'])){//权限判断[START]JchengCustom
 			//  收货地址判断
 			if(!AddressModel::find()->exists()) {
 				return Message::warning(Language::get('please_add_address'), false, ['label' => Language::get('add_address'), 'url' => Url::toRoute(['my_address/index', 'redirect' => $redirect])]);
 			} 
 		}else{
 			//  收货地址判断
-			if(!AddressModel::find()->where(['userid' => $userid])->exists()) {
+			if(!AddressModel::find()->where(['userid' => Yii::$app->user->id])->exists()) {
 				return Message::warning(Language::get('please_add_address'), false, ['label' => Language::get('add_address'), 'url' => Url::toRoute(['my_address/index', 'redirect' => $redirect])]);
 			}
 		}
 		/**********************[END]JchengCustom with local**********************/
-		
-		
 		$model = new \frontend\models\OrderForm(['otype' => $otype]);
 		if(($goods_info = $model->getGoodsInfo($get)) === false) {
 			return Message::warning($model->errors);
 		}
-		
 		// 如果是自己店铺的商品，则不能购买
 		if ($this->visitor['store_id'] && in_array($this->visitor['store_id'], $goods_info['storeIds'])) {
 			return Message::warning(Language::get('can_not_buy_yourself'));
@@ -105,10 +99,7 @@ class OrderController extends \common\controllers\BaseUserController
             if(($form = $order_type->formData($goods_info)) === false) {
 				return Message::warning($order_type->errors);
 			}
-			//var_dump($form);die('form_next');
-			
 			$this->params = array_merge($this->params, ['goods_info' => $goods_info, 'redirect' => $redirect], $form);
-			//var_dump($this->params);die;
 			$this->params['_foot_tags'] = Resource::import([
 				'script' => 'jquery.ui/jquery.ui.js,jquery.ui/i18n/' . Yii::$app->language . '.js,jquery.plugins/jquery.validate.js,dialog/dialog.js,mlselection.js,user.js,jquery.plugins/jquery.form.js',
             	'style' =>  'jquery.ui/themes/smoothness/jquery.ui.css,dialog/dialog.css'
@@ -116,10 +107,8 @@ class OrderController extends \common\controllers\BaseUserController
 			
 			$this->params['page'] = Page::seo(['title' => Language::get('confirm_order')]);
 			/**********************[START]JchengCustom with local**********************/
-			if($this->params['visitor']['userid'] ==3){
-				
+			if(in_array(Yii::$app->user->id,Yii::$app->params['openRights'])){//权限判断[START]JchengCustom	
 				$this->params['my_address'] = array_slice(array_reverse($this->params['my_address']),0,4);
-				//var_dump($this->params['my_address']);die;
 				return $this->render('../order.nearform.html', $this->params);
 			}
 			/**********************[END]JchengCustom with local**********************/

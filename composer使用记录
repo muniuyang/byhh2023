@@ -1,0 +1,29 @@
+composer使用记录
+
+
+
+1.composer降级
+
+composer self-update --1
+
+2.删除composer 文件
+
+管理员CMD
+
+键入：
+
+composer remove
+ 
+
+3.composer 升级: 
+
+管理员CMD
+
+键入：
+
+composer self-update
+
+4.更新到指定版本：
+
+composer self-update 1.10.1
+ 
