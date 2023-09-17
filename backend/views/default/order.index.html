@@ -86,6 +86,9 @@
 			if(res.status == '等待买家付款'){
 				res.status = '<font color=orange>'+res.status+'</font>';
 			}
+			if(res.refund_status == 'SUCCESS'){
+				res.status = '<font color=red>退款成功</font>';
+			}
 				return res.status ? res.status : '';
 			}}
         , { field: 'payment_name', title: '支付方式', width: 120 }

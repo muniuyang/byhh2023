@@ -100,7 +100,8 @@ class Buyer_orderController extends \common\controllers\BaseUserController
 		//var_dump($this->params['lang']);die;
 		$this->params['page'] = Page::seo(['title' => Language::get('order_detail')]);
 		/**********************[START]JchengCustom with local**********************/
-		if(in_array(Yii::$app->user->id,$this->params['customRights'])){//权限判断[START]JchengCustom
+		//if(in_array(Yii::$app->user->id,$this->params['customRights'])){//权限判断[START]JchengCustom
+		if(in_array(Yii::$app->user->id,Yii::$app->params['customRights'])){//权限判断[START]JchengCustom
 			$this->params['redirect'] = Url::toRoute(['buyer_order/view', 'order_id' => $post->order_id]);
 			return $this->render('../buyer_order.nearview.html', $this->params); 
 		}

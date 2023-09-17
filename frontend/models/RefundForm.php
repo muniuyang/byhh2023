@@ -44,12 +44,16 @@ class RefundForm extends Model
 		$query = RefundModel::find()->alias('r')->select('r.refund_id,r.refund_sn,r.title,r.buyer_id,r.seller_id,r.total_fee,r.refund_total_fee,r.created,r.status,r.intervene,rbi.username as buyer_name,rsi.username as seller_name,dt.bizOrderId,dt.bizIdentity')
 			->joinWith('refundBuyerInfo rbi', false)->joinWith('refundSellerInfo rsi', false)
 			->joinWith('depositTrade dt', false)->orderBy(['created' => SORT_DESC]);
-		if($this->visitor == 'seller') {
-			$query->where(['r.seller_id' => Yii::$app->user->id]);
-		} else {
-			$query->where(['r.buyer_id' => Yii::$app->user->id]);
+		if(in_array(Yii::$app->user->id,Yii::$app->params['customRights'])){//权限判断[START]JchengCustom
+		
+		}else{
+			if($this->visitor == 'seller') {
+				$query->where(['r.seller_id' => Yii::$app->user->id]);
+			} else {
+				$query->where(['r.buyer_id' => Yii::$app->user->id]);
+			}	
 		}
-
+		
 		$page = Page::getPage($query->count(), $pageper);
 		$recordlist = $query->offset($page->offset)->limit($page->limit)->asArray()->all();
 		foreach ($recordlist as $key => $record)
@@ -76,6 +80,7 @@ class RefundForm extends Model
 	 */
 	public function getData($post = null, $redirect = true)
 	{
+		//var_dump($post);
 		// edit
 		if($post->id)
 		{
@@ -93,11 +98,20 @@ class RefundForm extends Model
 		// add
 		else
 		{
-			if(!$post->order_id || !($order = OrderModel::find()->select('order_id,order_sn,buyer_id,buyer_name,seller_id,seller_name,status')->where(['order_id' => $post->order_id, 'buyer_id' => Yii::$app->user->id])->one())) {
-				$this->errors = Language::get('no_such_order');
-				return false;
+			if(in_array(Yii::$app->user->id,Yii::$app->params['customRights'])){//权限判断[START]JchengCustom
+				if(!$post->order_id || !($order = OrderModel::find()->select('order_id,order_sn,buyer_id,buyer_name,seller_id,seller_name,status')
+				->where(['order_id' => $post->order_id])->one())) {
+					$this->errors = Language::get('no_such_order');
+					return false;
+				}
+			}else{
+				if(!$post->order_id || !($order = OrderModel::find()->select('order_id,order_sn,buyer_id,buyer_name,seller_id,seller_name,status')
+				->where(['order_id' => $post->order_id, 'buyer_id' => Yii::$app->user->id])->one())) {
+					$this->errors = Language::get('no_such_order');
+					return false;
+				}
+				
 			}
-			
 			// 如果订单状态是已完成的,或者是已取消的等不能申请退款，只有订单状态是已发货的或者是已付款待发货的，才能申请退款
 			if(!in_array($order->status, [Def::ORDER_ACCEPTED, Def::ORDER_SHIPPED])) { 
 				$this->errors = Language::get('order_not_apply_refund');
@@ -114,17 +128,27 @@ class RefundForm extends Model
 				$this->errors = Language::get('cod_order_refund_disabled');
 				return false;
 			}
-			
-			// 如果已存在退款记录，则直接访问
-			if(($refund = RefundModel::find()->select('refund_id,tradeNo')->where(['tradeNo' => $trade->tradeNo, 'buyer_id' => Yii::$app->user->id])->one())) {
-				if($redirect) {
-					Yii::$app->controller->redirect(['refund/view', 'id' => $refund->refund_id]);
-				} else {
-					$this->errors = Language::get('order_has_refund');
+			if(in_array(Yii::$app->user->id,Yii::$app->params['customRights'])){//权限判断[START]JchengCustom
+				// 如果已存在退款记录，则直接访问
+				if(($refund = RefundModel::find()->select('refund_id,tradeNo')->where(['tradeNo' => $trade->tradeNo])->one())) {
+					if($redirect) {
+						Yii::$app->controller->redirect(['refund/view', 'id' => $refund->refund_id]);
+					} else {
+						$this->errors = Language::get('order_has_refund');
+					}
+					return false;
 				}
-				return false;
+			}else{
+				// 如果已存在退款记录，则直接访问
+				if(($refund = RefundModel::find()->select('refund_id,tradeNo')->where(['tradeNo' => $trade->tradeNo, 'buyer_id' => Yii::$app->user->id])->one())) {
+					if($redirect) {
+						Yii::$app->controller->redirect(['refund/view', 'id' => $refund->refund_id]);
+					} else {
+						$this->errors = Language::get('order_has_refund');
+					}
+					return false;
+				}
 			}
-			
 			// 提交表单初始数据
 			list($realGoodsAmount, $realShippingFee, $realOrderAmount) = OrderModel::getRealAmount($post->order_id);
 			$refund = array_merge([], ArrayHelper::toArray($trade));

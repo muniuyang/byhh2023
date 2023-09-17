@@ -53,7 +53,7 @@ class Seller_orderController extends \common\controllers\BaseSellerController
 		$model = new \frontend\models\Seller_orderForm(['store_id' => $this->visitor['store_id']]);
 		list($orders, $page) = $model->formData($post, 20);
 		//var_dump(Yii::$app->controller->id);die;
-		//var_dump($orders[15]);die;
+		//var_dump($orders);die;
 		$this->params['orders'] = $orders;
 		$this->params['pagination'] = Page::formatPage($page);
 		$this->params['filtered'] = $model->getConditions($post);

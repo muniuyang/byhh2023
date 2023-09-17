@@ -55,7 +55,7 @@ return array(
 	'TRADE_SUCCESS'				=> '交易完成',
 	'TRADE_CLOSED'				=> '交易关闭',
 	'TRADE_WAIT_ADMIN_VERIFY' 	=> '等待系统审核',
-
+	'TRADE_CLOSED'				=> '交易关闭',
 	
 	// 针对退款的状态
 	'REFUND_SUCCESS'				=> '退款成功',

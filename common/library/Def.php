@@ -41,7 +41,7 @@ class Def
 	const ORDER_DELIVERED       =   36;			     // 针对社区团购订单，平台已配送，待买家取货
 	const ORDER_FINISHED 		= 	40;              // 交易成功
 	const ORDER_CANCELED 		= 	 0;              // 交易已取消
-	
+	const ORDER_REFUNDED 		= 	 -2;              // 交易已退款
 	/* 商户业务类型代码 */
 	const TRADE_ORDER 			= 	'ORDER';	 // 购物
 	const TRADE_RECHARGE 		= 	'RECHARGE';	 // 充值
@@ -147,6 +147,9 @@ class Def
 			break;
 			case self::ORDER_CANCELED:
 				$lang_key = 'order_canceled';
+			break;
+			case self::ORDER_REFUNDED:
+				$lang_key = 'order_refunded';
 			break;
 		}
 

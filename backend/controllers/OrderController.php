@@ -18,6 +18,7 @@ use yii\helpers\Json;
 
 use common\models\OrderModel;
 use common\models\DepositTradeModel;
+use common\models\RefundModel;
 
 use common\library\Basewind;
 use common\library\Language;
@@ -73,15 +74,26 @@ class OrderController extends \common\controllers\BaseAdminController
 			
 			$page = Page::getPage($query->count(), $post->limit ? $post->limit : 10);
 			$list = $query->offset($page->offset)->limit($page->limit)->asArray()->all();
+	
 			foreach ($list as $key => $value)
 			{
-				$list[$key]['tradeNo'] = DepositTradeModel::find()->select('tradeNo')->where(['bizOrderId' => $value['order_sn']])->scalar();
+				
+				$list[$key]['tradeNo'] = DepositTradeModel::find()->select('tradeNo')->where(['bizOrderId' => $value['order_sn']])->scalar();// 是否申请过退款
 				$list[$key]['add_time'] = Timezone::localDate('Y-m-d H:i:s', $value['add_time']);
 				$list[$key]['pay_time'] = Timezone::localDate('Y-m-d H:i:s', $value['pay_time']);
 				$list[$key]['finished_time'] = Timezone::localDate('Y-m-d H:i:s', $value['finished_time']);
 				$list[$key]['status'] = Def::getOrderStatus($value['status']);
+  				
+				if(!empty($list[$key]['tradeNo']) && ($refund = RefundModel::find()->select('refund_id,status')->where(['tradeNo' => $list[$key]['tradeNo']])->one())) {
+					$list[$key]['refund_status'] = $refund->status;
+					$list[$key]['refund_id'] = $refund->refund_id;
+				}else{
+					$list[$key]['refund_status'] = '';
+					$list[$key]['refund_id'] = '';
+				}
+				
 			}
-
+			//var_dump($list);die;
 			return Json::encode(['code' => 0, 'msg' => '', 'count' => $query->count(), 'data' => $list]);
 		}
 	}
@@ -236,7 +248,23 @@ class OrderController extends \common\controllers\BaseAdminController
 		if($query->count() == 0) {
 			return Message::warning(Language::get('no_data'));
 		}
-		return \backend\models\OrderExportForm::download($query->asArray()->all());		
+		$list = $query->asArray()->all();
+		//var_dump($list);die;
+		foreach ($list as $key => $value)
+		{
+			$list[$key]['tradeNo'] = DepositTradeModel::find()->select('tradeNo')->where(['bizOrderId' => $value['order_sn']])->scalar();// 是否申请过退款
+			
+			if(!empty($list[$key]['tradeNo']) && ($refund = RefundModel::find()->select('refund_id,status')->where(['tradeNo' => $list[$key]['tradeNo']])->one())) {
+				$list[$key]['refund_status'] = $refund->status;
+				$list[$key]['status'] = $refund->status == 'SUCCESS'? -2:0;
+				$list[$key]['refund_id'] = $refund->refund_id;
+			}else{
+				$list[$key]['refund_status'] = '';
+				$list[$key]['refund_id'] = '';
+			}
+		}
+		//var_dump($list);die;
+		return \backend\models\OrderExportForm::download($list);		
 	}
 	
 	private function getSearchOption()

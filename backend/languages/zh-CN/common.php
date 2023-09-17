@@ -168,7 +168,7 @@ return array(
     'order_finished'    => '交易完成',
 	'order_success'		=> '交易完成',
 	'order_closed'		=> '交易关闭',
-	
+	'order_refunded'	=> '交易退款',
 	// 针对交易的状态
 	'TRADE_PENDING'				=> '等待买家付款',
 	'TRADE_ACCEPTED'    		=> '等待卖家发货',

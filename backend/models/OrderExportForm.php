@@ -68,6 +68,7 @@ class OrderExportForm extends Model
 				}
 				if($k == 'status') {
 					$value[$k] = Def::getOrderStatus($value['status']);
+					//var_dump($value[$k]);
 				}
 	
 				$record_value[$k] = $value[$k] ? $value[$k] : '';
@@ -78,6 +79,8 @@ class OrderExportForm extends Model
 		$record_xls[] = array('seller_name' => '');// empty line
 		$record_xls[] = array('seller_name' => sprintf('订单总数：%s笔，订单总额：%s元', $quantity, $amount));
 		
+		//var_dump($record_xls);
+		//die;
 		return \common\library\Page::export([
 			'models' 	=> $record_xls, 
 			'fileName' 	=> $folder,

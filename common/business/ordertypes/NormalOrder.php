@@ -108,7 +108,7 @@ class NormalOrder extends BaseOrder
   
 		/*****[注册用户]*****************[START]JchengCustom with local[提交订单替人下单]**********************/
 		if (!($base_info = parent::handleUserInsert($base_info, $consignee_info))) {
-			//var_dump($base_info);
+			//var_dump($base_info);die('888');
 			return false;
 		}
 		/**********************[END]JchengCustom with local**********************/

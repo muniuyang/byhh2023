@@ -405,7 +405,7 @@ class My_goodsController extends \common\controllers\BaseSellerController
 				foreach($goodsIds as $goods_id)
 				{
 					foreach($scateIds as $cate_id) {
-						$model->isNewRecord = true;
+						$model = new CategoryGoodsModel();
 						$model->goods_id = $goods_id;
 						$model->cate_id = $cate_id;
 						$model->save();

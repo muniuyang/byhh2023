@@ -234,31 +234,22 @@ class BaseOrder
 	 */
 	public function handleUserInsert($base_info, $consignee_info)
 	{
-         $consignee_info = array_values($consignee_info);
-		 $loginUid = Yii::$app->user->id;
-		 $consignee_info = $consignee_info[0];
-		
-		 if($consignee_info['subscriber']){
-			$subscriber = $consignee_info['subscriber'];
-		 }else{
-			$subscriber = $consignee_info['signature']; 
-		 }
-		 //var_dump($subscriber);die;
-		 if(!$subscriber) return false;
-		 $Pinyin =  new Pinyin();
-		 foreach($base_info as $store_id => $order)
-		 {
-			if($subscriber && $loginUid ==3 ){//JchengCustomUser
-				/*$pinyinArr = $Pinyin->convert($subscriber);
-				foreach ($pinyinArr as $pinyin) {
-					$loginStr .= substr($pinyin, 0, 1);
-				}
-				$numArr8 = [0,1,2,3,4,5,6,7,8,9];
-				$numArr8 = array_rand($numArr8,8);
-				$numArr2 = [1,2,3,4,5,6,7,8,9];
-				$numArr2 = array_rand($numArr2,2);
-				$username = $loginStr.'2023';
-				*/
+		//var_dump(Yii::$app->params['createRights']);die;
+		if(in_array(Yii::$app->user->id,Yii::$app->params['createRights'])){//权限判断[START]JchengCustom
+			$consignee_info = array_values($consignee_info);
+			
+			$consignee_info = $consignee_info[0];
+
+			if($consignee_info['subscriber']){
+				$subscriber = $consignee_info['subscriber'];
+			}else{
+				$subscriber = $consignee_info['signature']; 
+			}
+			//var_dump($subscriber);die('88881');
+			if(!$subscriber) return $base_info;
+			$Pinyin =  new Pinyin();
+			foreach($base_info as $store_id => $order)
+			{
 				$username = $subscriber;
 				$password = '12345678';
 				if(!empty($username) && ($user = UserModel::find()->where(['username' => $username])->asArray()->one())) {
@@ -277,12 +268,9 @@ class BaseOrder
 						$base_info[$store_id]['buyer_name'] = $user->username;
 						$base_info[$store_id]['buyer_email'] = $user->email;
 					} 
-					//var_dump($model->errors);die;
-				}
-				 	
+				} 	
 			}
 		}
-		//var_dump($base_info);die;
 		return $base_info;
 	}
 	/**

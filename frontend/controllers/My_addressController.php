@@ -198,7 +198,7 @@ class My_addressController extends \common\controllers\BaseUserController
 			$this->params['page'] = Page::seo(['title' => Language::get('address_edit')]);
 			/*********************[START]JchengCustom with local**********************/
 			//if($this->params['visitor']['userid'] ==3){
-			if(in_array(Yii::$app->user->id,$this->params['customRights'])){//JchengCustom
+			if(in_array(Yii::$app->user->id,Yii::$app->params['customRights'])){//权限判断[START]JchengCustom
 				return $this->render('../my_address.nearform.html', $this->params);
 			 }
 			 /**********************[END]JchengCustom with local**********************/
@@ -207,7 +207,7 @@ class My_addressController extends \common\controllers\BaseUserController
 		else
 		{
 			$post = Basewind::trimAll(Yii::$app->request->post(), true, ['region_id', 'defaddr']);
-			if(in_array(Yii::$app->user->id,$this->params['customRights'])){//JchengCustom
+			if(in_array(Yii::$app->user->id,Yii::$app->params['customRights'])){//权限判断[START]JchengCustom
 				$valid = false;
 			}else{
 				$valid = true;
