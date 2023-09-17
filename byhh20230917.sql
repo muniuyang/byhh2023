@@ -3,7 +3,7 @@
 -- https://www.phpmyadmin.net/
 --
 -- 主机： localhost
--- 生成日期： 2023-09-17 02:16:45
+-- 生成日期： 2023-09-17 03:47:25
 -- 服务器版本： 5.7.26
 -- PHP 版本： 7.3.4
 
@@ -277,7 +277,8 @@ CREATE TABLE `swd_cart` (
 INSERT INTO `swd_cart` (`rec_id`, `userid`, `store_id`, `goods_id`, `goods_name`, `spec_id`, `specification`, `price`, `quantity`, `goods_image`, `selected`, `product_id`, `invalid`) VALUES
 (4, 3, 2, 222, '【鲜花】小旋风~卡布奇洛', 265, '', '288.00', 1, 'data/files/store_2/goods/20230914083605623.jpg.thumb.jpg', 0, '6625fc2b52fff7f1aa66871cbb7f2208', NULL),
 (5, 4, 2, 51, '【开业花篮】红色款+20红玫+红豆款', 94, '', '280.00', 1, 'data/files/store_2/goods/20230820163134314.jpg.thumb.jpg', 1, '72f60e0db55286476e030365422b28aa', 0),
-(6, 3, 2, 51, '【开业花篮】红色款+20红玫+红豆款', 94, '', '280.00', 1, 'data/files/store_2/goods/20230820163134314.jpg.thumb.jpg', 1, '5afac21e01e6396461c69c7b70006fc0', 0);
+(6, 3, 2, 51, '【开业花篮】红色款+20红玫+红豆款', 94, '', '280.00', 1, 'data/files/store_2/goods/20230820163134314.jpg.thumb.jpg', 0, '5afac21e01e6396461c69c7b70006fc0', NULL),
+(8, 5, 2, 65, '【开业花篮】红色+金扶郎款', 108, '', '160.00', 1, '', 1, 'ddbbbc9cda46a824673127d1bcb186ab', 0);
 
 -- --------------------------------------------------------
 
@@ -1014,7 +1015,8 @@ INSERT INTO `swd_deposit_account` (`account_id`, `userid`, `account`, `password`
 (31, 4, '453115621@qq.com', '25f9e794323b453885f5181f1b624d0b', '0.00', '0.00', '0.00', '线下销售', 'ON', 1694399893, 1694399893),
 (29, 29, '1693335653@qq.com', '25f9e794323b453885f5181f1b624d0b', '9990.00', '0.00', '0.00', '维多利纺织', 'ON', 1693335653, 1693335653),
 (19, 3, '1693328163@qq.com', '25f9e794323b453885f5181f1b624d0b', '11000.00', '0.00', '0.00', 'buyer', 'ON', 1693328163, 1693328163),
-(32, 31, '17371825007', '25f9e794323b453885f5181f1b624d0b', '10000000.00', '0.00', '0.00', '刘军', 'ON', 1694851414, 1694851414);
+(32, 31, '17371825007', '25f9e794323b453885f5181f1b624d0b', '10000000.00', '0.00', '0.00', '刘军', 'ON', 1694851414, 1694851414),
+(33, 5, '1694917799@qq.com', '25f9e794323b453885f5181f1b624d0b', '0.00', '0.00', '0.00', '开业零售', 'ON', 1694917799, 1694917799);
 
 -- --------------------------------------------------------
 
@@ -1038,7 +1040,9 @@ INSERT INTO `swd_deposit_recharge` (`recharge_id`, `orderId`, `userid`, `examine
 (1, '539531521220', 3, '', 1),
 (2, '614749852696', 3, '', 1),
 (3, '565272727041', 3, '', 1),
-(4, '401488257315', 3, 'admin', 1);
+(4, '401488257315', 3, 'admin', 1),
+(5, '133329681874', 5, '', 1),
+(6, '899073866344', 5, '', 1);
 
 -- --------------------------------------------------------
 
@@ -1156,7 +1160,10 @@ INSERT INTO `swd_deposit_trade` (`trade_id`, `tradeNo`, `outTradeNo`, `payTradeN
 (30, '20230830030054652783', '', '20230830030127508502', '16933356532944902', 'ORDER', 29, 2, '170.00', 'SUCCESS', 'cod', 1, 'SHOPPING', 'COD', 'outlay', '货到付款', '', '支付 - 【开业花篮】红色+红扶郎款', '', '', 1693335654, NULL, 1693335738),
 (40, '20230916155708499482', '', '20230916155713905261', '16948510282878032', 'ORDER', 4, 2, '610.00', 'SUBMITTED', 'cod', 1, 'SHOPPING', 'COD', 'outlay', '货到付款', '', '支付 - 【绿植】幸福树', '', '', 1694851028, NULL, NULL),
 (41, '20230916160020633262', '', '20230916160036922577', '16948512207074482', 'ORDER', 3, 2, '610.00', 'SUBMITTED', 'cod', 1, 'SHOPPING', 'COD', 'outlay', '货到付款', '', '支付 - 【绿植】幸福树', '', '', 1694851220, NULL, NULL),
-(42, '20230916160334034430', '', '20230916160338259124', '16948514147053922', 'ORDER', 31, 2, '610.00', 'SUBMITTED', 'cod', 1, 'SHOPPING', 'COD', 'outlay', '货到付款', '', '支付 - 【绿植】幸福树', '', '', 1694851414, NULL, NULL);
+(42, '20230916160334034430', '', '20230916160338259124', '16948514147053922', 'ORDER', 31, 2, '610.00', 'SUBMITTED', 'cod', 1, 'SHOPPING', 'COD', 'outlay', '货到付款', '', '支付 - 【绿植】幸福树', '', '', 1694851414, NULL, NULL),
+(43, '20230917102019786229', '', '20230917102022046321', '16949172198864002', 'ORDER', 30, 2, '610.00', 'SUBMITTED', 'cod', 1, 'SHOPPING', 'COD', 'outlay', '货到付款', '', '支付 - 【绿植】幸福树', '', '', 1694917219, NULL, NULL),
+(44, '20230917103402667302', '', '20230917103402769865', '133329681874', 'RECHARGE', 5, 0, '10000.00', 'PENDING', 'alipay', 0, 'RECHARGE', 'INSTANT', 'income', '支付宝', '', '充值', 't', '', 1694918042, NULL, NULL),
+(45, '20230917103417121271', '', '20230917103417361166', '899073866344', 'RECHARGE', 5, 0, '10000.00', 'PENDING', 'alipay', 0, 'RECHARGE', 'INSTANT', 'income', '支付宝', '', '充值', 't', '', 1694918057, NULL, NULL);
 
 -- --------------------------------------------------------
 
@@ -2042,7 +2049,7 @@ CREATE TABLE `swd_goods_spec` (
 INSERT INTO `swd_goods_spec` (`spec_id`, `goods_id`, `spec_1`, `spec_2`, `price`, `mkprice`, `stock`, `sku`, `spec_image`, `sort_order`) VALUES
 (134, 91, '', '', '5.00', '0.00', 10000, '', '', 1),
 (127, 84, '', '', '280.00', '0.00', 10000, '', '', 1),
-(126, 83, '', '', '600.00', '0.00', 9997, '', '', 1),
+(126, 83, '', '', '600.00', '0.00', 9996, '', '', 1),
 (125, 82, '', '', '480.00', '0.00', 10000, '', '', 1),
 (6, 6, '', '', '688.00', '0.00', 10000, '1000000000006', '', 1),
 (7, 7, '', '', '380.00', '0.00', 10000, '1000000000007', '', 1),
@@ -2316,7 +2323,7 @@ INSERT INTO `swd_goods_statistics` (`goods_id`, `views`, `collects`, `orders`, `
 (58, 2, 0, 0, 0, 0),
 (46, 4, 0, 0, 0, 0),
 (62, 2, 0, 0, 0, 0),
-(65, 86, 0, 27, 1, 1),
+(65, 88, 0, 27, 1, 1),
 (64, 22, 0, 6, 2, 1),
 (87, 2, 0, 0, 0, 0),
 (123, 2, 0, 0, 0, 0),
@@ -2332,7 +2339,7 @@ INSERT INTO `swd_goods_statistics` (`goods_id`, `views`, `collects`, `orders`, `
 (85, 8, 0, 0, 0, 0),
 (139, 2, 0, 0, 0, 0),
 (259, 2, 0, 0, 0, 0),
-(83, 14, 0, 3, 0, 0),
+(83, 16, 0, 4, 0, 0),
 (67, 2, 0, 0, 0, 0),
 (76, 2, 0, 0, 0, 0),
 (79, 2, 0, 0, 0, 0),
@@ -2720,7 +2727,8 @@ INSERT INTO `swd_order` (`order_id`, `order_sn`, `gtype`, `otype`, `seller_id`, 
 (1, '16948510114810232', 'material', 'normal', 2, '博艺花卉', 4, '线下销售', '', 11, 1694851011, NULL, '', '', NULL, '', NULL, NULL, NULL, NULL, NULL, NULL, '600.00', '0.00', '610.00', 0, NULL, '0.00', '0.00', 0, '', 0, 0, '', 0, NULL, '0.00', 0),
 (2, '16948510282878032', 'material', 'normal', 2, '博艺花卉', 4, '线下销售', '', 10, 1694851028, '货到付款', 'cod', '', NULL, '', NULL, NULL, NULL, NULL, NULL, NULL, '600.00', '0.00', '610.00', 0, NULL, '0.00', '0.00', 0, '', 1, 0, '', 0, NULL, '0.00', 0),
 (3, '16948512207074482', 'material', 'normal', 2, '博艺花卉', 3, 'buyer', '', 10, 1694851220, '货到付款', 'cod', '', NULL, '', NULL, NULL, NULL, NULL, NULL, NULL, '600.00', '0.00', '610.00', 0, NULL, '0.00', '0.00', 0, '', 1, 0, '', 0, NULL, '0.00', 0),
-(4, '16948514147053922', 'material', 'normal', 2, '博艺花卉', 31, '刘军', '', 10, 1694851414, '货到付款', 'cod', '', NULL, '', NULL, NULL, NULL, NULL, NULL, NULL, '600.00', '0.00', '610.00', 0, NULL, '0.00', '0.00', 0, '', 1, 0, '', 0, NULL, '0.00', 0);
+(4, '16948514147053922', 'material', 'normal', 2, '博艺花卉', 31, '刘军', '', 10, 1694851414, '货到付款', 'cod', '', NULL, '', NULL, NULL, NULL, NULL, NULL, NULL, '600.00', '0.00', '610.00', 0, NULL, '0.00', '0.00', 0, '', 1, 0, '', 0, NULL, '0.00', 0),
+(5, '16949172198864002', 'material', 'normal', 2, '博艺花卉', 30, '得到十号', '', 10, 1694917219, '货到付款', 'cod', '', NULL, '', NULL, NULL, NULL, NULL, NULL, NULL, '600.00', '0.00', '610.00', 0, NULL, '0.00', '0.00', 0, '', 1, 0, '', 0, NULL, '0.00', 0);
 
 -- --------------------------------------------------------
 
@@ -2748,6 +2756,7 @@ CREATE TABLE `swd_order_extm` (
 --
 
 INSERT INTO `swd_order_extm` (`order_id`, `consignee`, `region_id`, `region_name`, `address`, `signature`, `subscriber`, `zipcode`, `phone_tel`, `phone_mob`, `shipping_name`, `shipping_fee`) VALUES
+(5, '蓝博拉蒂', 284, '湖北省 武汉', '云尚5C、050号', '得到十号', '得到十号', '', '', '', '快递', '10.00'),
 (4, '湖北海业工程咨询设计有限公司', 284, '湖北省 武汉', '武昌区石牌岭路130号、宸胜中心、四楼，邓总', '刘凯、刘军', '刘军', '', '', '17371825007', '快递', '10.00'),
 (3, '湖北海业工程咨询设计有限公司', 284, '湖北省 武汉', '武昌区石牌岭路130号、宸胜中心、四楼，邓总', NULL, NULL, '', '', '17371825007', '快递', '10.00'),
 (2, '湖北海业工程咨询设计有限公司', 284, '湖北省 武汉', '武昌区石牌岭路130号、宸胜中心、四楼，邓总', NULL, NULL, '', '', '17371825007', '快递', '10.00'),
@@ -2800,7 +2809,8 @@ INSERT INTO `swd_order_goods` (`rec_id`, `order_id`, `goods_id`, `goods_name`, `
 (38, 1, 83, '【绿植】幸福树', 126, '', '600.00', 1, 'http://shopwind.byhh.com/data/files/store_2/goods/20230822171855630.png.thumb.png', 0, '', 1, NULL, NULL, '', '', 0, ''),
 (39, 2, 83, '【绿植】幸福树', 126, '', '600.00', 1, 'http://shopwind.byhh.com/data/files/store_2/goods/20230822171855630.png.thumb.png', 0, '', 1, NULL, NULL, '', '', 0, ''),
 (40, 3, 83, '【绿植】幸福树', 126, '', '600.00', 1, 'http://shopwind.byhh.com/data/files/store_2/goods/20230822171855630.png.thumb.png', 0, '', 1, NULL, NULL, '', '', 0, ''),
-(41, 4, 83, '【绿植】幸福树', 126, '', '600.00', 1, 'http://shopwind.byhh.com/data/files/store_2/goods/20230822171855630.png.thumb.png', 0, '', 1, NULL, NULL, '', '', 0, '');
+(41, 4, 83, '【绿植】幸福树', 126, '', '600.00', 1, 'http://shopwind.byhh.com/data/files/store_2/goods/20230822171855630.png.thumb.png', 0, '', 1, NULL, NULL, '', '', 0, ''),
+(42, 5, 83, '【绿植】幸福树', 126, '', '600.00', 1, 'http://shopwind.byhh.com/data/files/store_2/goods/20230822171855630.png.thumb.png', 0, '', 1, NULL, NULL, '', '', 0, '');
 
 -- --------------------------------------------------------
 
@@ -4482,11 +4492,11 @@ CREATE TABLE `swd_user` (
 --
 
 INSERT INTO `swd_user` (`userid`, `username`, `nickname`, `email`, `password`, `password_reset_token`, `real_name`, `gender`, `birthday`, `phone_tel`, `phone_mob`, `im_qq`, `create_time`, `update_time`, `last_login`, `last_ip`, `logins`, `ugrade`, `portrait`, `activation`, `locked`, `imforbid`, `auth_key`) VALUES
-(1, 'admin', '', '', '$2y$13$UJTcYuaRSNl.xriXNycEmueS.9DApXTRiS9.riet7Q2OWIyo81yuG', '', NULL, 0, '', '', '', '', 1691384292, 1694851685, 1694851685, '127.0.0.1', 14, 1, NULL, NULL, 0, 0, ''),
-(2, 'seller', '', '', '$2y$13$cFZiBKonrs9jr6tucl2axezpg4xf7k1dQ11qDT2sfGJ3c7dU3V6aK', '', NULL, 0, '', '', '', '', 1691384295, 1694828453, 1694828453, '127.0.0.1', 13, 1, NULL, NULL, 0, 0, 'y34xInnSbxuW2glT4EPeY7ANwRBofp9R'),
-(3, 'buyer', '', '', '$2y$13$nvB7/gH5o9C1qfo7ZwuAo.AJrrrAYlmh.0gz.RphoTN5iKHAitq4e', '', '博艺销售', 0, '', '', '', '', 1691384295, 1694916363, 1694916363, '127.0.0.1', 15, 1, NULL, NULL, 0, 0, 'uTwCnRs4ww2TRwvpdjMhs0_MzITyePu5'),
-(4, '线下零售', '', '453115621@qq.com', '$2y$13$JG8W4vqocvYUp8GnK4XTn.SSdiZDo/gbCxo/jvKH.lu4e4DPYzuAu', '', '线下零售', 0, '', '', '13479269284', '', 1694399893, 1694916779, 1694916779, '127.0.0.1', 4, 1, NULL, NULL, 0, 0, '6B5G7oudeoC5sRR3b6FsczEAtWgn8lBY'),
-(30, '得到十号', '', '', '$2y$13$ezyYQNsZ8M4e0JhSMcJh0eAaur2rjYqE9zmzU2PtCItdnHy8voxC.', '', '得到十号', 0, '', '', '', '', 1693344676, 1693344676, 1693344676, '127.0.0.1', 1, 1, NULL, NULL, 0, 0, '3Cv7syctW_v_faPuYpjetP0YTjhOMs6b'),
+(1, '系统管理员', '', '', '$2y$13$UJTcYuaRSNl.xriXNycEmueS.9DApXTRiS9.riet7Q2OWIyo81yuG', '', '系统管理员', 0, '', '', '', '', 1691384292, 1694851685, 1694851685, '127.0.0.1', 14, 1, NULL, NULL, 0, 0, ''),
+(2, '博艺花卉', '', '', '$2y$13$cFZiBKonrs9jr6tucl2axezpg4xf7k1dQ11qDT2sfGJ3c7dU3V6aK', '', '博艺花卉', 0, '', '', '', '', 1691384295, 1694828453, 1694828453, '127.0.0.1', 13, 1, NULL, NULL, 0, 0, 'y34xInnSbxuW2glT4EPeY7ANwRBofp9R'),
+(3, '博艺管理', '', '', '$2y$13$nvB7/gH5o9C1qfo7ZwuAo.AJrrrAYlmh.0gz.RphoTN5iKHAitq4e', '', '博艺管理', 0, '', '', '', '', 1691384295, 1694916363, 1694916363, '127.0.0.1', 15, 1, NULL, NULL, 0, 0, 'uTwCnRs4ww2TRwvpdjMhs0_MzITyePu5'),
+(4, '散单零售', '', '453115621@qq.com', '$2y$13$JG8W4vqocvYUp8GnK4XTn.SSdiZDo/gbCxo/jvKH.lu4e4DPYzuAu', '', '散单零售', 0, '', '', '13479269284', '', 1694399893, 1694916779, 1694916779, '127.0.0.1', 4, 1, NULL, NULL, 0, 0, '6B5G7oudeoC5sRR3b6FsczEAtWgn8lBY'),
+(5, '开业零售', '', '', '$2y$13$ezyYQNsZ8M4e0JhSMcJh0eAaur2rjYqE9zmzU2PtCItdnHy8voxC.', '', '开业零售', 0, '', '', '', '', 1693344676, 1694917717, 1694917718, '127.0.0.1', 2, 1, NULL, NULL, 0, 0, '3Cv7syctW_v_faPuYpjetP0YTjhOMs6b'),
 (29, '维多利纺织', '', '', '$2y$13$w0qBXmt5xOvqLaUqophiYOBHCJzFitCGi8exgxmxL4I3nI7UfNQ8i', '', '维多利纺织', 0, '', '', '', '', 1693335653, 1693335653, 1693335653, '127.0.0.1', 1, 1, NULL, NULL, 0, 0, '1bbJPH_fvpofyU-FCRmFbBwF43wZa1XW'),
 (31, '刘军', '', '', '$2y$13$f803gz/VPts7EFCxYRDFlOLg3jE2CUeAZIRHZtga4xxccT6lKFOaO', '', '刘军', 0, '', '', '17371825007', '', 1694851414, 1694851414, 1694851414, '127.0.0.1', 1, 1, NULL, NULL, 0, 0, 'phF48jYwCc8wZffrx7pQTGegTJuWah7N');
 
@@ -5275,7 +5285,7 @@ ALTER TABLE `swd_acategory`
 -- 使用表AUTO_INCREMENT `swd_address`
 --
 ALTER TABLE `swd_address`
-  MODIFY `addr_id` int(10) UNSIGNED NOT NULL AUTO_INCREMENT, AUTO_INCREMENT=25;
+  MODIFY `addr_id` int(10) UNSIGNED NOT NULL AUTO_INCREMENT, AUTO_INCREMENT=26;
 
 --
 -- 使用表AUTO_INCREMENT `swd_appbuylog`
@@ -5323,7 +5333,7 @@ ALTER TABLE `swd_brand`
 -- 使用表AUTO_INCREMENT `swd_cart`
 --
 ALTER TABLE `swd_cart`
-  MODIFY `rec_id` int(10) UNSIGNED NOT NULL AUTO_INCREMENT, AUTO_INCREMENT=7;
+  MODIFY `rec_id` int(10) UNSIGNED NOT NULL AUTO_INCREMENT, AUTO_INCREMENT=9;
 
 --
 -- 使用表AUTO_INCREMENT `swd_cashcard`
@@ -5371,13 +5381,13 @@ ALTER TABLE `swd_delivery_template`
 -- 使用表AUTO_INCREMENT `swd_deposit_account`
 --
 ALTER TABLE `swd_deposit_account`
-  MODIFY `account_id` int(11) UNSIGNED NOT NULL AUTO_INCREMENT, AUTO_INCREMENT=33;
+  MODIFY `account_id` int(11) UNSIGNED NOT NULL AUTO_INCREMENT, AUTO_INCREMENT=34;
 
 --
 -- 使用表AUTO_INCREMENT `swd_deposit_recharge`
 --
 ALTER TABLE `swd_deposit_recharge`
-  MODIFY `recharge_id` int(11) UNSIGNED NOT NULL AUTO_INCREMENT, AUTO_INCREMENT=5;
+  MODIFY `recharge_id` int(11) UNSIGNED NOT NULL AUTO_INCREMENT, AUTO_INCREMENT=7;
 
 --
 -- 使用表AUTO_INCREMENT `swd_deposit_record`
@@ -5401,7 +5411,7 @@ ALTER TABLE `swd_deposit_setting`
 -- 使用表AUTO_INCREMENT `swd_deposit_trade`
 --
 ALTER TABLE `swd_deposit_trade`
-  MODIFY `trade_id` int(11) UNSIGNED NOT NULL AUTO_INCREMENT, AUTO_INCREMENT=43;
+  MODIFY `trade_id` int(11) UNSIGNED NOT NULL AUTO_INCREMENT, AUTO_INCREMENT=46;
 
 --
 -- 使用表AUTO_INCREMENT `swd_deposit_withdraw`
@@ -5563,13 +5573,13 @@ ALTER TABLE `swd_navigation`
 -- 使用表AUTO_INCREMENT `swd_order`
 --
 ALTER TABLE `swd_order`
-  MODIFY `order_id` int(10) UNSIGNED NOT NULL AUTO_INCREMENT, AUTO_INCREMENT=5;
+  MODIFY `order_id` int(10) UNSIGNED NOT NULL AUTO_INCREMENT, AUTO_INCREMENT=6;
 
 --
 -- 使用表AUTO_INCREMENT `swd_order_goods`
 --
 ALTER TABLE `swd_order_goods`
-  MODIFY `rec_id` int(10) UNSIGNED NOT NULL AUTO_INCREMENT, AUTO_INCREMENT=42;
+  MODIFY `rec_id` int(10) UNSIGNED NOT NULL AUTO_INCREMENT, AUTO_INCREMENT=43;
 
 --
 -- 使用表AUTO_INCREMENT `swd_order_log`
