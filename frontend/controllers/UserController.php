@@ -122,6 +122,20 @@ class UserController extends \common\controllers\BaseUserController
         if (!Yii::$app->user->isGuest) {
             return $this->goHome();
         }
+		//var_dump($_SERVER['HTTP_USER_AGENT']);
+		 /**********************[START]JchengCustom with local**********************/
+		$browserName = Basewind::browserName();
+		if($browserName == 'Firefox'){//权限判断[START]JchengCustom	
+			$this->params['loginName'] = '博艺花卉';
+		}else if($browserName == 'QQ'){
+			$this->params['loginName'] = '散单零售';
+		}else if($browserName == 'Chrome'){
+			$this->params['loginName'] = '开业零售';
+		}else if($browserName == 'MSIE'){
+			$this->params['loginName'] = '散单零售';
+		}
+		/**********************[END]JchengCustom with local**********************/
+		
 		
 		if(!Yii::$app->request->isPost) 
 		{

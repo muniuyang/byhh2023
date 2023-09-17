@@ -146,17 +146,19 @@ class My_addressController extends \common\controllers\BaseUserController
 				$valid = true;
 			}
 			/*******[更新用户]***************[START]JchengCustom 根据添加收货地址的落款**********************/
-			$consignee=$post->consignee;
-			if(!$consignee){
-				return Message::popWarning("*请填写收货人姓名^_^!");
-			}
-			$signature=$post->signature;
-			if(!$signature){
-				return Message::popWarning("*请填写落款签名^_^!");
-			}
-			$subscriber=$post->subscriber;
-			if(!$subscriber){
-				return Message::popWarning("*请填写订花人名称^_^!");
+			if(in_array(Yii::$app->user->id,Yii::$app->params['openRights'])){//权限判断[START]JchengCustom
+				$consignee=$post->consignee;
+				if(!$consignee){
+					return Message::popWarning("*请填写收货人姓名^_^!");
+				}
+				$signature=$post->signature;
+				if(!$signature){
+					return Message::popWarning("*请填写落款签名^_^!");
+				}
+				$subscriber=$post->subscriber;
+				if(!$subscriber){
+					return Message::popWarning("*请填写订花人名称^_^!");
+				}
 			}
 			$address = AddressModel::find()->where(['addr_id' => $addr_id])->asArray()->one();
 			/**********************[END]JchengCustom with local**********************/

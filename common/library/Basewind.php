@@ -383,7 +383,28 @@ class Basewind
 		}	
 		return false;
 	}
-
+    /**
+	 * 判断浏览器类型 JchengCustom
+	 */
+	public static function browserName()
+	{
+		if(preg_match('/MSIE/i',$_SERVER['HTTP_USER_AGENT'])){
+			//return 'MSIE';
+			return 'MSIE';
+		}elseif(preg_match('/QQ/i',$_SERVER['HTTP_USER_AGENT'])){
+			return 'QQ';
+		}elseif(preg_match('/Firefox/i',$_SERVER['HTTP_USER_AGENT'])){
+			return 'Firefox';
+		}elseif(preg_match('/Chrome/i',$_SERVER['HTTP_USER_AGENT'])){
+			return 'Chrome';
+		}elseif(preg_match('/Safari/i',$_SERVER['HTTP_USER_AGENT'])){
+			return 'Safari';
+		}elseif(preg_match('/Opera/i',$_SERVER['HTTP_USER_AGENT'])){
+			return 'Opera';
+		}else{
+			return '';
+		}
+	}
 	/**
 	 * 判断是否为支付宝客户端
 	 * @return bool

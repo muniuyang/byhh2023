@@ -1,6 +1,21 @@
 composer使用记录
 
+1、composer list：获取帮助信息；
+2、composer init：以交互方式填写composer.json文件信息；
+3、composer install：从当前目录读取composer.json文件，处理依赖关系，并安装到vendor目录下；
 
+     跳过某个依赖项： composer install --ignore-platform-reqs
+4、composer update：获取依赖的最新版本，升级composer.lock文件；
+5、composer require：添加新的依赖包到composer.json文件中并执行更新；
+6、composer search：在当前项目中搜索依赖包；
+7、composer show：列举所有可用的资源包；
+8、composer validate：检测composer.json文件是否有效；
+9、composer self-update：将composer工具更新到最新版本；
+10、composer create-project：基于composer创建一个新的项目；
+11、composer dump-autoload：在添加新的类和目录映射是更新autoloader
+12、composer remove twbs/bootstrap ：删除依赖后还需要去vender文件夹里，手动删除
+13、composer 指定版本：composer require hyperf/validation:"v2.1.0"
+ 
 
 1.composer降级
 
@@ -27,3 +42,69 @@ composer self-update
 
 composer self-update 1.10.1
  
+
+
+三、composer 降版本
+默认安装的是最新版本，如果想使用1.0的版本，可以通过如下命令实现：
+
+composer self-update --1
+版本回退命令：
+
+composer self-update --rollback
+查看composer 版本：
+
+composer --version
+composer -V 
+composer -v
+比如我默认安装了2.5.5 版本，想降级到1.0 则可执行命令：composer self-update --1
+
+回退后我又后悔了，可通过命令：composer self-update --rollback 回滚。
+————————————————
+版权声明：本文为CSDN博主「lanbing」的原创文章，遵循CC 4.0 BY-SA版权协议，转载请附上原文出处链接及本声明。
+原文链接：https://blog.csdn.net/wamp0001/article/details/130032385
+
+
+
+5. 安装包
+composer require apanly/browser-detector
+
+
+
+update 命令
+update 命令用于更新项目里所有的包，或者指定的某些包：
+
+# 更新所有依赖
+$ composer update
+
+# 更新指定的包
+$ composer update monolog/monolog
+
+# 更新指定的多个包
+$ composer update monolog/monolog symfony/dependency-injection
+
+# 还可以通过通配符匹配包
+$ composer update monolog/monolog symfony/*
+————————————————
+版权声明：本文为CSDN博主「低吟~浅唱」的原创文章，遵循CC 4.0 BY-SA版权协议，转载请附上原文出处链接及本声明。
+原文链接：https://blog.csdn.net/qq_40575646/article/details/122965587
+search 命令
+search 命令可以搜索包：
+
+$ composer search monolog
+该命令会输出包及其描述信息，如果只想输出包名可以使用 --only-name 参数：
+
+$ composer search --only-name monolog
+show 命令
+show 命令可以列出当前项目使用到包的信息：
+
+# 列出所有已经安装的包
+$ composer show
+
+# 可以通过通配符进行筛选
+$ composer show monolog/*
+
+# 显示具体某个包的信息
+$ composer show monolog/monolog
+————————————————
+版权声明：本文为CSDN博主「低吟~浅唱」的原创文章，遵循CC 4.0 BY-SA版权协议，转载请附上原文出处链接及本声明。
+原文链接：https://blog.csdn.net/qq_40575646/article/details/122965587
