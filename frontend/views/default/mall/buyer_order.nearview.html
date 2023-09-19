@@ -98,10 +98,10 @@
 			  width:100%;height:60px;line-height:60px;text-align:center;margin: 0 auto;
 		  }
 	  </style>
-	  <div class="btnbos">
-		  <a href="http://shopwind.byhh.com/order_printed/view.html?order_id={$order.order_id}&ptf=1"  class="printed" dialog_title="打印订单" 
+	  <div class="btnbos">{$order.orderGoods[0].cate_name|escape} 
+		  <a href="/order_printed/lists.html?order_id={$order.order_id}&ptf=1"  class="printed" dialog_title="打印订单" 
 		   ectype="batchopt" uri="/seller_order/printed.html" dialog_id="seller_order_printed" name="order_id">
-		  		  打印卡片</a>
+		  		 打印卡片</a>
 	  </div>
     </div>
   </div>

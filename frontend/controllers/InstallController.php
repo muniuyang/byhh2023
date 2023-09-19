@@ -57,7 +57,7 @@ class InstallController extends \common\controllers\BaseInstallController
 		if(Basewind::isInstall()) {
 			return $this->redirect(['default/index']);
 		}
-		
+
 		$this->params['page'] = Page::seo(['title' => Language::get('install_eula')]);
         return $this->render('../install.eula.html', $this->params);
 	}

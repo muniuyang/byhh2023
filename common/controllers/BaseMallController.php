@@ -70,7 +70,6 @@ class BaseMallController extends Controller
 	public function init()
 	{
 		parent::init();
-		
 		// 安装检测
 		Basewind::environment();
 

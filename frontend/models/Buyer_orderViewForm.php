@@ -15,6 +15,7 @@ use Yii;
 use yii\base\Model; 
 
 use common\models\OrderModel;
+use common\models\GoodsModel;
 use common\models\DepositTradeModel;
 use common\models\RefundModel;
 use common\models\UserModel;
@@ -36,16 +37,30 @@ class Buyer_orderViewForm extends Model
 		
 		/**********************[START]JchengCustom with local**********************/
 		$userid = Yii::$app->user->id;
+		$Goods = [];
 		if(in_array($userid,Yii::$app->params['openRights'])){
 			$orderInfo = OrderModel::find()->alias('o')
 			->select('o.order_id,o.buyer_id,o.seller_id,o.order_amount,o.discount,o.payment_code,o.payment_name,o.pay_message,o.pay_time,
 			o.ship_time,o.finished_time,o.express_no,o.postscript,o.status,o.order_sn,o.add_time as order_add_time,
-			s.store_name,s.region_name,s.address,s.im_qq')->joinWith('store s', false)->joinWith('orderExtm')->with('orderGoods')
+			s.store_name,s.region_name,s.address,s.im_qq')
+			->joinWith('store s', false)
+			->joinWith('orderExtm')
+			->with('orderGoods')
 			->where(['o.order_id' => $post->order_id])->asArray()->one();
+
+			$Goods = GoodsModel::find()->select(['cate_id','cate_name'])->where(['goods_id' => $orderInfo['orderGoods'][0]['goods_id']])->asArray()->one();
+			//var_dump($orderInfo);die;
 		}else{
 			$orderInfo = OrderModel::find()->alias('o')
 			->select('o.order_id,o.buyer_id,o.seller_id,o.order_amount,o.discount,o.payment_code,o.payment_name,o.pay_message,o.pay_time,o.ship_time,o.finished_time,o.express_no,o.postscript,o.status,o.order_sn,o.add_time as order_add_time,s.store_name,s.region_name,s.address,s.im_qq')->joinWith('store s', false)->joinWith('orderExtm')->with('orderGoods')
 			->where(['o.order_id' => $post->order_id, 'buyer_id' => Yii::$app->user->id])->asArray()->one();
+		}
+		if(!empty($Goods)){
+			$orderInfo['orderGoods'][0] = array_merge($orderInfo['orderGoods'][0],$Goods);
+		}else{
+			$orderInfo['orderGoods'][0]['cate_id'] =0;
+			$orderInfo['orderGoods'][0]['cate_name'] ='';
+
 		}
 		/**********************[START]JchengCustom with local**********************/
 		if(!$post->order_id || !($orderInfo)) {
@@ -56,6 +71,8 @@ class Buyer_orderViewForm extends Model
 		if(Basewind::getCurrentApp() == 'pc') {
 			$orderInfo['seller_info'] = UserModel::find()->select('phone_mob')->where(['userid' => $orderInfo['seller_id']])->asArray()->one();
 		}
+
+		//var_dump($orderInfo['orderGoods']);die('2');
 		
 		return $orderInfo;
 	}

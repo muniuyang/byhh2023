@@ -34,6 +34,8 @@ class DefaultController extends \common\controllers\BaseMallController
 	 */
 	public function init()
 	{
+
+
 		parent::init();
 		$this->view  = Page::setView('mall');
 		$this->params = ArrayHelper::merge($this->params, Page::getAssign('mall'), [

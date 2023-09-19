@@ -48,7 +48,6 @@ class Order_printedController extends \common\controllers\BaseUserController
 	public function actionView()
     {
 		
-		//die('ddd');
 		$post = Basewind::trimAll(Yii::$app->request->get(), true, ['order_id','ptf']);
 		
 		$model = new \frontend\models\Buyer_orderViewForm();
@@ -68,6 +67,17 @@ class Order_printedController extends \common\controllers\BaseUserController
 		}
 		 
 	  
+	}
+	/**
+	 *  打印模版列表
+	 */
+	public function actionLists()
+    {
+		
+		$post = Basewind::trimAll(Yii::$app->request->get(), true, ['order_id','ptf']);
+		//var_dump($post);
+		$this->params['order_id'] = $post->order_id;
+		return $this->render('../printed.list.html', $this->params);
 	}
     //http://shopwind.byhh.com/order_printed/printedf1.html
 	public function actionPrintedf1($order){
