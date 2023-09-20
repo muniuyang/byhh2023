@@ -58,14 +58,17 @@ class Order_printedController extends \common\controllers\BaseUserController
 		$orderInfo['ptf'] = $post->ptf;
 		//VAR_DUMP($orderInfo['orderExtm']);die;
 		$orderInfo['postscript'] = $orderInfo['orderExtm']['signature'];
-		if($post->ptf ==1){
+		if($post->ptf >=1 && $post->ptf<=20){
+			$this->actionExcute($orderInfo);
+		}else if($post->ptf ==21){
 			$this->actionPrintedf1($orderInfo);
-		}else if($post->ptf ==2){
+		}else if($post->ptf ==22){
 			$this->actionPrintedf2($orderInfo);
-		}else if($post->ptf ==3){
+		}else if($post->ptf ==23){
 			$this->actionPrintedf3($orderInfo);
-		}
-		 
+		}else{
+			return Message::warning("没找到模版，模版不存在！");
+		} 
 	  
 	}
 	/**
@@ -78,6 +81,22 @@ class Order_printedController extends \common\controllers\BaseUserController
 		//var_dump($post);
 		$this->params['order_id'] = $post->order_id;
 		return $this->render('../printed.list.html', $this->params);
+	}
+	/**
+	* 打印开始
+	*/
+	public function actionExcute($order){
+
+		$logo = dirname(Yii::$app->BasePath).'/frontend/web/data/system/byhhgzh.png';
+		$templateFile = dirname(Yii::$app->BasePath).'/frontend/web/data/printed_card_a00'.$order['ptf'].'.docx';
+		$orderExt = $order['orderExtm'];
+		$filename = 'F'.$order['ptf'].'['.$order['order_id'].']['.$order['postscript'].']送['.$orderExt['consignee'].'].docx';
+		$resultFile = dirname(Yii::$app->BasePath).'/frontend/web/data/sales/'.$filename;
+		// 创建新文档
+		$templateProcessor = new \PhpOffice\PhpWord\TemplateProcessor($templateFile);
+		$templateProcessor->setValue('signer',$order['postscript']); 
+		$templateProcessor->saveAs($resultFile);
+		$this->actionDown($resultFile);
 	}
     //http://shopwind.byhh.com/order_printed/printedf1.html
 	public function actionPrintedf1($order){
