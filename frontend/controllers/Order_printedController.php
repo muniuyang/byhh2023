@@ -88,7 +88,7 @@ class Order_printedController extends \common\controllers\BaseUserController
 	public function actionExcute($order){
 
 		$logo = dirname(Yii::$app->BasePath).'/frontend/web/data/system/byhhgzh.png';
-		$templateFile = dirname(Yii::$app->BasePath).'/frontend/web/data/printed_card_a00'.$order['ptf'].'.docx';
+		$templateFile = dirname(Yii::$app->BasePath).'/frontend/web/data/template/printed_card_a00'.$order['ptf'].'.docx';
 		$orderExt = $order['orderExtm'];
 		$filename = 'F'.$order['ptf'].'['.$order['order_id'].']['.$order['postscript'].']送['.$orderExt['consignee'].'].docx';
 		$resultFile = dirname(Yii::$app->BasePath).'/frontend/web/data/sales/'.$filename;
@@ -101,7 +101,7 @@ class Order_printedController extends \common\controllers\BaseUserController
     //http://shopwind.byhh.com/order_printed/printedf1.html
 	public function actionPrintedf1($order){
 		$logo = dirname(Yii::$app->BasePath).'/frontend/web/data/system/byhhgzh.png';
-		$templateFile = dirname(Yii::$app->BasePath).'/frontend/web/data/printed_template.docx';
+		$templateFile = dirname(Yii::$app->BasePath).'/frontend/web/data/template/printed_template.docx';
 		$orderExt = $order['orderExtm'];
 		//$resultFile = dirname(Yii::$app->BasePath).'/frontend/web/data/sales/printed['.$order['order_id'].']'.$order['ptf'].'.docx';
 		$filename = 'F'.$order['ptf'].'['.$order['order_id'].']['.$order['postscript'].']送['.$orderExt['consignee'].'].docx';
