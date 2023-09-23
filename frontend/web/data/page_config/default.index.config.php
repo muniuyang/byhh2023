@@ -63,34 +63,6 @@ return array (
         'num' => '5',
       ),
     ),
-    '_widget_905' => 
-    array (
-      'name' => 'df_need_channel',
-      'options' => 
-      array (
-        'ad1_image_url' => 'data/files/mall/template/201709201020512809.png',
-        'ad1_link_url' => 'http://test.shopwind.net/search/goods.html?cate_id=21',
-        'model1_title' => '优质新品|专注生活美学',
-        'model_style1' => 'mi',
-        'ad2_image_url' => 'data/files/mall/template/201709201022285977.png',
-        'ad2_link_url' => 'http://test.shopwind.net/goods.html?id=343',
-        'model2_title' => '潮流女装|春装流行款抢购',
-        'model_style2' => 'danh',
-        'ad3_image_url' => 'data/files/mall/template/201709201022288521.png',
-        'ad3_link_url' => 'http://test.shopwind.net/store/index.html?id=2',
-        'model3_title' => '人气美鞋|新外貌“鞋”会',
-        'model_style3' => 'huang',
-        'ad4_image_url' => 'data/files/mall/template/201709201022289922.png',
-        'ad4_link_url' => 'http://test.shopwind.net/goods.html?id=326',
-        'model4_title' => '品牌精选|潮牌尖货 初春换新',
-        'model_style4' => 'zi',
-        'ad5_image_url' => 'data/files/mall/template/201709201022285808.png',
-        'ad5_link_url' => 'http://test.shopwind.net/brand/index.html',
-        'model5_title' => '护肤彩妆|春妆必买清单 低至3折',
-        'model_style5' => 'danzi',
-        'ad0_image_url' => false,
-      ),
-    ),
     '_widget_154' => 
     array (
       'name' => 'df_clothing',
@@ -196,143 +168,6 @@ return array (
       'name' => 'df_electrical',
       'options' => 
       array (
-        'model_name' => '鲜花：手捧花、桌花、讲台花、开业花篮',
-        'model_style' => 'cheng',
-        'ad1_image_url' => 'data/files/mall/template/20230923102218971.jpg',
-        'ad1_link_url' => 'http://test.shopwind.net/store/index.html?id=2',
-        'ad2_image_url' => 'data/files/mall/template/20230923102218764.jpg',
-        'ad2_link_url' => 'http://test.shopwind.net/brand/index.html',
-        'ad3_image_url' => 'data/files/mall/template/20230923102218455.jpg',
-        'ad3_link_url' => 'http://test.shopwind.net/search/goods.html?cate_id=21',
-        'ad4_image_url' => 'data/files/mall/template/20230923102555502.jpg',
-        'ad4_link_url' => 'http://test.shopwind.net/goods.html?id=326',
-        'ad5_image_url' => 'data/files/mall/template/20230923102555549.jpg',
-        'ad5_link_url' => 'http://test.shopwind.net/integral/index.html',
-        'tab1_title' => '热门推荐',
-        'ad6_image_url' => 'data/files/mall/template/20230923102555640.jpg',
-        'ad6_link_url' => 'http://test.shopwind.net/channel/index.html?id=154318705971',
-        'model6_title' => 'TOP1',
-        'ad7_image_url' => 'data/files/mall/template/20230923102555312.jpg',
-        'ad7_link_url' => 'http://test.shopwind.net/goods.html?id=315',
-        'model7_title' => 'TOP2',
-        'ad8_image_url' => 'data/files/mall/template/20230923102555460.jpg',
-        'ad8_link_url' => 'http://test.shopwind.net/goods.html?id=332',
-        'model8_title' => 'TOP3',
-        'ad9_image_url' => 'data/files/mall/template/20230923102555423.jpg',
-        'ad9_link_url' => 'http://test.shopwind.net/channel/index.html?id=154318852528',
-        'model9_title' => 'TOP4',
-        'ad10_image_url' => 'data/files/mall/template/20230923102555900.jpg',
-        'ad10_link_url' => 'http://test.shopwind.net/search/goods.html?cate_id=63',
-        'model10_title' => 'TOP5',
-        'ad11_image_url' => 'data/files/mall/template/20230923102555299.jpg',
-        'ad11_link_url' => 'http://test.shopwind.net/goods.html?id=315',
-        'model11_title' => 'TOP6',
-        'tab2_title' => '小型绿植',
-        'img_recom_id_2' => '8',
-        'img_cate_id_2' => '21',
-        'tab3_title' => '小型花束',
-        'img_recom_id_3' => '10',
-        'img_cate_id_3' => '2',
-        'tab4_title' => '鲜花',
-        'img_recom_id_4' => '11',
-        'img_cate_id_4' => '0',
-        'tab5_title' => '其他',
-        'img_recom_id_5' => '-100',
-        'img_cate_id_5' => '2',
-      ),
-    ),
-    '_widget_760' => 
-    array (
-      'name' => 'df_master',
-      'options' => 
-      array (
-        'model_name' => '还有更多商品',
-        'ad1_image_url' => 'data/files/mall/template/201709211012151189.png',
-        'ad1_link_url' => 'http://test.shopwind.net/brand/index.html',
-        'model1_title' => '纯棉质品|把好货带回家',
-        'model_style1' => 'qing',
-        'ad2_image_url' => 'data/files/mall/template/201709211015174199.png',
-        'ad2_link_url' => 'http://test.shopwind.net/search/goods.html?cate_id=21',
-        'model2_title' => '新品沙发|热卖中',
-        'model_style2' => 'danzi',
-        'ad3_image_url' => 'data/files/mall/template/201709211015178201.png',
-        'ad3_link_url' => 'http://test.shopwind.net/search/goods.html?cate_id=63',
-        'model3_title' => '团购热卖|都是好货',
-        'model_style3' => 'danh',
-        'ad4_image_url' => 'data/files/mall/template/201709211015177573.png',
-        'ad4_link_url' => 'http://test.shopwind.net/channel/index.html?id=154318705971',
-        'model4_title' => '舒适童鞋|帮宝宝学走路',
-        'model_style4' => 'lan',
-        'ad5_image_url' => 'data/files/mall/template/201709211015176945.png',
-        'ad5_link_url' => 'http://test.shopwind.net/store/index.html?id=2',
-        'model5_title' => '双十二运动鞋|品牌直降',
-        'model_style5' => 'tao',
-      ),
-    ),
-    '_widget_554' => 
-    array (
-      'name' => 'df_store',
-      'options' => 
-      array (
-        'model_name' => '热门商铺',
-        'ad1_image_url' => 'data/files/mall/template/201709261649278403.jpg',
-        'ad1_storeId' => '2',
-        'ad1_title' => '女装时尚内衣',
-        'ad2_image_url' => 'data/files/mall/template/201709261649276004.jpg',
-        'ad2_storeId' => '2',
-        'ad2_title' => '夏季潮流女装馆',
-        'ad3_image_url' => 'data/files/mall/template/201709261649272462.jpg',
-        'ad3_storeId' => '2',
-        'ad3_title' => '秋季休闲女装馆',
-        'ad4_image_url' => 'data/files/mall/template/201709261649272406.jpg',
-        'ad4_storeId' => '2',
-        'ad4_title' => '校园风格女装馆',
-      ),
-    ),
-    '_widget_455' => 
-    array (
-      'name' => 'df_goods_list',
-      'options' => 
-      array (
-        'model_name' => '猜你喜欢',
-        'img_recom_id' => '-100',
-        'img_cate_id' => '0',
-        'num' => '30',
-      ),
-    ),
-  ),
-  'config' => 
-  array (
-    'top-ads' => 
-    array (
-      0 => '_widget_693',
-    ),
-    'col-1-r-l' => 
-    array (
-      0 => '_widget_684',
-    ),
-    'col-1-r-r' => 
-    array (
-      0 => '_widget_849',
-    ),
-    'col-3' => 
-    array (
-      0 => '_widget_423',
-      1 => '_widget_905',
-      2 => '_widget_154',
-      3 => '_widget_132',
-      4 => '_widget_297',
-      5 => '_widget_760',
-      6 => '_widget_554',
-      7 => '_widget_455',
-    ),
-  ),
-  'tmp' => 
-  array (
-    '_widget_297' => 
-    array (
-      'options' => 
-      array (
         'model_name' => '鲜花：手捧花、桌花、讲台花',
         'model_style' => 'cheng',
         'ad1_image_url' => 'data/files/mall/template/20230923102218971.jpg',
@@ -377,6 +212,40 @@ return array (
         'img_recom_id_5' => '-100',
         'img_cate_id_5' => '2',
       ),
+    ),
+    '_widget_455' => 
+    array (
+      'name' => 'df_goods_list',
+      'options' => 
+      array (
+        'model_name' => '猜你喜欢',
+        'img_recom_id' => '-100',
+        'img_cate_id' => '0',
+        'num' => '30',
+      ),
+    ),
+  ),
+  'config' => 
+  array (
+    'top-ads' => 
+    array (
+      0 => '_widget_693',
+    ),
+    'col-1-r-l' => 
+    array (
+      0 => '_widget_684',
+    ),
+    'col-1-r-r' => 
+    array (
+      0 => '_widget_849',
+    ),
+    'col-3' => 
+    array (
+      0 => '_widget_423',
+      1 => '_widget_154',
+      2 => '_widget_132',
+      3 => '_widget_297',
+      4 => '_widget_455',
     ),
   ),
 );
