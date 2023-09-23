@@ -89,8 +89,6 @@ class OrderController extends \common\controllers\BaseUserController
 		if ($this->visitor['store_id'] && in_array($this->visitor['store_id'], $goods_info['storeIds'])) {
 			return Message::warning(Language::get('can_not_buy_yourself'));
 		}
-		
-		//var_dump($goods_info);die;
 		if(!Yii::$app->request->isPost)
 		{
 			// 获取订单模型
