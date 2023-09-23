@@ -241,10 +241,13 @@ class BaseOrder
 			$consignee_info = $consignee_info[0];
 
 			if($consignee_info['subscriber']){
-				$subscriber = $consignee_info['subscriber'];
+				$subscribers = $consignee_info['subscriber'];
 			}else{
-				$subscriber = $consignee_info['signature']; 
+				$subscribers = $consignee_info['signature']; 
 			}
+			$subscribers = explode(',',$subscribers);
+			$subscriber  = $subscribers[0];
+			//var_dump($subscribers);die;
 			//var_dump($subscriber);die('88881');
 			if(!$subscriber) return $base_info;
 			$Pinyin =  new Pinyin();

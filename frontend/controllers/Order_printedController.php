@@ -61,11 +61,11 @@ class Order_printedController extends \common\controllers\BaseUserController
 		if($post->ptf >=1 && $post->ptf<=20){
 			$this->actionExcute($orderInfo);
 		}else if($post->ptf ==21){
-			$this->actionPrintedf1($orderInfo);
+			$this->actionPrinted($orderInfo);
 		}else if($post->ptf ==22){
-			$this->actionPrintedf2($orderInfo);
+			$this->actionPrinted($orderInfo);
 		}else if($post->ptf ==23){
-			$this->actionPrintedf3($orderInfo);
+			$this->actionPrinted($orderInfo);
 		}else{
 			return Message::warning("没找到模版，模版不存在！");
 		} 
@@ -80,6 +80,7 @@ class Order_printedController extends \common\controllers\BaseUserController
 		$post = Basewind::trimAll(Yii::$app->request->get(), true, ['order_id','ptf']);
 		//var_dump($post);
 		$this->params['order_id'] = $post->order_id;
+		$this->params['cards'] =[[],[],[],[],[],[],[],[],[]];
 		return $this->render('../printed.list.html', $this->params);
 	}
 	/**
@@ -88,7 +89,7 @@ class Order_printedController extends \common\controllers\BaseUserController
 	public function actionExcute($order){
 
 		$logo = dirname(Yii::$app->BasePath).'/frontend/web/data/system/byhhgzh.png';
-		$templateFile = dirname(Yii::$app->BasePath).'/frontend/web/data/template/printed_card_a00'.$order['ptf'].'.docx';
+		$templateFile = dirname(Yii::$app->BasePath).'/frontend/web/data/template/printed_card_a'.$order['ptf'].'.docx';
 		$orderExt = $order['orderExtm'];
 		$filename = 'F'.$order['ptf'].'['.$order['order_id'].']['.$order['postscript'].']送['.$orderExt['consignee'].'].docx';
 		$resultFile = dirname(Yii::$app->BasePath).'/frontend/web/data/sales/'.$filename;
@@ -99,9 +100,9 @@ class Order_printedController extends \common\controllers\BaseUserController
 		$this->actionDown($resultFile);
 	}
     //http://shopwind.byhh.com/order_printed/printedf1.html
-	public function actionPrintedf1($order){
+	public function actionPrinted($order){
 		$logo = dirname(Yii::$app->BasePath).'/frontend/web/data/system/byhhgzh.png';
-		$templateFile = dirname(Yii::$app->BasePath).'/frontend/web/data/template/printed_template.docx';
+		$templateFile = dirname(Yii::$app->BasePath).'/frontend/web/data/template/printed_card_b'.$order['ptf'].'.docx';
 		$orderExt = $order['orderExtm'];
 		//$resultFile = dirname(Yii::$app->BasePath).'/frontend/web/data/sales/printed['.$order['order_id'].']'.$order['ptf'].'.docx';
 		$filename = 'F'.$order['ptf'].'['.$order['order_id'].']['.$order['postscript'].']送['.$orderExt['consignee'].'].docx';

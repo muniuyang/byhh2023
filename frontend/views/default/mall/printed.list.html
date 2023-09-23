@@ -4,150 +4,35 @@
    
     <div class="list w">
       <ul class="clearfix">
+		  <!--{foreach from=$cards item=record key=key}-->
         <li class="clearfix float-left">
-          <div class="lp float-left"> <a href="{url route='/order_printed/view' ptf=1 order_id=$order_id}" target="_blank"><img src="" /></a> </div>
+          <div class="lp float-left"> <a href="{url route='/order_printed/view' ptf=($key+1) order_id=$order_id}" target="_blank">
+		  <img src="/static/images/template/a{$key+1}.png" /></a> </div>
           <div class="mp float-left">
-            <div class="value1"><span style="font-size:18px;color:#f23030;">花束WPS（A001）</span></div>
+            <div class="value1"><span style="font-size:18px;color:#f23030;">花束WPS（A{$key+1}）</span></div>
             <br/>
-            <div class="can"><em class="red">模版尺寸:11.7*7.5</em></div>
-          
-            <div class="type mt10">卡片模版花束通用</div>
-            <div class="count"><em class="f66 mr5">仅剩1件</em> <span><i title="4%" style="width:4%;"></i></span></div>
+            <div class="can"><em class="red">亲爱的!</em></div> <br/>
+			<div class="can">喜迁新居喜洋洋，福星高照福满堂。</div>
+            <div class="type mt10" style="float:right;">衣铭服饰  <b>赠</b></div>
           </div>
           <div class="rp float-right">
-            <div class="wp"><a href="{url route='/order_printed/view' ptf=1 order_id=$order_id}" > <span class="line"></span> <em class="text">立即打印</em> </a> </div>
+            <div class="wp"><a href="{url route='/order_printed/view' ptf={$key+1} order_id=$order_id}" > <span class="line"></span> <em class="text">立即打印</em> </a> </div>
           </div>
           <div class="ins float-right"> <i class="i1"></i> <i class="i2"></i> </div>
         </li>
-         <li class="clearfix float-left">
-          <div class="lp float-left"> <a href="{url route='/order_printed/view' ptf=2 order_id=$order_id}" target="_blank"><img src="" /></a> </div>
-          <div class="mp float-left">
-            <div class="value1"><span style="font-size:18px;color:#f23030;">花束WPS（A002）</span></div>
-            <br/>
-            <div class="can"><em class="red">模版尺寸:11.7*7.5</em></div>
-          
-            <div class="type mt10">卡片模版花束通用</div>
-            <div class="count"><em class="f66 mr5">仅剩1件</em> <span><i title="4%" style="width:4%;"></i></span></div>
-          </div>
-          <div class="rp float-right">
-            <div class="wp"><a href="{url route='/order_printed/view' ptf=2 order_id=$order_id}" > <span class="line"></span> <em class="text">立即打印</em> </a> </div>
-          </div>
-          <div class="ins float-right"> <i class="i1"></i> <i class="i2"></i> </div>
-        </li>
-         <li class="clearfix float-left">
-          <div class="lp float-left"> <a href="{url route='/order_printed/view' ptf=3 order_id=$order_id}" target="_blank"><img src="" /></a> </div>
-          <div class="mp float-left">
-            <div class="value1"><span style="font-size:18px;color:#f23030;">花束WPS（A003）</span></div>
-            <br/>
-            <div class="can"><em class="red">模版尺寸:11.7*7.5</em></div>
-          
-            <div class="type mt10">卡片模版花束通用</div>
-            <div class="count"><em class="f66 mr5">仅剩1件</em> <span><i title="4%" style="width:4%;"></i></span></div>
-          </div>
-          <div class="rp float-right">
-            <div class="wp"><a href="{url route='/order_printed/view' ptf=3 order_id=$order_id}" > <span class="line"></span> <em class="text">立即打印</em> </a> </div>
-          </div>
-          <div class="ins float-right"> <i class="i1"></i> <i class="i2"></i> </div>
-        </li>
-         <li class="clearfix float-left">
-          <div class="lp float-left"> <a href="{url route='/order_printed/view' ptf=4 order_id=$order_id}" target="_blank"><img src="" /></a> </div>
-          <div class="mp float-left">
-            <div class="value1"><span style="font-size:18px;color:#f23030;">花束WPS（A004）</span></div>
-            <br/>
-            <div class="can"><em class="red">模版尺寸:11.7*7.5</em></div>
-          
-            <div class="type mt10">卡片模版花束通用</div>
-            <div class="count"><em class="f66 mr5">仅剩1件</em> <span><i title="4%" style="width:4%;"></i></span></div>
-          </div>
-          <div class="rp float-right">
-            <div class="wp"><a href="{url route='/order_printed/view' ptf=4 order_id=$order_id}" > <span class="line"></span> <em class="text">立即打印</em> </a> </div>
-          </div>
-          <div class="ins float-right"> <i class="i1"></i> <i class="i2"></i> </div>
-        </li>
+		<!--{/foreach}-->
+		
+    
         <li class="clearfix float-left">
-          <div class="lp float-left"> <a href="{url route='/order_printed/view' ptf=5 order_id=$order_id}" target="_blank"><img src="" /></a> </div>
+          <div class="lp float-left"> <a href="{url route='/order_printed/view' ptf=21 order_id=$order_id}" target="_blank"><img src="/static/images/template/b1.png" /></a> </div>
           <div class="mp float-left">
-            <div class="value1"><span style="font-size:18px;color:#f23030;">花束WPS（A005）</span></div>
+            <div class="value1"><span style="font-size:18px;color:#05d7a8;">开业WPS（B1）</span></div>
             <br/>
-            <div class="can"><em class="red">模版尺寸:11.7*7.5</em></div>
+            <div class="can"><em class="red">模版尺寸:A4</em></div>
           
-            <div class="type mt10">卡片模版花束通用</div>
-            <div class="count"><em class="f66 mr5">仅剩1件</em> <span><i title="4%" style="width:4%;"></i></span></div>
-          </div>
-          <div class="rp float-right">
-            <div class="wp"><a href="{url route='/order_printed/view' ptf=5 order_id=$order_id}" > <span class="line"></span> <em class="text">立即打印</em> </a> </div>
-          </div>
-          <div class="ins float-right"> <i class="i1"></i> <i class="i2"></i> </div>
-        </li>
-        <li class="clearfix float-left">
-          <div class="lp float-left"> <a href="{url route='/order_printed/view' ptf=6 order_id=$order_id}" target="_blank"><img src="" /></a> </div>
-          <div class="mp float-left">
-            <div class="value1"><span style="font-size:18px;color:#f23030;">花束WPS（A006）</span></div>
-            <br/>
-            <div class="can"><em class="red">模版尺寸:11.7*7.5</em></div>
-          
-            <div class="type mt10">卡片模版花束通用</div>
-            <div class="count"><em class="f66 mr5">仅剩1件</em> <span><i title="4%" style="width:4%;"></i></span></div>
-          </div>
-          <div class="rp float-right">
-            <div class="wp"><a href="{url route='/order_printed/view' ptf=6 order_id=$order_id}" > <span class="line"></span> <em class="text">立即打印</em> </a> </div>
-          </div>
-          <div class="ins float-right"> <i class="i1"></i> <i class="i2"></i> </div>
-        </li>
-        <li class="clearfix float-left">
-          <div class="lp float-left"> <a href="{url route='/order_printed/view' ptf=7 order_id=$order_id}" target="_blank"><img src="" /></a> </div>
-          <div class="mp float-left">
-            <div class="value1"><span style="font-size:18px;color:#f23030;">花束WPS（A007）</span></div>
-            <br/>
-            <div class="can"><em class="red">模版尺寸:11.7*7.5</em></div>
-          
-            <div class="type mt10">卡片模版花束通用</div>
-            <div class="count"><em class="f66 mr5">仅剩1件</em> <span><i title="4%" style="width:4%;"></i></span></div>
-          </div>
-          <div class="rp float-right">
-            <div class="wp"><a href="{url route='/order_printed/view' ptf=7 order_id=$order_id}" > <span class="line"></span> <em class="text">立即打印</em> </a> </div>
-          </div>
-          <div class="ins float-right"> <i class="i1"></i> <i class="i2"></i> </div>
-        </li>
-        <li class="clearfix float-left">
-          <div class="lp float-left"> <a href="{url route='/order_printed/view' ptf=8 order_id=$order_id}" target="_blank"><img src="" /></a> </div>
-          <div class="mp float-left">
-            <div class="value1"><span style="font-size:18px;color:#f23030;">花束WPS（A008）</span></div>
-            <br/>
-            <div class="can"><em class="red">模版尺寸:11.7*7.5</em></div>
-          
-            <div class="type mt10">卡片模版花束通用</div>
-            <div class="count"><em class="f66 mr5">仅剩1件</em> <span><i title="4%" style="width:4%;"></i></span></div>
-          </div>
-          <div class="rp float-right">
-            <div class="wp"><a href="{url route='/order_printed/view' ptf=8 order_id=$order_id}" > <span class="line"></span> <em class="text">立即打印</em> </a> </div>
-          </div>
-          <div class="ins float-right"> <i class="i1"></i> <i class="i2"></i> </div>
-        </li>
-        <li class="clearfix float-left">
-          <div class="lp float-left"> <a href="{url route='/order_printed/view' ptf=9 order_id=$order_id}" target="_blank"><img src="" /></a> </div>
-          <div class="mp float-left">
-            <div class="value1"><span style="font-size:18px;color:#f23030;">花束WPS（A009）</span></div>
-            <br/>
-            <div class="can"><em class="red">模版尺寸:11.7*7.5</em></div>
-          
-            <div class="type mt10">卡片模版花束通用</div>
-            <div class="count"><em class="f66 mr5">仅剩1件</em> <span><i title="4%" style="width:4%;"></i></span></div>
-          </div>
-          <div class="rp float-right">
-            <div class="wp"><a href="{url route='/order_printed/view' ptf=9 order_id=$order_id}" > <span class="line"></span> <em class="text">立即打印</em> </a> </div>
-          </div>
-          <div class="ins float-right"> <i class="i1"></i> <i class="i2"></i> </div>
-        </li>
-        <li class="clearfix float-left">
-          <div class="lp float-left"> <a href="{url route='/order_printed/view' ptf=21 order_id=$order_id}" target="_blank"><img src="" /></a> </div>
-          <div class="mp float-left">
-            <div class="value1"><span style="font-size:18px;color:#05d7a8;">开业WPS（B001）</span></div>
-            <br/>
-            <div class="can"><em class="red">模版尺寸:11.7*7.5</em></div>
-          
-            <div class="type mt10">卡片模版绿植花篮通用</div>
-            <div class="count"><em class="f66 mr5">仅剩1件</em> <span><i title="4%" style="width:4%;"></i></span></div>
+            <div class="type mt10"><b>祝:</b>菲莉泓媛服饰</div>
+            <div class="type mt10">开业大吉，财源广进</div>
+            <div class="type mt10">衣铭服饰  <b>恭贺</b></div>
           </div>
           <div class="rp float-right">
             <div class="wp" style=" background-image: -moz-linear-gradient(top, #05d7a8, #05d7a8);
@@ -159,14 +44,15 @@
           <div class="ins float-right"> <i class="i1"></i> <i class="i2"></i> </div>
         </li>
         <li class="clearfix float-left">
-          <div class="lp float-left"> <a href="{url route='/order_printed/view' ptf=22 order_id=$order_id}" target="_blank"><img src="" /></a> </div>
+          <div class="lp float-left"> <a href="{url route='/order_printed/view' ptf=22 order_id=$order_id}" target="_blank"><img src="/static/images/template/b2.png" /></a> </div>
           <div class="mp float-left">
-            <div class="value1"><span style="font-size:18px;color:#05d7a8;">开业WPS（B002）</span></div>
+            <div class="value1"><span style="font-size:18px;color:#05d7a8;">开业WPS（B2）</span></div>
             <br/>
-            <div class="can"><em class="red">模版尺寸:11.7*7.5</em></div>
+            <div class="can"><em class="red">模版尺寸:A4</em></div>
           
-            <div class="type mt10">卡片模版绿植花篮通用</div>
-            <div class="count"><em class="f66 mr5">仅剩1件</em> <span><i title="4%" style="width:4%;"></i></span></div>
+            <div class="type mt10"><b>祝:</b>湖北海业工程咨询设计有限公司</div>
+			<div class="type mt10">开业大吉，财源广进</div>
+            <div class="type mt10">林诉公馆  <b>恭贺</b></div>
           </div>
           <div class="rp float-right">
             <div class="wp" style="background-image: -moz-linear-gradient(top, #05d7a8, #05d7a8);
@@ -179,14 +65,15 @@
         </li>
         <li class="clearfix float-left">
           <div class="lp float-left"> 
-            <a href="{url route='/order_printed/view' ptf=23 order_id=$order_id}" target="_blank"><img src="" /></a> </div>
+            <a href="{url route='/order_printed/view' ptf=23 order_id=$order_id}" target="_blank"><img src="/static/images/template/b3.png" /></a> </div>
           <div class="mp float-left">
-            <div class="value1"><span style="font-size:18px;color:#05d7a8;">开业WPS（B003）</span></div>
+            <div class="value1"><span style="font-size:18px;color:#05d7a8;">开业WPS（B3）</span></div>
             <br/>
-            <div class="can"><em class="red">模版尺寸:11.7*7.5</em></div>
+            <div class="can"><em class="red">模版尺寸:A4</em></div>
           
-            <div class="type mt10">卡片模版绿植花篮通用</div>
-            <div class="count"><em class="f66 mr5">仅剩1件</em> <span><i title="4%" style="width:4%;"></i></span></div>
+            <div class="type mt10"><b>祝:</b>湖北海业工程咨询设计有限公司</div>
+			<div class="type mt10">开业大吉，财源广进</div>
+            <div class="type mt10"><div>柳喜成，李小芳  </br>柳喜成，李小芳</div><div><b>恭贺</b></div></div>
           </div>
           <div class="rp float-right">
             <div class="wp" style="background-image: -moz-linear-gradient(top, #05d7a8, #05d7a8);

@@ -125,7 +125,7 @@ class OrderController extends \common\controllers\BaseUserController
 			$result = $order_type->submit(array(
 				'goods_info' => $goods_info
 			));
-			//var_dump($result);die('555');
+			var_dump($result);die('555');
 			if(empty($result)) {
 				return Message::warning($order_type->errors);
 			}

@@ -71,7 +71,7 @@ class RefundController extends \common\controllers\BaseUserController
 		list($refund) = $model->getData($get);
 		//var_dump($refund);die;
 		
-		if(in_array(Yii::$app->user->id,$this->params['customRights'])){//权限判断[START]JchengCustom
+		if(in_array(Yii::$app->user->id,Yii::$app->params['customRights'])){//权限判断[START]JchengCustom
 		}
 		if(!$refund) {
 			return Message::warning($model->errors);
