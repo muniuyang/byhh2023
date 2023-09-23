@@ -40,7 +40,7 @@ class Buyer_orderConfirmForm extends Model
 	public function formData($post = null)
 	{
 		
-		if(in_array(Yii::$app->user->id,Yii::$app->params['customRights'])){//权限判断[START]JchengCustom
+		if(in_array(Yii::$app->user->id,Yii::$app->params['createRights'])){//权限判断[START]JchengCustom
 			// 订单信息
 			if(!$post->order_id || !($orderInfo = OrderModel::find()->where(['order_id' => $post->order_id])->andWhere(['in', 'status', [Def::ORDER_SHIPPED]])->indexBy('order_id')->asArray()->one())) {
 				$this->errors = Language::get('no_such_order');
@@ -133,7 +133,7 @@ class Buyer_orderConfirmForm extends Model
 		// 记录订单操作日志 
 		$model = new OrderLogModel();
 		$model->order_id = $orderInfo['order_id'];
-		if(in_array(Yii::$app->user->id,Yii::$app->params['customRights'])){//权限判断[START]JchengCustom
+		if(in_array(Yii::$app->user->id,Yii::$app->params['createRights'])){//权限判断[START]JchengCustom
 			$model->operator = $orderInfo['buyer_name'];
 		}else{
 			$model->operator = addslashes(Yii::$app->user->identity->username);

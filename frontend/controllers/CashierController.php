@@ -59,7 +59,7 @@ class CashierController extends \common\controllers\BaseUserController
 		// 支付多个订单
 		/**********************[START]JchengCustom with local**********************/
 		$userid = Yii::$app->user->id;
-		if(in_array(Yii::$app->user->id,Yii::$app->params['openRights'])){//权限判断[START]JchengCustom
+		if(in_array(Yii::$app->user->id,Yii::$app->params['createRights'])){//权限判断[START]JchengCustom
 			$bizOrderId = implode(',', OrderModel::find()->select('order_sn')->andWhere(['in', 'order_id', explode(',', $post->order_id)])->column());
 		}else{
 			$bizOrderId = implode(',', OrderModel::find()->select('order_sn')->where(['buyer_id' => $userid])->andWhere(['in', 'order_id', explode(',', $post->order_id)])->column());

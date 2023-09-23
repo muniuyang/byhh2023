@@ -118,7 +118,7 @@ class UserRegisterForm extends Model
 		}
 		
 		/**********************[START]JchengCustom **********************/
-		if(in_array(Yii::$app->user->id,Yii::$app->params['openRights'])){//权限判断[START]JchengCustom
+		if(in_array(Yii::$app->user->id,Yii::$app->params['createRights'])){//权限判断[START]JchengCustom
 			return $user;
 		}
 		/**********************[END]JchengCustom with local**********************/

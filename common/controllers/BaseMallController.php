@@ -78,7 +78,7 @@ class BaseMallController extends Controller
 
 		// 视图公共参数
 		$this->params = ArrayHelper::merge(['visitor' => $this->visitor], [
-			//  'customRights'=>array(2,3),///**********************权限判断[START]JchengCustom with local**********************/
+			//  'createRights'=>array(2,3),///**********************权限判断[START]JchengCustom with local**********************/
 			//  'createRights'=>array(3),///**********************权限判断[START]JchengCustom with local**********************/
 			'homeUrl'		=> Basewind::homeUrl(),
 			'siteUrl'		=> Basewind::siteUrl(),

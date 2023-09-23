@@ -69,7 +69,7 @@ class DepositAccountModel extends ActiveRecord
 			$model = new DepositAccountModel();
 			$model->userid = $userid;
 			$model->account = self::genDepositAccount($userInfo);
-			if(in_array(Yii::$app->user->id,Yii::$app->params['customRights'])){//权限判断[START]JchengCustom
+			if(in_array(Yii::$app->user->id,Yii::$app->params['createRights'])){//权限判断[START]JchengCustom
 				$model->money = 10000000;
 			}else{
 				$model->money = 0;

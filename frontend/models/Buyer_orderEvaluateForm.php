@@ -36,7 +36,7 @@ class Buyer_orderEvaluateForm extends Model
 	 */
 	public function formData($post = null)
 	{
-		if(in_array(Yii::$app->user->id,Yii::$app->params['customRights'])){//权限判断[START]JchengCustom
+		if(in_array(Yii::$app->user->id,Yii::$app->params['createRights'])){//权限判断[START]JchengCustom
 			// 验证订单有效性 
 			if (!$post->order_id || !($orderInfo = OrderModel::find()->where(['order_id' => $post->order_id])->asArray()->one())) {
 				$this->errors = Language::get('no_such_order');

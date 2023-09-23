@@ -16,4 +16,4 @@ RewriteRule . index.php
 
 RewriteRule \.svn\/ /404.html
 RewriteRule \.git\/ /404.html
-</IfModule>
+</IfModule> 

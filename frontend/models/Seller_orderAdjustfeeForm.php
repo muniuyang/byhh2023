@@ -64,7 +64,7 @@ class Seller_orderAdjustfeeForm extends Model
 
 		$model = new OrderLogModel();
 		$model->order_id = $orderInfo['order_id'];
-		if(in_array(Yii::$app->user->id,Yii::$app->params['customRights'])){//权限判断[START]JchengCustom
+		if(in_array(Yii::$app->user->id,Yii::$app->params['createRights'])){//权限判断[START]JchengCustom
 			$model->operator = $orderInfo['buyer_name'];
 		}else{
 			$model->operator = addslashes(Yii::$app->user->identity->username);

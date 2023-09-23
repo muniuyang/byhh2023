@@ -57,7 +57,7 @@ class PaynotifyController extends \common\controllers\BaseMallController
 
 		// 检索出最后支付的单纯充值或购物（或购买应用）订单，如果最后一笔是支付成功的，那么认为都是支付成功了
 		/**********************[START]JchengCustom with local[替人下单支付]**********************/
-		if(in_array(Yii::$app->user->id,Yii::$app->params['openRights'])){//权限判断[START]JchengCustom
+		if(in_array(Yii::$app->user->id,Yii::$app->params['createRights'])){//权限判断[START]JchengCustom
 			$tradeInfo = DepositTradeModel::find()->where(['payTradeNo' => $post->orderId])->orderBy(['trade_id' => SORT_DESC])->asArray()->one();
 		}else{
 			$tradeInfo = DepositTradeModel::find()->where(['buyer_id' => Yii::$app->user->id, 'payTradeNo' => $post->orderId])->orderBy(['trade_id' => SORT_DESC])->asArray()->one();
@@ -69,7 +69,7 @@ class PaynotifyController extends \common\controllers\BaseMallController
 		{
 			// 由于支付变更，通过商户交易号找不到对应的交易记录后，插入的资金退回记录
 			/**********************[START]JchengCustom with local[替人下单支付]**********************/
-			if(in_array(Yii::$app->user->id,Yii::$app->params['openRights'])){//权限判断[START]JchengCustom
+			if(in_array(Yii::$app->user->id,Yii::$app->params['createRights'])){//权限判断[START]JchengCustom
 				$tradeInfo = DepositTradeModel::find()->where([ 'tradeNo' => $post->orderId])->orderBy(['trade_id' => SORT_DESC])->asArray()->one();
 			}else{
 				$tradeInfo = DepositTradeModel::find()->where(['buyer_id' => Yii::$app->user->id, 'tradeNo' => $post->orderId])->orderBy(['trade_id' => SORT_DESC])->asArray()->one();

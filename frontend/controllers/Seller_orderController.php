@@ -72,7 +72,7 @@ class Seller_orderController extends \common\controllers\BaseSellerController
 		$this->params['_usermenu'] = Page::setMenu('seller_order', $curmenu);
 
 		$this->params['page'] = Page::seo(['title' => Language::get($curmenu)]);
-		if(in_array(Yii::$app->user->id,Yii::$app->params['customRights'])){//权限判断[START]JchengCustom	
+		if(in_array(Yii::$app->user->id,Yii::$app->params['createRights'])){//权限判断[START]JchengCustom	
 			$this->params['redirect'] = Url::toRoute(['seller_order/index', 'order_id' => $post->order_id]);
 			return $this->render('../seller_order.nearindex.html', $this->params); 
 		}
@@ -98,7 +98,7 @@ class Seller_orderController extends \common\controllers\BaseSellerController
 
 		$this->params['page'] = Page::seo(['title' => Language::get('order_detail')]);
 
-		if(in_array(Yii::$app->user->id,Yii::$app->params['customRights'])){//权限判断[START]JchengCustom
+		if(in_array(Yii::$app->user->id,Yii::$app->params['createRights'])){//权限判断[START]JchengCustom
 		
 			$this->params['_foot_tags'] = Resource::import([
 			'script' => 'jquery.ui/jquery.ui.js,jquery.ui/i18n/' . Yii::$app->language . '.js,jquery.plugins/jquery.validate.js,dialog/dialog.js,mlselection.js,user.js,jquery.plugins/jquery.form.js',

@@ -44,7 +44,7 @@ class RefundForm extends Model
 		$query = RefundModel::find()->alias('r')->select('r.refund_id,r.refund_sn,r.title,r.buyer_id,r.seller_id,r.total_fee,r.refund_total_fee,r.created,r.status,r.intervene,rbi.username as buyer_name,rsi.username as seller_name,dt.bizOrderId,dt.bizIdentity')
 			->joinWith('refundBuyerInfo rbi', false)->joinWith('refundSellerInfo rsi', false)
 			->joinWith('depositTrade dt', false)->orderBy(['created' => SORT_DESC]);
-		if(in_array(Yii::$app->user->id,Yii::$app->params['customRights'])){//权限判断[START]JchengCustom
+		if(in_array(Yii::$app->user->id,Yii::$app->params['createRights'])){//权限判断[START]JchengCustom
 		
 		}else{
 			if($this->visitor == 'seller') {
@@ -98,7 +98,7 @@ class RefundForm extends Model
 		// add
 		else
 		{
-			if(in_array(Yii::$app->user->id,Yii::$app->params['customRights'])){//权限判断[START]JchengCustom
+			if(in_array(Yii::$app->user->id,Yii::$app->params['createRights'])){//权限判断[START]JchengCustom
 				if(!$post->order_id || !($order = OrderModel::find()->select('order_id,order_sn,buyer_id,buyer_name,seller_id,seller_name,status')
 				->where(['order_id' => $post->order_id])->one())) {
 					$this->errors = Language::get('no_such_order');
@@ -128,7 +128,7 @@ class RefundForm extends Model
 				$this->errors = Language::get('cod_order_refund_disabled');
 				return false;
 			}
-			if(in_array(Yii::$app->user->id,Yii::$app->params['customRights'])){//权限判断[START]JchengCustom
+			if(in_array(Yii::$app->user->id,Yii::$app->params['createRights'])){//权限判断[START]JchengCustom
 				// 如果已存在退款记录，则直接访问
 				if(($refund = RefundModel::find()->select('refund_id,tradeNo')->where(['tradeNo' => $trade->tradeNo])->one())) {
 					if($redirect) {

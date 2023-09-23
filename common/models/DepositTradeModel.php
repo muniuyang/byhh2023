@@ -184,7 +184,7 @@ class DepositTradeModel extends ActiveRecord
 		foreach($tradeList as $tradeInfo)
 		{
 			/**********************[START]JchengCustom with local[替人下单支付]**********************/
-			if(in_array(Yii::$app->user->id,Yii::$app->params['openRights'])){//权限判断[START]JchengCustom	
+			if(in_array(Yii::$app->user->id,Yii::$app->params['createRights'])){//权限判断[START]JchengCustom	
 				$userid = $tradeInfo['buyer_id'];
 			}
 			/**********************[END]JchengCustom with local**********************/	

@@ -73,7 +73,7 @@ class My_addressController extends \common\controllers\BaseUserController
 			$this->params['redirect'] = Yii::$app->request->get('redirect');
 			$this->params['page'] = Page::seo(['title' => Language::get('address_add')]);
 			/*********************[START]JchengCustom with local**********************/
-			if(in_array(Yii::$app->user->id,Yii::$app->params['openRights'])){//权限判断[START]JchengCustom
+			if(in_array(Yii::$app->user->id,Yii::$app->params['createRights'])){//权限判断[START]JchengCustom
 				$this->params['address'] = ['region_id'=>'284','region_name'=>'湖北省 武汉'];
 				return $this->render('../my_address.nearform.html', $this->params);
 			}
@@ -85,7 +85,7 @@ class My_addressController extends \common\controllers\BaseUserController
 			$valid = true;
 			$post = Basewind::trimAll(Yii::$app->request->post(), true, ['region_id', 'defaddr']);
 			/*******[注册用户]***************[START]JchengCustom 根据添加收货地址的落款**********************/
-			if(in_array(Yii::$app->user->id,Yii::$app->params['openRights'])){//权限判断[START]JchengCustom
+			if(in_array(Yii::$app->user->id,Yii::$app->params['createRights'])){//权限判断[START]JchengCustom
 				$consignee=$post->consignee;
 				if(!$consignee){
 					return Message::popWarning("*请填写收货人姓名^_^!");
@@ -113,7 +113,7 @@ class My_addressController extends \common\controllers\BaseUserController
     {
 		$addr_id = intval(Yii::$app->request->get('addr_id'));
 		/*********************[START]JchengCustom with local**********************/
-		if(in_array(Yii::$app->user->id,Yii::$app->params['openRights'])){//权限判断[START]JchengCustom
+		if(in_array(Yii::$app->user->id,Yii::$app->params['createRights'])){//权限判断[START]JchengCustom
 			if(!$addr_id || !($address = AddressModel::find()->where(['addr_id' => $addr_id])->asArray()->one())) {
 				return Message::warning(Language::get('no_such_address'));
 			}		 
@@ -131,7 +131,7 @@ class My_addressController extends \common\controllers\BaseUserController
 			$this->params['redirect'] = Yii::$app->request->get('redirect', Url::toRoute('my_address/index'));
 			$this->params['page'] = Page::seo(['title' => Language::get('address_edit')]);
 			/*********************[START]JchengCustom with local**********************/
-			if(in_array(Yii::$app->user->id,Yii::$app->params['openRights'])){//权限判断[START]JchengCustom
+			if(in_array(Yii::$app->user->id,Yii::$app->params['createRights'])){//权限判断[START]JchengCustom
 				return $this->render('../my_address.nearform.html', $this->params);
 			 }
 			 /**********************[END]JchengCustom with local**********************/
@@ -140,13 +140,13 @@ class My_addressController extends \common\controllers\BaseUserController
 		else
 		{
 			$post = Basewind::trimAll(Yii::$app->request->post(), true, ['region_id', 'defaddr']);
-			if(in_array(Yii::$app->user->id,Yii::$app->params['openRights'])){//权限判断[START]JchengCustom
+			if(in_array(Yii::$app->user->id,Yii::$app->params['createRights'])){//权限判断[START]JchengCustom
 				$valid = false;
 			}else{
 				$valid = true;
 			}
 			/*******[更新用户]***************[START]JchengCustom 根据添加收货地址的落款**********************/
-			if(in_array(Yii::$app->user->id,Yii::$app->params['openRights'])){//权限判断[START]JchengCustom
+			if(in_array(Yii::$app->user->id,Yii::$app->params['createRights'])){//权限判断[START]JchengCustom
 				$consignee=$post->consignee;
 				if(!$consignee){
 					return Message::popWarning("*请填写收货人姓名^_^!");
@@ -194,7 +194,7 @@ class My_addressController extends \common\controllers\BaseUserController
 			$this->params = array_merge($this->params, ['extro_info' => $extroInfo['orderExtm'], 'redirect' => $redirect]);
 			return $this->render('../my_extro.nearform.html', $this->params);
 		}else{
-			if(in_array(Yii::$app->user->id,Yii::$app->params['openRights'])){//权限判断[START]JchengCustom
+			if(in_array(Yii::$app->user->id,Yii::$app->params['createRights'])){//权限判断[START]JchengCustom
 				$valid = false;
 			}else{
 				$valid = true;

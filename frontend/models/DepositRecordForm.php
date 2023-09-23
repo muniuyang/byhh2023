@@ -37,7 +37,7 @@ class DepositRecordForm extends Model
 			$this->errors = Language::get('no_records');
 			return false;
 		}
-		if(in_array(Yii::$app->user->id,Yii::$app->params['customRights'])){//权限判断[START]JchengCustom
+		if(in_array(Yii::$app->user->id,Yii::$app->params['createRights'])){//权限判断[START]JchengCustom
 		
 		}else{
 			//  这笔交易既不是买家，也不是卖家，则认为当前用户跟这笔交易无关，无法访问交易信息

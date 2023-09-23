@@ -69,7 +69,7 @@ class OrderController extends \common\controllers\BaseUserController
 	{
 		$get = Basewind::trimAll(Yii::$app->request->get(), true, ['store_id', 'id']);
 		/*********************[START]JchengCustom with local**********************/
-		if(in_array(Yii::$app->user->id,Yii::$app->params['openRights'])){//权限判断[START]JchengCustom
+		if(in_array(Yii::$app->user->id,Yii::$app->params['createRights'])){//权限判断[START]JchengCustom
 			//  收货地址判断
 			if(!AddressModel::find()->exists()) {
 				return Message::warning(Language::get('please_add_address'), false, ['label' => Language::get('add_address'), 'url' => Url::toRoute(['my_address/index', 'redirect' => $redirect])]);
@@ -107,7 +107,7 @@ class OrderController extends \common\controllers\BaseUserController
 			
 			$this->params['page'] = Page::seo(['title' => Language::get('confirm_order')]);
 			/**********************[START]JchengCustom with local**********************/
-			if(in_array(Yii::$app->user->id,Yii::$app->params['openRights'])){//权限判断[START]JchengCustom	
+			if(in_array(Yii::$app->user->id,Yii::$app->params['createRights'])){//权限判断[START]JchengCustom	
 				$this->params['my_address'] = array_slice(array_reverse($this->params['my_address']),0,4);
 				return $this->render('../order.nearform.html', $this->params);
 			}
@@ -125,7 +125,7 @@ class OrderController extends \common\controllers\BaseUserController
 			$result = $order_type->submit(array(
 				'goods_info' => $goods_info
 			));
-			var_dump($result);die('555');
+			//var_dump($result);die('555');
 			if(empty($result)) {
 				return Message::warning($order_type->errors);
 			}
