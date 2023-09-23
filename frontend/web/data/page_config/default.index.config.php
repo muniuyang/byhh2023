@@ -42,17 +42,6 @@ return array (
         ),
       ),
     ),
-    '_widget_849' => 
-    array (
-      'name' => 'df_user',
-      'options' => 
-      array (
-        'model1_title' => '商城帮助',
-        'cate_id_1' => '1',
-        'model2_title' => '入驻指南',
-        'cate_id_2' => '6',
-      ),
-    ),
     '_widget_423' => 
     array (
       'name' => 'df_seckill',
@@ -234,10 +223,6 @@ return array (
     'col-1-r-l' => 
     array (
       0 => '_widget_684',
-    ),
-    'col-1-r-r' => 
-    array (
-      0 => '_widget_849',
     ),
     'col-3' => 
     array (
