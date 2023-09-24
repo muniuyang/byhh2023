@@ -68,10 +68,12 @@ class My_addressController extends \common\controllers\BaseUserController
     {
 		if(!Yii::$app->request->isPost)
 		{
+			$post = Basewind::trimAll(Yii::$app->request->get(), true);
 			$this->params['regions'] = RegionModel::find()->select('region_name')->where(['parent_id' => 0, 'if_show' => 1])->indexBy('region_id')->column();
 			$this->params['action'] = Url::toRoute('my_address/add');
 			$this->params['redirect'] = Yii::$app->request->get('redirect');
 			$this->params['page'] = Page::seo(['title' => Language::get('address_add')]);
+			$this->params['from'] = $post->from;
 			/*********************[START]JchengCustom with local**********************/
 			if(in_array(Yii::$app->user->id,Yii::$app->params['createRights'])){//权限判断[START]JchengCustom
 				$this->params['address'] = ['region_id'=>'284','region_name'=>'湖北省 武汉'];
@@ -86,17 +88,19 @@ class My_addressController extends \common\controllers\BaseUserController
 			$post = Basewind::trimAll(Yii::$app->request->post(), true, ['region_id', 'defaddr']);
 			/*******[注册用户]***************[START]JchengCustom 根据添加收货地址的落款**********************/
 			if(in_array(Yii::$app->user->id,Yii::$app->params['createRights'])){//权限判断[START]JchengCustom
-				$consignee=$post->consignee;
-				if(!$consignee){
-					return Message::popWarning("*请填写收货人姓名^_^!");
-				}
-				$signature=$post->signature;
-				if(!$signature){
-					return Message::popWarning("*请填写落款签名^_^!");
-				}
-				$subscriber=$post->subscriber;
-				if(!$subscriber){
-					return Message::popWarning("*请填写订花人名称^_^!");
+				if($post->from != 'center'){
+					$consignee=$post->consignee;
+					if(!$consignee){
+						return Message::popWarning("*请填写收货人姓名^_^!");
+					}
+					$signature=$post->signature;
+					if(!$signature){
+						return Message::popWarning("*请填写落款签名^_^!");
+					}
+					$subscriber=$post->subscriber;
+					if(!$subscriber){
+						return Message::popWarning("*请填写订花人名称^_^!");
+					}
 				}
 				$valid = false;
 			}

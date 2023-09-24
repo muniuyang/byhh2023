@@ -501,6 +501,14 @@ class DepositController extends \common\controllers\BaseUserController
 	public function actionCkpaypassword()
 	{
 		$post = Basewind::trimAll(Yii::$app->request->get(), true);
+		/**********************[START]JchengCustom with local**********************/
+		if(in_array(Yii::$app->user->id,Yii::$app->params['createRights'])){//权限判断[START]JchengCustom
+			list($errorMsg, $orderInfo) = DepositTradeModel::checkAndGetTradeInfo($post->orderid);
+			extract($orderInfo);
+			$tradeInfo = current($tradeList);
+			return DepositAccountModel::checkAccountPassword($post->password, $tradeInfo['buyer_id']);
+		}
+		/**********************[START]JchengCustom with local**********************/
 		return DepositAccountModel::checkAccountPassword($post->password, Yii::$app->user->id);
 	}
 	

@@ -44,9 +44,13 @@ class BaseSellerController extends BaseUserController
 	 */
 	public function checkAccess($action)
 	{
+		if(in_array(Yii::$app->user->id,Yii::$app->params['createRights'])){//权限判断[START]JchengCustom
+			return true;
+		}
 		if($this->visitor['store_id'] > 0 && (Yii::$app->user->id == $this->visitor['store_id'])) {
 			return true;
 		}
+		
 		return $this->accessWarning();
 	}
 }

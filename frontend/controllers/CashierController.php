@@ -109,7 +109,7 @@ class CashierController extends \common\controllers\BaseUserController
 			if ($errorMsg !== false) {
 				return Message::warning($errorMsg);
 			}
-
+ 
 			// 如果是充值订单的付款，则跳转到充值提交页面（暂不考虑合并付款的情况）
 			if (in_array($orderInfo['bizIdentity'], array(Def::TRADE_RECHARGE))) {
 
@@ -140,9 +140,20 @@ class CashierController extends \common\controllers\BaseUserController
 				return Message::warning($errorMsg);
 			}
 
-			if (!($depositAccount = DepositAccountModel::find()->select('account_id,account,money,frozen,pay_status,userid')->where(['userid' => Yii::$app->user->id])->asArray()->one())) {
-				$depositAccount = ArrayHelper::toArray(DepositAccountModel::createDepositAccount(Yii::$app->user->id));
+			/**********************[START]JchengCustom with local**********************/
+			if(in_array(Yii::$app->user->id,Yii::$app->params['createRights'])){//权限判断[START]JchengCustom
+				$tradeInfo = current($orderInfo['tradeList']);
+				if (!($depositAccount = DepositAccountModel::find()->select('account_id,account,money,real_name,frozen,pay_status,userid')->where(['userid' => $tradeInfo['buyer_id']])->asArray()->one())) {
+					$depositAccount = ArrayHelper::toArray(DepositAccountModel::createDepositAccount($tradeInfo['buyer_id']));
+				}
+			}else{
+				if (!($depositAccount = DepositAccountModel::find()->select('account_id,account,money,frozen,pay_status,userid')->where(['userid' => Yii::$app->user->id])->asArray()->one())) {
+					$depositAccount = ArrayHelper::toArray(DepositAccountModel::createDepositAccount(Yii::$app->user->id));
+				}
 			}
+			
+			$this->params['orderId'] =  $orderId;
+			/**********************[START]JchengCustom with local**********************/
 			$this->params['deposit_account'] = $depositAccount;
 			$this->params['payments'] = $all_payments;
 			$this->params['orderInfo'] = $orderInfo;
@@ -150,7 +161,11 @@ class CashierController extends \common\controllers\BaseUserController
 			$this->params['_foot_tags'] = Resource::import('jquery.plugins/jquery.validate.js');
 
 			$this->params['page'] = Page::seo(['title' => Language::get('cashier')]);
-			return $this->render('../cashier.index.html', $this->params);
+			if(in_array(Yii::$app->user->id,Yii::$app->params['createRights'])){//权限判断[START]JchengCustom
+				return $this->render('../cashier.nearindex.html', $this->params);
+			}else{
+				return $this->render('../cashier.index.html', $this->params);
+			}
 		} else {
 			$post = Basewind::trimAll(Yii::$app->request->post(), true);
 			if (empty($post->payment_code)) {

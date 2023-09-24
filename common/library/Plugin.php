@@ -76,6 +76,7 @@ class Plugin
 		
 		// 插件实例类
 		$plugin_class = sprintf("common\plugins\%s\%s\%s", $this->instance, $code, ucfirst($code));
+		//var_dump($plugin_class);die;('eee');
 		// 创建插件实例类
 		return new $plugin_class($params);
 	}

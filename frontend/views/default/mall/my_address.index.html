@@ -3,7 +3,8 @@
   <div id="right"> {include file="user.curlocal.html"}
     <div class="wrapful">{include file="user.submenu.html"}
       <div class="wrap">
-        <div class="eject_btn" title="{$lang.add_address}"><b class="ico1" ectype="dialog" dialog_title="{$lang.add_address}" dialog_id="my_address_add" dialog_width="600" uri="{url route='my_address/add' redirect=$smarty.get.redirect}">{$lang.add_address}</b></div>
+        <div class="eject_btn" title="{$lang.add_address}"><b class="ico1" ectype="dialog" dialog_title="{$lang.add_address}" 
+		dialog_id="my_address_add" dialog_width="600" uri="{url route='my_address/add' redirect=$smarty.get.redirect  from='center'}">{$lang.add_address}</b></div>
         <div class="public table">
           <table>
            
@@ -23,7 +24,8 @@
               <td>{$address.address|escape}</td>
               <td>{$address.zipcode|escape}</td>
               <td>{$address.phone_tel} / {$address.phone_mob}</td>
-              <td><a href="javascript:void(0);" ectype="dialog" dialog_id="my_address_edit" dialog_title="{$lang.edit_address}" dialog_width="700" uri="{url route='my_address/edit' addr_id=$address.addr_id}" class="edit1 float_none">{$lang.edit}</a> <a uri="{url route='my_address/delete' addr_id=$address.addr_id}" confirm="{$lang.drop_confirm}" class="J_AjaxRequest delete float_none">{$lang.drop}</a></td>
+              <td><a href="javascript:void(0);" ectype="dialog" dialog_id="my_address_edit" dialog_title="{$lang.edit_address}" 
+			  dialog_width="700" uri="{url route='my_address/edit' addr_id=$address.addr_id}" class="edit1 float_none">{$lang.edit}</a> <a uri="{url route='my_address/delete' addr_id=$address.addr_id}" confirm="{$lang.drop_confirm}" class="J_AjaxRequest delete float_none">{$lang.drop}</a></td>
             </tr>
             <!--{/foreach}-->
             <!--{if $addressList}-->

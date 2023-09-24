@@ -56,7 +56,6 @@ class AddressForm extends Model
 		if($valid === true && !$this->valid($post)) {
 			return false;
 		}
-		
 		$userid = Yii::$app->user->id;
 		/**********************[START]JchengCustom **********************/
 		if(in_array(Yii::$app->user->id,Yii::$app->params['createRights']) && $post->userid){//权限判断[START]JchengCustom

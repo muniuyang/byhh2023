@@ -122,9 +122,9 @@ class DepositAccountModel extends ActiveRecord
 	{
 		if(empty($money) || !$userid) return false;
 		/*********************[START]JchengCustom with local**********************/
-		if(in_array(Yii::$app->user->id,Yii::$app->params['createRights'])){//订单余额支付，权限判断[START]JchengCustom
-			$userid= Yii::$app->user->id;
-		}
+		//if(in_array(Yii::$app->user->id,Yii::$app->params['createRights'])){//订单余额支付，权限判断[START]JchengCustom
+			//$userid= Yii::$app->user->id;
+		//}
 		/**********************[END]JchengCustom with local**********************/
 		if(!($query = parent::find()->select('money')->where(['userid' => $userid])->one())) {
 			return false;
