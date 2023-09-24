@@ -53,6 +53,7 @@ class BasePayment extends BasePlugin
 	 */
     public function createPayform($params = array(), $gateway = '', $method = 'post')
     {
+		
 		$payment = Plugin::getInstance('payment')->build($this->code)->getInfo();
         return array(
 			'payment_code' 	=> $this->code,
@@ -269,7 +270,9 @@ class BasePayment extends BasePlugin
 					$depositAccount = DepositAccountModel::find()->select('pay_status,money')->where(['userid' => Yii::$app->user->id])->asArray()->one();
 					
 					if(in_array($depositAccount['pay_status'], array('ON'))) {
+						//var_dump($depositAccount);
 						if($orderInfo['amount'] > $depositAccount['money']) {
+							//die('33');
 							$payment['disabled'] = 1;
 							$payment['disabled_desc'] = Language::get('balancepay_not_enough');
 						} else {
@@ -288,7 +291,7 @@ class BasePayment extends BasePlugin
 					$payment = false;
 				}
 			}
-            
+           // var_dump($payment);
 			if($payment !== false) {
 				if ($selected === false && !$payment['disabled']) {
 					$selected = true;

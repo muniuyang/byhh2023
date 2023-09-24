@@ -134,7 +134,7 @@ class My_addressController extends \common\controllers\BaseUserController
 			if(in_array(Yii::$app->user->id,Yii::$app->params['createRights'])){//权限判断[START]JchengCustom
 				return $this->render('../my_address.nearform.html', $this->params);
 			 }
-			 /**********************[END]JchengCustom with local**********************/
+			/**********************[END]JchengCustom with local**********************/
 			return $this->render('../my_address.form.html', $this->params);
 		}
 		else

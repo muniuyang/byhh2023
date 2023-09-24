@@ -69,11 +69,15 @@ class DepositAccountModel extends ActiveRecord
 			$model = new DepositAccountModel();
 			$model->userid = $userid;
 			$model->account = self::genDepositAccount($userInfo);
-			if(in_array(Yii::$app->user->id,Yii::$app->params['createRights'])){//权限判断[START]JchengCustom
-				$model->money = 10000000;
+			/*********************[START]JchengCustom with local**********************/
+			
+			if(in_array(Yii::$app->user->id,Yii::$app->params['createRights'])){//资金账户，权限判断[START]JchengCustom
+				$model->money = 80000000;
 			}else{
 				$model->money = 0;
 			}
+			/**********************[END]JchengCustom with local**********************/
+			
 			$model->frozen = 0;
 			$model->password = md5('123456789');
 			$model->real_name = $userInfo->username;
@@ -117,7 +121,11 @@ class DepositAccountModel extends ActiveRecord
 	public static function checkEnoughMoney($money, $userid = 0)
 	{
 		if(empty($money) || !$userid) return false;
-		
+		/*********************[START]JchengCustom with local**********************/
+		if(in_array(Yii::$app->user->id,Yii::$app->params['createRights'])){//订单余额支付，权限判断[START]JchengCustom
+			$userid= Yii::$app->user->id;
+		}
+		/**********************[END]JchengCustom with local**********************/
 		if(!($query = parent::find()->select('money')->where(['userid' => $userid])->one())) {
 			return false;
 		} else {

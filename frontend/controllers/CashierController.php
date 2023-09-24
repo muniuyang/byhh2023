@@ -156,7 +156,7 @@ class CashierController extends \common\controllers\BaseUserController
 			if (empty($post->payment_code)) {
 				return Message::warning(Language::get('pls_select_paymethod'));
 			}
-
+			
 			// 如果是余额支付，验证支付密码
 			if (in_array(strtolower($post->payment_code), array('deposit'))) {
 				if (!DepositAccountModel::checkAccountPassword($post->password, Yii::$app->user->id)) {
@@ -169,13 +169,13 @@ class CashierController extends \common\controllers\BaseUserController
 			if ($errorMsg !== false) {
 				return Message::warning($errorMsg);
 			}
-
+			
 			$payment = Plugin::getInstance('payment')->build();
 			list($all_payments, $cod_payments, $errorMsg) = $payment->getAvailablePayments($orderInfo, true, true);
 			if ($errorMsg !== false) {
 				return Message::warning($errorMsg);
 			}
-
+			
 			// 检查用户所使用的付款方式是否在允许的范围内
 			if (!in_array($post->payment_code, $payment->getKeysOfPayments($all_payments))) {
 				return Message::warning(Language::get('payment_not_available'));
@@ -194,9 +194,12 @@ class CashierController extends \common\controllers\BaseUserController
 
 			// 生成支付URL或表单
 			list($payTradeNo, $payform) = Plugin::getInstance('payment')->build($post->payment_code, $post)->getPayform($orderInfo);
+			
 			if($payform['payResult'] === false) {
+				//var_dump($payform);die('33333');
 				return Message::warning($payform['errMsg']);
 			}
+
 			$this->params['payform'] = array_merge($payform, ['payTradeNo' => $payTradeNo]);
 
 			// 跳转到真实收银台
