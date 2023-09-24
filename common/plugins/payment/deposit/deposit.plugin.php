@@ -55,7 +55,6 @@ class Deposit extends BasePayment
 
 		// 因为是余额支付，所以直接处理业务
 		if ($this->payNotify($orderInfo, $payTradeNo) === false) {
-			 var_dump($payTradeNo);var_dump("</br/>");die('9999');
 			return array($payTradeNo, ['payResult' => false, 'errMsg' => $this->errors ? $this->errors : Language::get('pay_fail')]);
 		}
            
@@ -81,15 +80,12 @@ class Deposit extends BasePayment
 		}
 	 
 		if (!($orderInfo = DepositTradeModel::getTradeInfoForNotify($payTradeNo))) {
-			var_dump($payTradeNo);var_dump("</br/>");die('666');
 			$this->errors = Language::get('order_info_empty');
 			return false;
 		}
 		if (in_array($orderInfo['bizIdentity'], array(Def::TRADE_ORDER))) {
-			var_dump(Def::TRADE_ORDER);var_dump("777</br/>");
 			return parent::handleOrderAfterNotify($orderInfo, ['target' => Def::ORDER_ACCEPTED]);
 		} elseif (in_array($orderInfo['bizIdentity'], array(Def::TRADE_BUYAPP))) {
-			var_dump($payTradeNo);var_dump("</br/>");die('888');
 			return parent::handleBuyappAfterNotify($orderInfo, ['target' => Def::ORDER_ACCEPTED]);
 		}
 		return true;
