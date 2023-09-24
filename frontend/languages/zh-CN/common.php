@@ -7,6 +7,7 @@ return array(
 	'yuan'	  		=> '元',
 	'jian'	  		=> '件',
 	'home'    		=> '首页',
+	'query'         => '查询',
 	'buy_list'		=> '购物清单',
 	'store_rate'	=> '店铺评分',
 	'goods'   		=> '商品',

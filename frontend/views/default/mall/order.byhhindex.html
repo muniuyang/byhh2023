@@ -1,0 +1,147 @@
+{include file="header.byhh.html"}
+<div id="main">
+  <div id="rightCon" class="clearfix layui-body" style="left:0;top:70px;">
+    <div class="scroller" style="padding:0;">
+      <div class="search-form clearfix" style="padding:10;margin:0;margin-top:10px;">
+        <form method="get" id="formSearch">
+        <div class="webkit-box box-align-center">
+          <input type="hidden" name="r" value="orderbyhh/index" />
+          <label class="mr5">搜索关键词类型</label>
+          <select class="querySelect" name="field">
+            <option value="">--选择关键词类型--</option>
+            {html_options options=$search_options selected=$smarty.get.field}
+          </select>
+
+          <input class="infoTableInput mr10" placeholder="输入搜索关键词" type="text" name="search_name" value="{$smarty.get.search_name|escape}" />
+         
+          <label class="mr5">年结客户</label>
+          <select class="querySelect" name="real_name" >
+            <option value="">--选择客户名称--</option>
+            {html_options  values=$userBill output=$userBill selected=$smarty.get.real_name}
+          </select>
+
+
+          <label class="mr5">{$lang.search_status}</label>
+          <select class="querySelect" name="status">
+            <option value="">{$lang.no_limit}</option>
+            {html_options options=$status_list selected=$smarty.get.status}
+          </select>
+          
+          </div>
+          <div class="webkit-box box-align-center mt20">
+            {$lang.order_amount_from}
+          <input class="queryInput2" type="text" value="{$smarty.get.order_amount_from}" name="order_amount_from" />
+          {$lang.order_amount_to}
+          <input class="queryInput2" type="text" style="width:60px;" value="{$smarty.get.order_amount_to}"
+            name="order_amount_to" class="pick_date" />
+
+          {$lang.add_time_from}
+          <input class="queryInput" type="text" value="{$smarty.get.add_time_from}" id="add_time_from"
+            name="add_time_from" class="pick_date" />
+          {$lang.add_time_to}
+          <input class="queryInput" type="text" value="{$smarty.get.add_time_to}" id="add_time_to" name="add_time_to"
+            class="pick_date" />
+          <input type="submit" class="layui-btn layui-bg-blue layui-btn-sm block width7" value="{$lang.query}" />
+          <!--{if $filtered}-->
+          <a class="layui-btn layui-btn-primary layui-btn-sm box-align-center" href="{url route='orderbyhh/index'}">{$lang.cancel_query}</a>
+          <!--{/if}-->
+          </div>
+        </form>
+      </div>
+      <div class="tablegrid1">
+        <table class="layui-hide" id="tablegrid" lay-filter="tablegrid"></table>
+      </div>
+    </div>
+  </div>
+</div>
+<script type="text/html" id="toolbar">
+	<div class="layui-btn-container">
+	  <button class="layui-btn layui-btn-primary layui-border-black" lay-event="export"><i class="layui-icon layui-icon-export"></i>导出数据</button>
+	</div>
+</script>
+
+<script type="text/html" id="colBar">
+	<a class="ml5 mr5 blue pointer" lay-event="view">查看</a>
+</script>
+<script>
+  layui.use('table', function () {
+    var table = layui.table;
+
+    table.render({
+      elem: '#tablegrid'
+      //,skin: 'line'
+      , url: url(['orderbyhh/index', $("#formSearch").serializeJson()])
+      , toolbar: '#toolbar'
+      , defaultToolbar: ['filter', /*'exports',*/ 'print']
+      , title: '订单列表'
+      //, size: 'lg'
+      , cols: [[
+        { type: 'checkbox', fixed: 'left' }
+        , { field: 'order_id', title: 'ID', width: 70, fixed: 'left', unresize: true, sort: true }
+        , { field: 'order_sn', title: '订单编号', width: 200 }
+        , { field: 'tradeNo', title: '交易号', width: 200, templet: function(res) {
+            return res.tradeNo ? res.tradeNo : '';
+        }}
+        , { field: 'store_name', title: '店铺名称', width: 160 }
+        , { field: 'signature', title: '收货人(收花人)', width: 150 }
+        , { field: 'buyer_name', title: '买家', width: 150 }
+		    , { field: 'real_name', title: '买家实名(订花人)', width: 150 }
+        , { field: 'order_amount', title: '订单金额', width: 125, sort: true, align: 'center' }
+        , { field: 'status', title: '订单状态', width: 160, sort: true, align: 'center',templet:function(res){
+			if(res.status == '交易完成'){
+				res.status = '<font color=green>'+res.status+'</font>';
+			}
+			if(res.status == '交易关闭'){
+				res.status = '<font color=gray>'+res.status+'</font>';
+			}
+			if(res.status == '等待买家付款'){
+				res.status = '<font color=orange>'+res.status+'</font>';
+			}
+			if(res.refund_status == 'SUCCESS'){
+				res.status = '<font color=red>退款成功</font>';
+			}
+				return res.status ? res.status : '';
+			}}
+        , { field: 'payment_name', title: '支付方式', width: 120 }
+        , { field: 'add_time', title: '下单时间', width: 170, sort: true, align: 'center' }
+        , { field: 'pay_time', title: '付款时间', width: 170, sort: true, align: 'center' }
+        , { field: 'finished_time', title: '完成时间', width: 170, sort: true, align: 'center' }
+        , { fixed: 'right', title: '操作', toolbar: '#colBar', width: 120, align: 'center' }
+      ]]
+      , page: {
+        theme: 'blue'
+      }
+    });
+ 
+    //监听头工具栏事件
+    table.on('toolbar(tablegrid)', function (obj) {
+      var checkStatus = table.checkStatus(obj.config.id);
+      if (checkStatus.data.length <= 0) {
+        return false;
+      }
+      var items = new Array();
+      $.each(checkStatus.data, function (i, item) {
+        items.push(item.order_id);
+      });
+
+      if (obj.event === 'export') {
+        window.location.href = url(['orderbyhh/export', $.extend($("#formSearch").serializeJson(), { id: items.join(',') })]);
+      }
+    });
+
+    //监听行工具事件
+    table.on('tool(tablegrid)', function (obj) {
+      var data = obj.data;
+      if (obj.event === 'view') {
+        window.location.href = url(['orderbyhh/view', { id: data.order_id }]);
+      }
+    });
+	 
+  });
+
+  $(function () {
+    $('#add_time_from').datepicker({ dateFormat: 'yy-mm-dd' });
+    $('#add_time_to').datepicker({ dateFormat: 'yy-mm-dd' });
+  });
+</script>
+{include file="footer.byhh.html"}

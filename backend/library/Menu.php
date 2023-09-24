@@ -202,6 +202,7 @@ class Menu
 					)
 				)
 			),
+			
 			// 分销
 			'distribute' => array(
 				'text'      => Language::get('distribute'),
