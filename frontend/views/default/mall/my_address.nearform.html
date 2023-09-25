@@ -3,12 +3,13 @@
     <div id="warning"></div>
     <form method="post" action="{$action}" id="address_form" target="iframe">
       <ul>
-        <li>
+        <li class="B_Consignee">
           <h3>{$lang.consignee}: </h3>
           <p>
-            <input type="text" class="text width_normal" name="consignee" value="{$address.consignee|escape}"/>
+            <input type="text" class="text width_normal I_Consignee" name="consignee" value="{$address.consignee|escape}"/>
             <label class="field_message"><span class="field_notice">{$lang.consignee_desc}</span></label>
           </p>
+		  <div class="I_Consignee_list"></div>
         </li>
         <li>
           <h3>{$lang.region}: </h3>
@@ -21,16 +22,12 @@
             <input type="button" value="{$lang.edit}" class="edit_region" />
             <select style="display:none" onchange="hide_error();">
               <option>{$lang.select_pls}</option>
-              
-                          {html_options options=$regions}
-                        
+				{html_options options=$regions}      
             </select>
             <!-- {else} -->
             <select onchange="hide_error();">
               <option>{$lang.select_pls}</option>
-              
-                          {html_options options=$regions}
-                        
+				{html_options options=$regions}        
             </select>
             <!-- {/if} --> 
             <b class="field_message" style="font-weight:normal;">
@@ -41,7 +38,7 @@
         <li>
           <h3>{$lang.address}: </h3>
           <p>
-            <input type="text" class="text width_normal" name="address" value="{$address.address|escape}"/>
+            <input type="text" class="text width_normal I_Address" name="address" value="{$address.address|escape}"/>
             <label class="field_message"><span class="field_notice">{$lang.address_desc}</span></label>
           </p>
         </li>
@@ -102,5 +99,18 @@
 <script type="text/javascript">
 $(function(){
     regionInit("region");
+	$('.B_Consignee .I_Consignee').change(function(){
+ 
+		$.getJSON("{url route='my_address/search'}", { 'keyword' : $('.I_Consignee').val()}, function(data) {
+			html = '';
+			if(data.code == 0) {
+				$('.I_Address').val(data.data[0].address);
+				$.each(data.data,function(i, item){	
+					html += '<li style="padding: 10px 0 0;color:#FF8800;">[地址]('+(i+1)+'): <span>'+item.address+'</span></li>';
+				});
+				$('.I_Consignee_list').html("<ul>"+html+"</ul>");
+			}
+		});
+	}); 
 });
 </script>

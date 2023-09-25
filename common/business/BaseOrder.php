@@ -197,10 +197,8 @@ class BaseOrder
         // 返回基本信息
 		$result = array();
 		$post = ArrayHelper::toArray($this->post);
-		//var_dump($post);die;
 		foreach($goods_info['orderList'] as $store_id => $order)
 		{
-			
 			$buyerInfo['buyer_id'] = Yii::$app->user->id;
 			$buyerInfo['buyer_name'] = addslashes(Yii::$app->user->identity->username);
 			$buyerInfo['buyer_email'] = '';
@@ -230,16 +228,18 @@ class BaseOrder
 		return $result;
     }
 	/**
-	 * JchengCustom根据订花人名称信息subscriber添加新用户
+	 * JchengCustom根据订花人名称信息subscriber注册用户
 	 */
 	public function handleUserInsert($base_info, $consignee_info)
 	{
+		//var_dump($base_info);
+		//var_dump($consignee_info);
+		//var_dump($this->post);
+		//die('444');
 		//var_dump(Yii::$app->params['createRights']);die;
 		if(in_array(Yii::$app->user->id,Yii::$app->params['createRights'])){//权限判断[START]JchengCustom
 			$consignee_info = array_values($consignee_info);
-			
 			$consignee_info = $consignee_info[0];
-
 			if($consignee_info['subscriber']){
 				$subscribers = $consignee_info['subscriber'];
 			}else{
@@ -247,8 +247,6 @@ class BaseOrder
 			}
 			$subscribers = explode(',',$subscribers);
 			$subscriber  = $subscribers[0];
-			//var_dump($subscribers);die;
-			//var_dump($subscriber);die('88881');
 			if(!$subscriber) return $base_info;
 			$Pinyin =  new Pinyin();
 			foreach($base_info as $store_id => $order)
@@ -333,6 +331,8 @@ class BaseOrder
 		if(($address = $this->getAddressInfo($post['addr_id'], $post['region_id']))) {
 			$post = array_merge($post, $address);
 		}
+		
+		//var_dump($address);
         if (!$post['consignee']) {
        		$this->errors = Language::get('consignee_empty');
             return false;

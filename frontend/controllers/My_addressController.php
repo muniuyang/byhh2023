@@ -14,6 +14,7 @@ namespace frontend\controllers;
 use Yii;
 use yii\helpers\ArrayHelper;
 use yii\helpers\Url;
+use yii\helpers\Json;
 
 use common\models\AddressModel;
 use common\models\RegionModel;
@@ -86,7 +87,7 @@ class My_addressController extends \common\controllers\BaseUserController
 		{
 			$valid = true;
 			$post = Basewind::trimAll(Yii::$app->request->post(), true, ['region_id', 'defaddr']);
-			/*******[注册用户]***************[START]JchengCustom 根据添加收货地址的落款**********************/
+			/**********************[START]JchengCustom 根据添加收货地址的落款**********************/
 			if(in_array(Yii::$app->user->id,Yii::$app->params['createRights'])){//权限判断[START]JchengCustom
 				if($post->from != 'center'){
 					$consignee=$post->consignee;
@@ -173,6 +174,27 @@ class My_addressController extends \common\controllers\BaseUserController
 			return Message::popSuccess(Language::get('address_edit_successed'), urldecode(Yii::$app->request->post('redirect', Url::toRoute('my_address/index'))));
 		}
 	}
+	
+	public function actionSearch()
+	{
+		 
+		/**********************[END]JchengCustom with local**********************/
+		if(!Yii::$app->request->isAjax)
+		{
+			 
+			 
+		}
+		else
+		{
+			$post = Basewind::trimAll(Yii::$app->request->get(), true);
+			$query = OrderExtmModel::find()->select('address')->where(['like', 'consignee', $post->keyword])
+			->orderBy(['order_id' => SORT_DESC]);
+			$list = $query->asArray()->all();
+			return Json::encode(['code' => 0, 'msg' => '', 'count' => $query->count(), 'data' => $list]);
+		}
+	}
+	
+	
 	/**
 	 * 修改订单地址信息
 	 */

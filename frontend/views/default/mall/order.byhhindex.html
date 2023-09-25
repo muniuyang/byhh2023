@@ -14,11 +14,7 @@
 
           <input class="infoTableInput mr10" placeholder="输入搜索关键词" type="text" name="search_name" value="{$smarty.get.search_name|escape}" />
          
-          <label class="mr5">年结客户</label>
-          <select class="querySelect" name="real_name" >
-            <option value="">--选择客户名称--</option>
-            {html_options  values=$userBill output=$userBill selected=$smarty.get.real_name}
-          </select>
+
 
 
           <label class="mr5">{$lang.search_status}</label>
@@ -26,14 +22,18 @@
             <option value="">{$lang.no_limit}</option>
             {html_options options=$status_list selected=$smarty.get.status}
           </select>
-          
-          </div>
-          <div class="webkit-box box-align-center mt20">
-            {$lang.order_amount_from}
+          {$lang.order_amount_from}
           <input class="queryInput2" type="text" value="{$smarty.get.order_amount_from}" name="order_amount_from" />
           {$lang.order_amount_to}
           <input class="queryInput2" type="text" style="width:60px;" value="{$smarty.get.order_amount_to}"
             name="order_amount_to" class="pick_date" />
+          </div>
+          <div class="webkit-box box-align-center mt20">
+          <label class="mr5">年结客户</label>
+          <select class="querySelect" name="real_name" >
+            <option value="">--选择客户名称--</option>
+            {html_options  values=$userBill output=$userBill selected=$smarty.get.real_name}
+          </select>
 
           {$lang.add_time_from}
           <input class="queryInput" type="text" value="{$smarty.get.add_time_from}" id="add_time_from"
@@ -48,6 +48,14 @@
           </div>
         </form>
       </div>
+	  
+	  {literal}
+	  <style type="text/css">
+	  .layui-table-tips-main{
+		max-height:450px;
+		}
+	  </style>
+	  {/literal} 
       <div class="tablegrid1">
         <table class="layui-hide" id="tablegrid" lay-filter="tablegrid"></table>
       </div>
@@ -72,21 +80,26 @@
       //,skin: 'line'
       , url: url(['orderbyhh/index', $("#formSearch").serializeJson()])
       , toolbar: '#toolbar'
+	  ,limit:20
       , defaultToolbar: ['filter', /*'exports',*/ 'print']
       , title: '订单列表'
       //, size: 'lg'
       , cols: [[
         { type: 'checkbox', fixed: 'left' }
         , { field: 'order_id', title: 'ID', width: 70, fixed: 'left', unresize: true, sort: true }
-        , { field: 'order_sn', title: '订单编号', width: 200 }
-        , { field: 'tradeNo', title: '交易号', width: 200, templet: function(res) {
-            return res.tradeNo ? res.tradeNo : '';
-        }}
-        , { field: 'store_name', title: '店铺名称', width: 160 }
-        , { field: 'signature', title: '收货人(收花人)', width: 150 }
-        , { field: 'buyer_name', title: '买家', width: 150 }
-		    , { field: 'real_name', title: '买家实名(订花人)', width: 150 }
-        , { field: 'order_amount', title: '订单金额', width: 125, sort: true, align: 'center' }
+        , { field: 'goods_image', title: '图片', width: 60,templet:function(res){
+				return '<img src='+res.goods_image+' style="with:60px;"/>' ;
+			}}
+		, { field: 'goods_name', title: '标题(*款式*)', width: 260 }
+        , { field: 'store_name', title: '店铺名称', width: 90 }
+        , { field: 'signature', title: '收货人(*收花人*)', width: 150 ,align: 'center',style:'color: #FF8800;'}
+		, { field: 'address', title: '收货地址(*收花人地址*)', width: 230 ,align: 'center',style:'color: #FF8800;'}
+		, { field: 'real_name', title: '买家(*订花人*)', width: 130 ,align: 'center',style:'color: #00AA00;',templet:function(res){
+				return res.real_name;//+'('+res.buyer_name+')' ;
+			}}
+		, { field: 'goods_amount', title: '商品售价', width: 110, sort: true, align: 'center' }
+        , { field: 'order_amount', title: '订单金额', width: 110, sort: true, align: 'center' }
+		, { field: 'shipping_fee', title: '运送费', width: 110, sort: true, align: 'center' }
         , { field: 'status', title: '订单状态', width: 160, sort: true, align: 'center',templet:function(res){
 			if(res.status == '交易完成'){
 				res.status = '<font color=green>'+res.status+'</font>';

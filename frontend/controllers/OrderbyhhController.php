@@ -44,17 +44,18 @@ class OrderbyhhController extends \common\controllers\BaseUserController
 		parent::init();
 		$this->view  = Page::setView('mall');
 		$this->params = ArrayHelper::merge($this->params, Page::getAssign('user'));
+		if(!in_array(Yii::$app->user->id,Yii::$app->params['createRights'])){//权限判断[START]JchengCustom
+			die("未授权，不能访问！");
+		}
 	}
 	//https://www.byhh.com/admin/orderbyhh/index.html
 	public function actionIndex()
 	{
 		$post = Basewind::trimAll(Yii::$app->request->get(), true, ['limit', 'page', 'status']);
-		
 		if(!Yii::$app->request->isAjax) 
 		{
 			$this->params['filtered'] = $this->getConditions($post);
 			$this->params['search_options'] = $this->getSearchOption();
-			//var_dump($this->params['search_options']);
 			$this->params['status_list'] = $this->getStatus();
 			$this->params['_foot_tags'] = Resource::import([
 				'script' => 'jquery.ui/jquery.ui.js,jquery.ui/i18n/' . Yii::$app->language . '.js',
@@ -79,26 +80,22 @@ class OrderbyhhController extends \common\controllers\BaseUserController
 		{
 			//$query = OrderModel::find()->select('order_id,order_sn,buyer_name,seller_name as store_name,order_amount,payment_name,status,add_time,pay_time,finished_time');
 			//$query = $this->getConditions($post, $query)->orderBy(['order_id' => SORT_DESC]);
-			
-			$query = OrderModel::find()->alias('o')->select('o.order_id,o.order_sn,o.buyer_name,o.seller_name as store_name,o.order_amount,o.payment_name,o.status,o.add_time,o.pay_time,o.finished_time,oe.signature
-			,obi.real_name');//oe.signature as real_name
+			$query = OrderModel::find()->alias('o')->select('o.order_id,o.order_sn,o.buyer_name,o.seller_name as store_name,o.goods_amount,o.order_amount,o.payment_name,o.status,o.add_time,o.pay_time,o.finished_time,
+			oe.signature,oe.address,oe.shipping_fee,obi.real_name,og.goods_name,og.goods_image');//oe.signature as real_name,'og.goods_name','og.goods_image'
 			$query = $this->getConditions($post, $query)
 			->joinWith('orderExtm oe', false)
 			->joinWith('orderBuyerInfo obi', false)
+			->joinWith('orderGoods og', false)
 			->orderBy(['o.order_id' => SORT_DESC]);
-			
-			$page = Page::getPage($query->count(), $post->limit ? $post->limit : 10);
+			$page = Page::getPage($query->count(), $post->limit ? $post->limit : 20);
 			$list = $query->offset($page->offset)->limit($page->limit)->asArray()->all();
-	
 			foreach ($list as $key => $value)
 			{
-				
 				$list[$key]['tradeNo'] = DepositTradeModel::find()->select('tradeNo')->where(['bizOrderId' => $value['order_sn']])->scalar();// 是否申请过退款
 				$list[$key]['add_time'] = Timezone::localDate('Y-m-d H:i:s', $value['add_time']);
 				$list[$key]['pay_time'] = Timezone::localDate('Y-m-d H:i:s', $value['pay_time']);
 				$list[$key]['finished_time'] = Timezone::localDate('Y-m-d H:i:s', $value['finished_time']);
 				$list[$key]['status'] = Def::getOrderStatus($value['status']);
-  				
 				if(!empty($list[$key]['tradeNo']) && ($refund = RefundModel::find()->select('refund_id,status')->where(['tradeNo' => $list[$key]['tradeNo']])->one())) {
 					$list[$key]['refund_status'] = $refund->status;
 					$list[$key]['refund_id'] = $refund->refund_id;
@@ -108,7 +105,6 @@ class OrderbyhhController extends \common\controllers\BaseUserController
 				}
 				
 			}
-			//var_dump($list);die;
 			return Json::encode(['code' => 0, 'msg' => '', 'count' => $query->count(), 'data' => $list]);
 		}
 	}
@@ -247,13 +243,18 @@ class OrderbyhhController extends \common\controllers\BaseUserController
 	{
 		$post = Basewind::trimAll(Yii::$app->request->get(), true);
 		if($post->id) $post->id = explode(',', $post->id);
-		
-		$query = OrderModel::find()->alias('o')->select('o.order_id,o.order_sn,o.buyer_name,o.seller_name as store_name,
-		o.order_amount,o.status,o.add_time,o.pay_time,o.ship_time,o.finished_time,o.payment_name,o.express_no,o.postscript,o.pay_message,
-		oe.consignee,oe.region_name,oe.address,oe.phone_mob')
-			->joinWith('orderExtm oe', false)
-			//->joinWith('orderBuyerInfo obi', false)
-			->orderBy(['o.order_id' => SORT_DESC]);
+ 
+		$query = OrderModel::find()->alias('o')->select('o.order_id,o.order_sn,o.buyer_name,o.seller_name as store_name,o.goods_amount,o.order_amount,o.payment_name,o.status,o.add_time,o.pay_time,o.finished_time,
+		oe.signature,oe.address,oe.region_name,oe.shipping_fee,obi.real_name,og.goods_name,og.goods_image');//oe.signature as real_name,'og.goods_name','og.goods_image'
+		$query = $this->getConditions($post, $query)
+		->joinWith('orderExtm oe', false)
+		->joinWith('orderBuyerInfo obi', false)
+		->joinWith('orderGoods og', false)
+		->orderBy(['o.order_id' => SORT_DESC]);		
+				
+			
+			
+			
 		if(!empty($post->id)) {
 			$query->andWhere(['in', 'o.order_id', $post->id]);
 		}
@@ -279,7 +280,7 @@ class OrderbyhhController extends \common\controllers\BaseUserController
 			}
 		}
 		//var_dump($list);die;
-		return \backend\models\OrderExportForm::download($list);		
+		return \frontend\models\OrderExportForm::download($list);		
 	}
 	
 	private function getSearchOption()
