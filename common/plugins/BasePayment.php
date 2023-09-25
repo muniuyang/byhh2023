@@ -268,7 +268,7 @@ class BasePayment extends BasePlugin
 				if($showDepositPay === true)
 				{
 					$depositAccount = DepositAccountModel::find()->select('pay_status,money')->where(['userid' => Yii::$app->user->id])->asArray()->one();
-					
+					//var_dump($depositAccount);
 					if(in_array($depositAccount['pay_status'], array('ON'))) {
 						//var_dump($depositAccount);
 						if($orderInfo['amount'] > $depositAccount['money']) {
@@ -291,7 +291,7 @@ class BasePayment extends BasePlugin
 					$payment = false;
 				}
 			}
-           // var_dump($payment);
+            //var_dump($payment);die;
 			if($payment !== false) {
 				if ($selected === false && !$payment['disabled']) {
 					$selected = true;

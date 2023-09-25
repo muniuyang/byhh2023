@@ -55,6 +55,7 @@ class Plugin
 	 */
 	public function build($code = null, $params = null)
 	{
+		
 		$base_file = Yii::getAlias('@common') . '/plugins/Base' . ucfirst($this->instance) . '.php';
 		if(!is_file($base_file)) {
 			return false;
@@ -66,6 +67,7 @@ class Plugin
 
 			// 插件基类
 			$base_class = sprintf("common\plugins\Base%s", ucfirst($this->instance));
+			//var_dump($base_class);die;
 			return new $base_class($params);
 		}
 

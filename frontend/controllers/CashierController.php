@@ -157,7 +157,9 @@ class CashierController extends \common\controllers\BaseUserController
 			$this->params['deposit_account'] = $depositAccount;
 			$this->params['payments'] = $all_payments;
 			$this->params['orderInfo'] = $orderInfo;
-
+			
+			//var_dump($this->params['payments']);die;
+			
 			$this->params['_foot_tags'] = Resource::import('jquery.plugins/jquery.validate.js');
 
 			$this->params['page'] = Page::seo(['title' => Language::get('cashier')]);

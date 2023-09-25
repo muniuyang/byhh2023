@@ -73,15 +73,12 @@ class OrderbyhhController extends \common\controllers\BaseUserController
 				}
 			}
 			$this->params['userBill'] = $temps;
-			//var_dump($this->params['userBill']);die;
 			return $this->render('../order.byhhindex.html', $this->params);
 		}
 		else
 		{
-			//$query = OrderModel::find()->select('order_id,order_sn,buyer_name,seller_name as store_name,order_amount,payment_name,status,add_time,pay_time,finished_time');
-			//$query = $this->getConditions($post, $query)->orderBy(['order_id' => SORT_DESC]);
 			$query = OrderModel::find()->alias('o')->select('o.order_id,o.order_sn,o.buyer_name,o.seller_name as store_name,o.goods_amount,o.order_amount,o.payment_name,o.status,o.add_time,o.pay_time,o.finished_time,
-			oe.signature,oe.address,oe.shipping_fee,obi.real_name,og.goods_name,og.goods_image');//oe.signature as real_name,'og.goods_name','og.goods_image'
+			oe.consignee,oe.signature,oe.address,oe.shipping_fee,obi.real_name,og.goods_name,og.goods_image');
 			$query = $this->getConditions($post, $query)
 			->joinWith('orderExtm oe', false)
 			->joinWith('orderBuyerInfo obi', false)

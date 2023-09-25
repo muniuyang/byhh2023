@@ -53,6 +53,7 @@
 	  <style type="text/css">
 	  .layui-table-tips-main{
 		max-height:450px;
+		min-height:400px;
 		}
 	  </style>
 	  {/literal} 
@@ -92,7 +93,7 @@
 			}}
 		, { field: 'goods_name', title: '标题(*款式*)', width: 260 }
         , { field: 'store_name', title: '店铺名称', width: 90 }
-        , { field: 'signature', title: '收货人(*收花人*)', width: 150 ,align: 'center',style:'color: #FF8800;'}
+        , { field: 'consignee', title: '收货人(*收花人*)', width: 150 ,align: 'center',style:'color: #FF8800;'}
 		, { field: 'address', title: '收货地址(*收花人地址*)', width: 230 ,align: 'center',style:'color: #FF8800;'}
 		, { field: 'real_name', title: '买家(*订花人*)', width: 130 ,align: 'center',style:'color: #00AA00;',templet:function(res){
 				return res.real_name;//+'('+res.buyer_name+')' ;
