@@ -58,13 +58,11 @@ class Order_printedController extends \common\controllers\BaseUserController
 		$orderInfo['ptf'] = $post->ptf;
 		//VAR_DUMP($orderInfo['orderExtm']);die;
 		$orderInfo['postscript'] = $orderInfo['orderExtm']['signature'];
+		$orderInfo['content'] = $orderInfo['orderExtm']['content'];
+
 		if($post->ptf >=1 && $post->ptf<=20){
 			$this->actionExcute($orderInfo);
-		}else if($post->ptf ==21){
-			$this->actionPrinted($orderInfo);
-		}else if($post->ptf ==22){
-			$this->actionPrinted($orderInfo);
-		}else if($post->ptf ==23){
+		}else if($post->ptf >=21 && $post->ptf<=30){
 			$this->actionPrinted($orderInfo);
 		}else{
 			return Message::warning("没找到模版，模版不存在！");
@@ -96,6 +94,7 @@ class Order_printedController extends \common\controllers\BaseUserController
 		// 创建新文档
 		$templateProcessor = new \PhpOffice\PhpWord\TemplateProcessor($templateFile);
 		$templateProcessor->setValue('signer',$order['postscript']); 
+		$templateProcessor->setValue('content',$order['content']); 
 		$templateProcessor->saveAs($resultFile);
 		$this->actionDown($resultFile);
 	}
@@ -104,24 +103,33 @@ class Order_printedController extends \common\controllers\BaseUserController
 		$logo = dirname(Yii::$app->BasePath).'/frontend/web/data/system/byhhgzh.png';
 		$templateFile = dirname(Yii::$app->BasePath).'/frontend/web/data/template/printed_card_b'.$order['ptf'].'.docx';
 		$orderExt = $order['orderExtm'];
-		//$resultFile = dirname(Yii::$app->BasePath).'/frontend/web/data/sales/printed['.$order['order_id'].']'.$order['ptf'].'.docx';
 		$filename = 'F'.$order['ptf'].'['.$order['order_id'].']['.$order['postscript'].']送['.$orderExt['consignee'].'].docx';
 		$resultFile = dirname(Yii::$app->BasePath).'/frontend/web/data/sales/'.$filename;
 		
 		// 创建新文档
 		$templateProcessor = new \PhpOffice\PhpWord\TemplateProcessor($templateFile);
-		// Variables on different parts of document
 		$templateProcessor->setValue('address',$orderExt['address']);// On section/content
 		$templateProcessor->setValue('title', $orderExt['consignee']);// On footer
-		$templateProcessor->setValue('signer',$order['postscript']); // On header
-		/*
-		$templateProcessor->setImageValue('im',$logo);
-		$templateProcessor->setImageValue('im', array('path' => $logo,'wrappingStyle' => 'infront', 'width' => 120,'height' => 120));
-		$templateProcessor->setImageValue('FeatureImage', function () {
-			 Closure will only be executed if the replacement tag is found in the template
-			return array('path' => SlowFeatureImageGenerator::make(), 'width' => 240,'height' => 240,'ratio' => false);
-		});
-		*/
+		$templateProcessor->setValue('content',$order['content']); 
+
+		if(in_array($order['ptf'],[23,24,25])){
+			$sigers = explode(',',$order['postscript']);
+			$ct = count($sigers);
+			foreach($sigers as $k=>$v){
+				$templateProcessor->setValue('signer'.$k,$v); 
+			}
+			if($order['ptf'] == 23){$j=3;$st=$j-$ct;}
+			if($order['ptf'] == 24){$j=4;$st=$j-$ct;}
+			if($order['ptf'] == 25){$j=6;$st=$j-$ct;}
+			if($st>0){
+ 				for($i=$ct;$i<$j;$i++){
+ 					$templateProcessor->setValue('signer'.$i,''); 
+ 				}
+ 			}
+		}else{
+			$templateProcessor->setValue('signer',$order['postscript']); // On header
+		}
+
 		$templateProcessor->saveAs($resultFile);
 		$this->actionDown($resultFile);
 	} 

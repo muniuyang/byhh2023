@@ -73,6 +73,7 @@ class ExtroForm extends Model
 		/**********************[START]JchengCustom with local**********************/
 		$model->signature 	= $post->signature;//落款
 		$model->subscriber 	= $post->subscriber;//订花人
+		$model->content 	= $post->content;//祝贺语
 		/**********************[START]JchengCustom with local**********************/
 		if(!$model->save()) {
 			$this->errors = $model->errors;

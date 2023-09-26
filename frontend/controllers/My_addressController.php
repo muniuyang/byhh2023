@@ -131,6 +131,8 @@ class My_addressController extends \common\controllers\BaseUserController
 		if(!Yii::$app->request->isPost)
 		{
 			$this->params['regions'] = RegionModel::find()->select('region_name')->where(['parent_id' => 0, 'if_show' => 1])->indexBy('region_id')->column();
+			$congra = \common\models\CongratulationsModel::find()->where(['addr_id' =>$addr_id])->one();
+ 			$address['content'] = $congra->content;	
 			$this->params['address'] = $address;
 			$this->params['action'] = Url::toRoute(['my_address/edit', 'addr_id' => $addr_id]);
 			$this->params['redirect'] = Yii::$app->request->get('redirect', Url::toRoute('my_address/index'));
@@ -232,7 +234,6 @@ class My_addressController extends \common\controllers\BaseUserController
 			//$consignee = OrderExtmModel::find()->select('region_id')->where(['order_id' => $order_info['order_id']])->one();
 			
 			if(!($extroInfo = $model->save($post, $valid))) {
-				var_dump($model); die('33333');
 				return Message::popWarning($model->errors);
 			}
 			return Message::popSuccess(Language::get('address_edit_successed'), urldecode(Yii::$app->request->post('redirect', Url::toRoute('buyer_order/view'))));

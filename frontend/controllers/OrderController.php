@@ -120,6 +120,12 @@ class OrderController extends \common\controllers\BaseUserController
 			$result = $order_type->submit(array(
 				'goods_info' => $goods_info
 			));
+
+
+			//var_dump($result);
+
+						//die('3');
+
 			if(empty($result)) {
 				return Message::warning($order_type->errors);
 			}
@@ -130,6 +136,16 @@ class OrderController extends \common\controllers\BaseUserController
 			//$d = array_values($result);
 			// 有可能是支付多个订单
 			$bizOrderId = implode(',', OrderModel::find()->select('order_sn')->where(['in', 'order_id', array_values($result)])->column());
+
+			/*************添加祝贺语*********[START]JchengCustom with local**********************/
+			//$congra = \common\models\CongratulationsModel::find()->where(['addr_id' =>$post->addr_id])->one();
+			//$congra->order_id = $post->content;
+			//$congra->save();
+			
+			/**********************[START]JchengCustom with local**********************/
+
+
+
 			// 到收银台付款
 			return $this->redirect(['cashier/gateway', 'bizOrderId' => $bizOrderId, 'bizIdentity' => Def::TRADE_ORDER]);
 		}

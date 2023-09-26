@@ -4,7 +4,7 @@
     <form method="post" action="{$action}" id="address_form" target="iframe">
       <ul>
         <li class="B_Consignee">
-          <h3>{$lang.consignee}: </h3>
+          <h3>收货人(祝?): </h3>
           <p>
             <input type="text" class="text width_normal I_Consignee" name="consignee" value="{$address.consignee|escape}"/>
             <label class="field_message"><span class="field_notice">{$lang.consignee_desc}</span></label>
@@ -43,27 +43,27 @@
           </p>
         </li>
 		<li>
-		  <h3>{$lang.signature}: </h3>
+		  <h3>落款(赠送人): </h3>
 		  <p>
 		    <input type="text" class="text width_normal" name="signature" value="{$address.signature|escape}"/>
-		    <label class="field_message"><span class="field_notice">{$lang.signature_desc}</span></label>
+		    <label class="field_message"><span class="field_notice">签名落款，代表谁送的，多个用“逗号”隔开。</span></label>
 		  </p>
 		</li>
 		<li>
-		  <h3>{$lang.subscriber}: </h3>
+		  <h3>订货人(结款): </h3>
 		  <p>
 		    <input type="text" class="text width_normal" name="subscriber" value="{$address.subscriber|escape}"/>
 		    <label class="field_message"><span class="field_notice">{$lang.subscriber_desc}</span></label>
 		  </p>
 		</li>
-        <li>
+        <li style="display: none;">
           <h3>{$lang.zipcode}: </h3>
           <p>
             <input type="text" class="text width_normal" name="zipcode" name="zipcode" value="{$address.zipcode|escape}" />
             <label class="field_message"><span class="field_notice"></span></label>
           </p>
         </li>
-        <li>
+        <li style="display: none;">
           <h3>{$lang.phone_tel}:</h3>
           <p>
             <input type="text" class="text width_normal"  name="phone_tel" value="{$address.phone_tel}"/>
@@ -76,6 +76,16 @@
             <label class="field_message"><span class="field_notice">{$lang.phone_mob}</span></label>
           </p>
         </li>
+
+        <li>
+          <h3>祝福语:</h3>
+          <p>
+            <textarea id="remark_input" class="text width_normal"  class="text" name="content" 
+            value="{$address.content|escape}"   style="width:270px;height:90px;" placeholder="如：”开业大吉，生意兴隆“">{$address.content|escape}</textarea>
+            <label class="field_message"><span class="field_notice">如：”开业大吉，生意兴隆“</span></label>
+          </p>
+        </li>     
+
         <li>
           <h3>设为默认:</h3>
           <p style="line-height: 24px;">

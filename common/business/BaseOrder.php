@@ -233,7 +233,7 @@ class BaseOrder
 	public function handleUserInsert($base_info, $consignee_info)
 	{
 		//var_dump($base_info);
-		//var_dump($consignee_info);
+		//var_dump($consignee_info);die;
 		//var_dump($this->post);
 		//die('444');
 		//var_dump(Yii::$app->params['createRights']);die;
@@ -280,28 +280,25 @@ class BaseOrder
     public function handleConsigneeInfo($goods_info = array())
     {
 		$result = array();
-			
-		
 		// 验证收货人信息填写是否完整
 		if (!($consignee_info = $this->validConsigneeInfo())) {
 			return false;
-		}
-			 
-
+		}			 
 		// 验证配送方式信息填写是否完整
 		if(!($delivery_info = $this->validDeliveryInfo())) {
 			return false;
 		}
-		
         // 计算配送费用
 		$shipping_method = $this->getOrderShippings($goods_info);
-		//
-		 
+		$post = ArrayHelper::toArray($this->post);
+		//祝贺语
+		$congra = \common\models\CongratulationsModel::find()->where(['addr_id' =>$post['addr_id']])->one();
 		foreach($shipping_method as $store_id => $shipping)
 		{
 			/**********************[START]JchengCustom with local**********************/
 			//'signature' 	=>  $consignee_info['signature']
 			//'subscriber' 	=>  $consignee_info['subscriber'],
+			//'content' 		=>  $congra['content'],
 			/**********************[END]JchengCustom with local**********************/
         	$result[$store_id] = array(
 				'consignee'     =>  $consignee_info['consignee'],
@@ -310,6 +307,7 @@ class BaseOrder
 				'address'       =>  $consignee_info['address'],
 				'signature' 	=>  $consignee_info['signature'],
 				'subscriber' 	=>  $consignee_info['subscriber'],
+				'content' 		=>  $congra['content'],
 				'zipcode'       =>  $consignee_info['zipcode'],
 				'phone_tel'     =>  $consignee_info['phone_tel'],
 				'phone_mob'     =>  $consignee_info['phone_mob'],
@@ -330,9 +328,7 @@ class BaseOrder
 		$post = ArrayHelper::toArray($this->post);
 		if(($address = $this->getAddressInfo($post['addr_id'], $post['region_id']))) {
 			$post = array_merge($post, $address);
-		}
-		
-		//var_dump($address);
+		}		
         if (!$post['consignee']) {
        		$this->errors = Language::get('consignee_empty');
             return false;
@@ -346,7 +342,6 @@ class BaseOrder
             return false;
         }
 		if(in_array(Yii::$app->user->id,Yii::$app->params['createRights'])){//权限判断[START]JchengCustom
-			//var_dump($post);die('333');
 			
 		}else{
 			if (!$post['phone_tel'] && !$post['phone_mob']) {

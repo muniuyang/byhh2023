@@ -53,6 +53,7 @@ class AddressForm extends Model
 	
 	public function save($post, $valid = true)
 	{
+		//var_dump($this->addr_id);die;
 		if($valid === true && !$this->valid($post)) {
 			return false;
 		}
@@ -89,6 +90,16 @@ class AddressForm extends Model
 			$this->errors = $model->errors;
 			return false;
 		}
+		/*************添加祝贺语*********[START]JchengCustom with local**********************/
+		$congra = \common\models\CongratulationsModel::find()->where(['addr_id' =>$model->addr_id])->one();
+		if(!$congra){
+			$congra = new \common\models\CongratulationsModel();
+		}
+		$congra->addr_id = $model->addr_id;
+		$congra->content = $post->content;
+		$congra->save();
+		/**********************[START]JchengCustom with local**********************/
+
 		if($post->defaddr) {
 			AddressModel::updateAll(['defaddr' => 0], ['and', ['userid' => $userid], ['!=', 'addr_id', $model->addr_id]]);
 		}

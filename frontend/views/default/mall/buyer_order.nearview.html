@@ -61,10 +61,12 @@
         </div>
       </div>
       <h3>{$lang.consigness}</h3>
-      <div class="goods"> {$lang.consignee_address}&nbsp;:&nbsp;<span style="font-weight: bold;font-size:20px;">{$order.orderExtm.consignee|escape}</span>
+      <div class="goods"> 收货人&nbsp;:&nbsp;<span style="font-weight: bold;font-size:20px;">{$order.orderExtm.consignee|escape}</span> 
 	  <!--{if $order.orderExtm.phone_mob}-->, &nbsp;<span style="font-weight: bold;font-size:20px;">{$order.orderExtm.phone_mob}</span><!--{/if}-->
 	  <!--{if $order.orderExtm.phone_tel}-->,&nbsp;<span style="font-weight: bold;font-size:20px;">{$order.orderExtm.phone_tel}</span><!--{/if}--> 
         ,&nbsp;{$order.orderExtm.region_name|escape}&nbsp;<span style="font-weight: bold;font-size:20px;">{$order.orderExtm.address|escape} </span><br /><br />
+        祝贺语&nbsp;:&nbsp;<span style="font-weight: bold;font-size:20px;">{$order.orderExtm.content|escape} </span><br /><br />
+
 		{$lang.signature}&nbsp;:&nbsp;<span style="font-weight: bold;font-size:20px;">{$order.orderExtm.signature|escape} </span><br /><br />
 		{$lang.subscriber}&nbsp;:&nbsp;<span style="font-weight: bold;font-size:20px;">{$order.orderExtm.subscriber|escape} </span><br /><br />
 		
