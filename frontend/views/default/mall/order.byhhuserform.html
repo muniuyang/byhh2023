@@ -1,0 +1,43 @@
+<script type="text/javascript">
+$(function(){
+    $('#cancel_button').click(function(){
+        DialogManager.close('seller_order_adjust_fee');
+    });
+});
+</script>
+<div class="eject_con">
+  <form  method="post" target="iframe" action="{url route='orderbyhh/cuser'}">
+    <div class="content_line">
+      <div id="warning"></div>
+    <p> <span style="width:80px; display:inline-block">用户名:</span>
+      <input type="text" name="username" value="" placeholder="输入用户名"/>
+    </p>
+	
+	
+	</div>
+
+
+	
+	<div class="content_line">
+	  <div id="warning"></div>
+	
+		<p style="line-height: 24px;">
+			<span style="width:80px; display:inline-block">用户类型:</span>
+		  <label><input type="radio" name="utype" value="1"/>&nbsp;&nbsp;年结用户</label>&nbsp;&nbsp;&nbsp;&nbsp;
+		  <label><input type="radio" name="utype" value="2" />&nbsp;&nbsp;普通用户</label>
+		</p>
+	</div>
+
+	
+	<div class="total_value">
+	 
+	  <p> <span style="width:80px; display:inline-block">用户密码:</span>
+	    <input type="text" name="password" value="12345678" placeholder="输入用户名密码"/>
+	  </p>
+	</div>
+    <div class="wrap_btn" style="padding-left:80px;padding-right:60px;">
+      <input type="submit" id="confirm_button" class="btn1" value="{$lang.confirm}" />
+      <input type="button" id="cancel_button" class="btn2" value="{$lang.cancel}" />
+    </div>
+  </form>
+</div>

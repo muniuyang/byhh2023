@@ -45,10 +45,10 @@ class OrderbyhhController extends \common\controllers\BaseUserController
 		$this->view  = Page::setView('mall');
 		$this->params = ArrayHelper::merge($this->params, Page::getAssign('user'));
 		if(!in_array(Yii::$app->user->id,Yii::$app->params['createRights'])){//权限判断[START]JchengCustom
-			die("未授权，不能访问！");
+			//die("未授权，不能访问！");
 		}
 	}
-	//https://www.byhh.com/admin/orderbyhh/index.html
+	//http://www.byhh.com/orderbyhh/index.html
 	public function actionIndex()
 	{
 		$post = Basewind::trimAll(Yii::$app->request->get(), true, ['limit', 'page', 'status']);
@@ -58,9 +58,11 @@ class OrderbyhhController extends \common\controllers\BaseUserController
 			$this->params['search_options'] = $this->getSearchOption();
 			$this->params['status_list'] = $this->getStatus();
 			$this->params['_foot_tags'] = Resource::import([
-				'script' => 'jquery.ui/jquery.ui.js,jquery.ui/i18n/' . Yii::$app->language . '.js',
-            	'style'=> 'jquery.ui/themes/smoothness/jquery.ui.css'
+				'script' => 'jquery.ui/jquery.ui.js,jquery.ui/i18n/' . Yii::$app->language . '.js,jquery.plugins/jquery.validate.js,dialog/dialog.js,mlselection.js,user.js,jquery.plugins/jquery.form.js',
+				'style' =>  'jquery.ui/themes/smoothness/jquery.ui.css,dialog/dialog.css'
 			]);
+			
+			
 			$this->params['page'] = Page::seo(['title' => Language::get('order_list')]);
 			$userBills =  UserBillModel::find()->alias('b')->select('u.real_name')
 			->joinWith('user u', false)
@@ -84,6 +86,8 @@ class OrderbyhhController extends \common\controllers\BaseUserController
 			->joinWith('orderBuyerInfo obi', false)
 			->joinWith('orderGoods og', false)
 			->orderBy(['o.order_id' => SORT_DESC]);
+			
+			//var_dump($query->createCommand()->getRawSql());die;
 			$page = Page::getPage($query->count(), $post->limit ? $post->limit : 20);
 			$list = $query->offset($page->offset)->limit($page->limit)->asArray()->all();
 			foreach ($list as $key => $value)
@@ -105,6 +109,54 @@ class OrderbyhhController extends \common\controllers\BaseUserController
 			return Json::encode(['code' => 0, 'msg' => '', 'count' => $query->count(), 'data' => $list]);
 		}
 	}
+	//http://www.byhh.com/orderbyhh/create_user.html?u=吴年伟
+	public function actionCuser2(){
+		$post = Basewind::trimAll(Yii::$app->request->get(), true);
+		var_dump($post);die;
+		
+	}
+	/**
+	 * 修改订单地址信息
+	 */
+	public function actionCuser()
+	{
+		if(!Yii::$app->request->isPost)
+		{
+			$post = Basewind::trimAll(Yii::$app->request->get(), true);
+			$this->params['action'] = Url::toRoute(['orderbyhh/extro', 'order_id' => $post->order_id]);
+			$redirect = Url::toRoute(['orderbyhh/index']);
+			$this->params = array_merge($this->params, ['extro_info' => $extroInfo['orderExtm'], 'redirect' => $redirect]);
+			return $this->render('../order.byhhuserform.html', $this->params);
+		}else{
+			$post = Basewind::trimAll(Yii::$app->request->post(), true);
+			if(in_array($post->utype,[1,2])){
+				return Message::popWarning("用户的类型未选择!");
+			}
+			if(in_array(Yii::$app->user->id,Yii::$app->params['createRights'])){//权限判断[START]JchengCustom
+				$umodel = new \frontend\models\UserRegisterForm();
+				$username = $post->username ;
+				$umodel->username  = $username;
+				$umodel->phone_mob = '';
+				$umodel->password  =  $post->password;
+				$umodel->confirmPassword = $post->password;
+				$umodel->agree =1;
+				if ($user = $umodel->register(['real_name'=>$username])) {
+					$ubmodel = new \common\models\UserBillModel();
+					$ubmodel->userid = $user->userid;
+					if(!$ubmodel->save()) {
+						return Message::popWarning($ubmodel->errors);
+					}
+				}else{
+					return Message::popWarning($umodel->errors);
+				}
+			}else{
+				return Message::popWarning("权限不够");
+			}
+			return Message::popSuccess("添加成功", urldecode(Yii::$app->request->post('redirect', Url::toRoute('orderbyhh/index'))));
+		}
+	}
+	
+	
 	
 	public function actionView()
 	{
@@ -241,8 +293,9 @@ class OrderbyhhController extends \common\controllers\BaseUserController
 		$post = Basewind::trimAll(Yii::$app->request->get(), true);
 		if($post->id) $post->id = explode(',', $post->id);
  
-		$query = OrderModel::find()->alias('o')->select('o.order_id,o.order_sn,o.buyer_name,o.seller_name as store_name,o.goods_amount,o.order_amount,o.payment_name,o.status,o.add_time,o.pay_time,o.finished_time,
-		oe.signature,oe.address,oe.region_name,oe.shipping_fee,obi.real_name,og.goods_name,og.goods_image');//oe.signature as real_name,'og.goods_name','og.goods_image'
+		$query = OrderModel::find()->alias('o')->select('o.order_id,o.order_sn,o.buyer_name,o.seller_name as store_name,o.goods_amount,
+		o.order_amount,o.payment_name,o.status,o.add_time,o.pay_time,o.finished_time,
+		oe.consignee,oe.signature,oe.address,oe.region_name,oe.shipping_fee,obi.real_name,og.goods_name,og.goods_image');//oe.signature as real_name,'og.goods_name','og.goods_image'
 		$query = $this->getConditions($post, $query)
 		->joinWith('orderExtm oe', false)
 		->joinWith('orderBuyerInfo obi', false)
@@ -284,8 +337,10 @@ class OrderbyhhController extends \common\controllers\BaseUserController
 	{
 		return array(
             'seller_name'	=> Language::get('store_name'),
-            'buyer_name' 	=> Language::get('buyer_name'),
-			'real_name' 	=> Language::get('real_name'),
+           // 'buyer_name' 	=> Language::get('buyer_name'),
+			'consignee' 	=> '收货人(收花人)',
+			'signature' 	=> '签名落款(赠花人)',
+			'real_name' 	=> '买货人(订花人)',
             'payment_name' 	=> Language::get('payment_name'),
             'order_sn' 		=> Language::get('order_sn'),
 		);
@@ -324,6 +379,10 @@ class OrderbyhhController extends \common\controllers\BaseUserController
 			$post->search_name = $username;
 			//var_dump($username);die;
 		}
+		
+		
+		//var_dump($query->createCommand()->getRawSql());die;
+		
 		if($query === null) {
 			foreach(array_keys(ArrayHelper::toArray($post)) as $field) {
 				
@@ -333,6 +392,7 @@ class OrderbyhhController extends \common\controllers\BaseUserController
 			}
 			return false;
 		}
+		//var_dump($post);die;
 		if($post->field && $post->search_name && in_array($post->field, array_keys($this->getSearchOption()))) {
 			$query->andWhere([$post->field => $post->search_name]);
 		}
@@ -362,6 +422,7 @@ class OrderbyhhController extends \common\controllers\BaseUserController
 		if(!$post->order_amount_from && ($post->order_amount_to > 0)) {
 			$query->andWhere(['<=', 'order_amount', $post->order_amount_to]);
 		}
+		
 		return $query;
 	}
 }

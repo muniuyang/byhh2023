@@ -56,8 +56,8 @@ class Taskqueue
 	{
 		$today = Timezone::gmtime();
 		
-        // 默认2天
-        $interval = 388 * 24 * 3600;
+        // 默认3年 jcheng
+        $interval = 3 * 365 * 24 * 3600;
 		
 		// 每次仅处理2条记录，注意：处理太多会影响性能
 		$list = OrderModel::find()->where("add_time + {$interval} < {$today}")->andWhere(['in', 'status', [Def::ORDER_SUBMITTED, Def::ORDER_PENDING]])->indexBy('order_id')->orderBy(['order_id' => SORT_ASC])->limit(2)->asArray()->all();

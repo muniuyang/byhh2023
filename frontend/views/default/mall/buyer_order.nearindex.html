@@ -82,9 +82,21 @@
                     <a href="{url route='buyer_order/view' order_id=$order.order_id}" target="_blank">{$lang.view_order}</a> 
                     <!--付款--> 
                     <a href="{url route='cashier/index' order_id=$order.order_id}" target="_blank" id="order{$order.order_id}_action_pay"{if $order.status neq Def::ORDER_PENDING} style="display:none"{/if} class="btn-order-status-pay">{$lang.pay}</a> 
-                    <!--确认收货--> 
-                    <a href="javascript:;" ectype="dialog" dialog_id="buyer_order_confirm" dialog_width="400" dialog_title="{$lang.confirm_order}" uri="{url route='buyer_order/confirm' order_id=$order.order_id}" id="order{$order.order_id}_action_confirm"{if $order.status neq Def::ORDER_SHIPPED} style="display:none"{/if} />{$lang.confirm_order}</a>
-                    <!--取消订只有已提交和待付款的订单可以取消--> 
+                    
+					<!--发货-->
+					<a href="javascript:;" class="btn-order-status-shipped" ectype="dialog" dialog_title="{$lang.shipped_order}" dialog_id="seller_order_shipped" 
+					uri="{url route='seller_order/shipped' order_id=$order.order_id}" dialog_width="400" 
+					id="order{$order.order_id}_action_shipped"
+					{if $order.status neq Def::ORDER_ACCEPTED && ($order.status neq Def::ORDER_SUBMITTED || $order.payment_code neq 'cod')} style="display:none"{/if} />
+					{$lang.shipped_order}</a>
+					
+					<!--确认收货--> 
+                    <a href="javascript:;" class="btn-order-status-shipped" ectype="dialog" dialog_id="buyer_order_confirm" dialog_width="400"
+					 dialog_title="{$lang.confirm_order}" uri="{url route='buyer_order/confirm' order_id=$order.order_id}" 
+					 id="order{$order.order_id}_action_confirm"{if $order.status neq Def::ORDER_SHIPPED} style="display:none"{/if} />{$lang.confirm_order}</a>
+                   
+					<!
+					--取消订只有已提交和待付款的订单可以取消--> 
                     <a href="javascript:;" ectype="dialog" dialog_width="400" dialog_title="{$lang.cancel_order}" dialog_id="buyer_order_cancel" uri="{url route='buyer_order/cancel' order_id=$order.order_id}"  id="order{$order.order_id}_action_cancel" {if $order.status neq Def::ORDER_PENDING && $order.status neq Def::ORDER_SUBMITTED}style="display:none"{/if}>{$lang.cancel_order}</a>
                     <!--查看物流/会有多个物流插件，此处无需判断插件是否可用，直接显示链接-->
                     <a target="_blank" class="btn1" href="{url route='express/index' order_id=$order.order_id}" {if $order.status neq Def::ORDER_SHIPPED && $order.status neq Def::ORDER_FINISHED}style="display:none"{/if}>{$lang.view_delivery_track}</a>

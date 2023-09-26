@@ -7,16 +7,11 @@
         <div class="webkit-box box-align-center">
           <input type="hidden" name="r" value="orderbyhh/index" />
           <label class="mr5">搜索关键词类型</label>
-          <select class="querySelect" name="field">
+          <select class="querySelect classSelect" name="field">
             <option value="">--选择关键词类型--</option>
             {html_options options=$search_options selected=$smarty.get.field}
           </select>
-
           <input class="infoTableInput mr10" placeholder="输入搜索关键词" type="text" name="search_name" value="{$smarty.get.search_name|escape}" />
-         
-
-
-
           <label class="mr5">{$lang.search_status}</label>
           <select class="querySelect" name="status">
             <option value="">{$lang.no_limit}</option>
@@ -30,7 +25,7 @@
           </div>
           <div class="webkit-box box-align-center mt20">
           <label class="mr5">年结客户</label>
-          <select class="querySelect" name="real_name" >
+          <select class="querySelect buyerSelect" name="real_name" >
             <option value="">--选择客户名称--</option>
             {html_options  values=$userBill output=$userBill selected=$smarty.get.real_name}
           </select>
@@ -66,6 +61,10 @@
 <script type="text/html" id="toolbar">
 	<div class="layui-btn-container">
 	  <button class="layui-btn layui-btn-primary layui-border-black" lay-event="export"><i class="layui-icon layui-icon-export"></i>导出数据</button>
+
+	<a class="layui-btn layui-btn-primary layui-border-black" href="javascript:;" uri="{url route='orderbyhh/cuser'}" dialog_width="450" dialog_title="创建用户" ectype="dialog"
+	dialog_id="seller_order_adjust_fee" id="order{$order.orderExtm.order_id}_action_adjust_fee" ><i class="layui-icon layui-icon-username"></i>创建用户</a> 
+	</div>
 	</div>
 </script>
 
@@ -94,8 +93,9 @@
 		, { field: 'goods_name', title: '标题(*款式*)', width: 260 }
         , { field: 'store_name', title: '店铺名称', width: 90 }
         , { field: 'consignee', title: '收货人(*收花人*)', width: 150 ,align: 'center',style:'color: #FF8800;'}
-		, { field: 'address', title: '收货地址(*收花人地址*)', width: 230 ,align: 'center',style:'color: #FF8800;'}
-		, { field: 'real_name', title: '买家(*订花人*)', width: 130 ,align: 'center',style:'color: #00AA00;',templet:function(res){
+		, { field: 'address', title: '收货地址(*收花人*)', width: 230 ,align: 'center',style:'color: #FF8800;'}
+		, { field: 'signature', title: '签名落款(*赠花人*)', width: 200 ,align: 'center',style:'color: #00FF00;'}
+		, { field: 'real_name', title: '买货人(*订花人*)', width: 140 ,align: 'center',style:'color: #00AA00;',templet:function(res){
 				return res.real_name;//+'('+res.buyer_name+')' ;
 			}}
 		, { field: 'goods_amount', title: '商品售价', width: 110, sort: true, align: 'center' }
@@ -156,6 +156,12 @@
   $(function () {
     $('#add_time_from').datepicker({ dateFormat: 'yy-mm-dd' });
     $('#add_time_to').datepicker({ dateFormat: 'yy-mm-dd' });
+	$('.buyerSelect').change(function(){
+		$(".classSelect option[value='real_name']").attr("selected", true);    //设置Select的Text值为"买家实名"的项选中 
+		$('.infoTableInput').val($(this).find("option:selected").text());
+	})
   });
 </script>
+<iframe id="iframe" name="iframe" src="about:blank" frameborder="0" width="0" height="0" style="display:none"></iframe>
+
 {include file="footer.byhh.html"}

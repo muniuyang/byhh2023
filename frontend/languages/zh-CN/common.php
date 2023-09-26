@@ -342,6 +342,7 @@ return array(
     'pending_orders'    => '待付款',
 	'teaming_orders'	=> '待成团',
     'accepted_orders'    => '待发货',
+	 'shipped_order'         => '发货',
     'shipped_orders'    => '已发货',
     'finished_orders'    => '已完成',
     'canceled_orders'    => '已取消',

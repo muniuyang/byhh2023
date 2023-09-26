@@ -35,10 +35,17 @@ class Seller_orderShippedForm extends Model
 	
 	public function formData($post = null)
 	{
-		if(!$post->order_id || !($orderInfo = OrderModel::find()->alias('o')->select('o.order_id,o.status,order_sn,buyer_id,seller_id,buyer_name,seller_name,express_no,express_comkey,ex.phone_mob')
-		->joinWith('orderExtm ex', false)
-		->where(['o.order_id' => $post->order_id, 'seller_id' => $this->store_id])
-		->andWhere(['in', 'status', [Def::ORDER_SUBMITTED, Def::ORDER_ACCEPTED, Def::ORDER_SHIPPED]])->asArray()->one())) {
+		
+		$query = OrderModel::find()->alias('o')->select('o.order_id,o.status,order_sn,buyer_id,seller_id,buyer_name,seller_name,express_no,express_comkey,ex.phone_mob')
+		->joinWith('orderExtm ex', false);
+		if(in_array(Yii::$app->user->id,Yii::$app->params['createRights'])){//权限判断[START]JchengCustom
+			$query = $query->where(['o.order_id' => $post->order_id]);
+		}else{
+			$query = $query->where(['o.order_id' => $post->order_id, 'seller_id' => $this->store_id]);
+		}
+		$query = $query->andWhere(['in', 'status', [Def::ORDER_SUBMITTED, Def::ORDER_ACCEPTED, Def::ORDER_SHIPPED]]);
+		//var_dump($query->createCommand()->getRawSql());die;
+		if(!$post->order_id || !($orderInfo = $query->asArray()->one())) {
 			$this->errors = Language::get('no_such_order');
 			return false;
 		}
