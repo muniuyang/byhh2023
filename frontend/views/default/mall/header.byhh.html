@@ -16,14 +16,21 @@
     <title>{$page.title}</title>
     <meta name="Keywords" content="{$page.keywords}" />
     <meta name="Description" content="{$page.description}" />
-
+         {literal}
+      <style type="text/css">
+    .layui-show {
+        display: block!important;
+    }
+      </style>
+      {/literal} 
     <link href="{lib file='layui/css/layui.css' }" rel="stylesheet" type="text/css" />
     <link href="{res file='../admin/static/css/iconfont/iconfont.css'}" rel="stylesheet" type="text/css" />
     <link href="{res file='../admin/static/css/font-awesome.css'}" rel="stylesheet" type="text/css" />
     <link href="{res file='../admin/static/css/admin.css'}" rel="stylesheet" type="text/css" />
-	<link href="{res file='css/user.css'}" rel="stylesheet" type="text/css" />
 	
-	
+
+
+
 
     <script type="text/javascript">
         var HOME_URL = "{$homeUrl}";
@@ -70,13 +77,18 @@
                 </dl>
             </li>
             <li class="layui-nav-item layui-hide layui-show-md-inline-block ml20">
-                <a href="javascript:;" class="jump">平台后台</a>
+                <a href="javascript:;" class="jump">操作</a>
                 <dl class="layui-nav-child">
-                    <dd><a href="{url route='admin/index'}">平台后台</a></dd>
-                    <dd><a href="{url route='seller/index' baseUrl=$homeUrl}" target="_blank">商家后台</a></dd>
+                    <dd><a href="{url route='admin/index'}" target="_blank">平台后台</a></dd>
+                    <dd><a href="{url route='seller_order/index' baseUrl=$homeUrl}" target="_blank">商家后台</a></dd>
+                    <dd><a href="{url route='buyer_order/index' baseUrl=$homeUrl}" target="_blank">买家后台</a></dd>
+
+                    buyer_order/index.html
                 </dl>
             </li>
         </ul>
 
-   
+      <ul class="menutabs J_Menutabs" style="display:none;">
+            <li class="selected"><a class="mr5" href="{url route='default/index'}">概览</a><i data-id="0" class="layui-icon layui-icon-close layui-unselect layui-tab-close f-13"></i></li>
+        </ul>
     </div>
