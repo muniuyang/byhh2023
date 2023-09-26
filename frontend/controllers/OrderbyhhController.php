@@ -123,14 +123,17 @@ class OrderbyhhController extends \common\controllers\BaseUserController
 		if(!Yii::$app->request->isPost)
 		{
 			$post = Basewind::trimAll(Yii::$app->request->get(), true);
-			$this->params['action'] = Url::toRoute(['orderbyhh/extro', 'order_id' => $post->order_id]);
+			$this->params['action'] = Url::toRoute(['orderbyhh/extro', 'from' => 'cuser']);
 			$redirect = Url::toRoute(['orderbyhh/index']);
-			$this->params = array_merge($this->params, ['extro_info' => $extroInfo['orderExtm'], 'redirect' => $redirect]);
+			$this->params = array_merge($this->params, ['redirect' => $redirect]);
 			return $this->render('../order.byhhuserform.html', $this->params);
 		}else{
 			$post = Basewind::trimAll(Yii::$app->request->post(), true);
-			if(in_array($post->utype,[1,2])){
+			if(!in_array($post->utype,[1,2])){
 				return Message::popWarning("用户的类型未选择!");
+			}
+			if(!$post->username){
+				return Message::popWarning("请输入用户名!");
 			}
 			if(in_array(Yii::$app->user->id,Yii::$app->params['createRights'])){//权限判断[START]JchengCustom
 				$umodel = new \frontend\models\UserRegisterForm();
@@ -140,14 +143,16 @@ class OrderbyhhController extends \common\controllers\BaseUserController
 				$umodel->password  =  $post->password;
 				$umodel->confirmPassword = $post->password;
 				$umodel->agree =1;
-				if ($user = $umodel->register(['real_name'=>$username])) {
+				$user = $umodel->register(['real_name'=>$username]);
+				if(!$user){
+					return Message::popWarning($umodel->errors);
+				}
+				if($post->utype==1) {
 					$ubmodel = new \common\models\UserBillModel();
 					$ubmodel->userid = $user->userid;
 					if(!$ubmodel->save()) {
 						return Message::popWarning($ubmodel->errors);
 					}
-				}else{
-					return Message::popWarning($umodel->errors);
 				}
 			}else{
 				return Message::popWarning("权限不够");
