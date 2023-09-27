@@ -91,13 +91,15 @@ class AddressForm extends Model
 			return false;
 		}
 		/*************添加祝贺语*********[START]JchengCustom with local**********************/
-		$congra = \common\models\CongratulationsModel::find()->where(['addr_id' =>$model->addr_id])->one();
-		if(!$congra){
-			$congra = new \common\models\CongratulationsModel();
+		if($post->content){
+			$congra = \common\models\CongratulationsModel::find()->where(['addr_id' =>$model->addr_id])->one();
+			if(!$congra){
+				$congra = new \common\models\CongratulationsModel();
+				$congra->addr_id = $model->addr_id;
+			}
+			$congra->content = $post->content;
+			$congra->save();	
 		}
-		$congra->addr_id = $model->addr_id;
-		$congra->content = $post->content;
-		$congra->save();
 		/**********************[START]JchengCustom with local**********************/
 
 		if($post->defaddr) {

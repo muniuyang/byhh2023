@@ -147,7 +147,44 @@ class Seller_orderController extends \common\controllers\BaseSellerController
 			
         }
     }
-	
+	/* 调整时间 jcheng*/
+    public function actionAdjusttime()
+    {
+		$get = Basewind::trimAll(Yii::$app->request->get(), true, ['order_id']);
+		//var_dump($get);die('555');
+		
+		$model = new \frontend\models\Seller_orderAdjusttimeForm(['store_id' => $this->visitor['store_id']]);
+		if(!($orderInfo = $model->formData($get))) {
+			return Message::warning($model->errors);
+		}
+		if(in_array(Yii::$app->user->id,Yii::$app->params['createRights'])){//权限判断[START]JchengCustom
+		
+		}
+		//var_dump($orderInfo);die;
+        if (!Yii::$app->request->isPost)
+        {
+			$this->params['order'] = $orderInfo;
+			
+			// 当前位置
+			//$this->params['_curlocal'] = Page::setLocal(Language::get('seller_order'), Url::toRoute('seller_order/index'), Language::get('adjust_fee'));
+		
+			// 当前用户中心菜单
+			//$this->params['_usermenu'] = Page::setMenu('seller_order', 'adjust_fee');
+			$this->params['redirect']  = Url::toRoute(['seller_order/view', 'order_id' => $post->order_id]);
+
+			$this->params['page'] = Page::seo(['title' => Language::get('adjust_fee')]);
+			return $this->render('../seller_order.adjust_time.html', $this->params);
+        }
+        else
+        {
+			$post = Basewind::trimAll(Yii::$app->request->post(), true);
+			if(!$model->submit($post, $orderInfo)) {
+				return Message::popWarning($model->errors);
+			}
+            return Message::popSuccess();
+			
+        }
+    }
 	/* 待发货的订单发货 */
     public function actionShipped()
     {
