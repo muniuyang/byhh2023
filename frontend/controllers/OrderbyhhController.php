@@ -402,30 +402,30 @@ class OrderbyhhController extends \common\controllers\BaseUserController
 			$query->andWhere([$post->field => $post->search_name]);
 		}
 		if($post->status) {
-			$query->andWhere(['status' => $post->status]);
+			$query->andWhere(['o.status' => $post->status]);
 		}
 		if($post->add_time_from) $post->add_time_from = Timezone::gmstr2time($post->add_time_from);
 		if($post->add_time_to) $post->add_time_to = Timezone::gmstr2time_end($post->add_time_to);
 		if($post->add_time_from && $post->add_time_to) {
-			$query->andWhere(['and', ['>=', 'add_time', $post->add_time_from], ['<=', 'add_time', $post->add_time_to]]);
+			$query->andWhere(['and', ['>=', 'o.add_time', $post->add_time_from], ['<=', 'o.add_time', $post->add_time_to]]);
 		}
 		if($post->add_time_from && (!$post->add_time_to || ($post->add_time_to <= $post->add_time_from))) {
-			$query->andWhere(['>=', 'add_time', $post->add_time_from]);
+			$query->andWhere(['>=', 'o.add_time', $post->add_time_from]);
 		}
 		if(!$post->add_time_from && ($post->add_time_to && ($post->add_time_to > Timezone::gmtime()))) {
-			$query->andWhere(['<=', 'add_time', $post->add_time_to]);
+			$query->andWhere(['<=', 'o.add_time', $post->add_time_to]);
 		}
 		
 		if($post->order_amount_from) $post->order_amount_from = floatval($post->order_amount_from);
 		if($post->order_amount_to) $post->order_amount_to = floatval($post->order_amount_to);
 		if($post->order_amount_from && $post->order_amount_to) {
-			$query->andWhere(['and', ['>=', 'order_amount', $post->order_amount_from], ['<=', 'order_amount', $post->order_amount_to]]);
+			$query->andWhere(['and', ['>=', 'o.order_amount', $post->order_amount_from], ['<=', 'o.order_amount', $post->order_amount_to]]);
 		}
 		if($post->order_amount_from && (!$post->order_amount_to || ($post->order_amount_to < 0))) {
-			$query->andWhere(['>=', 'order_amount', $post->order_amount_from]);
+			$query->andWhere(['>=', 'o.order_amount', $post->order_amount_from]);
 		}
 		if(!$post->order_amount_from && ($post->order_amount_to > 0)) {
-			$query->andWhere(['<=', 'order_amount', $post->order_amount_to]);
+			$query->andWhere(['<=', 'o.order_amount', $post->order_amount_to]);
 		}
 		
 		return $query;
