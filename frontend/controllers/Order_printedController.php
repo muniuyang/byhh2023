@@ -78,7 +78,9 @@ class Order_printedController extends \common\controllers\BaseUserController
 		$post = Basewind::trimAll(Yii::$app->request->get(), true, ['order_id','ptf']);
 		//var_dump($post);
 		$this->params['order_id'] = $post->order_id;
-		$this->params['cards'] =[[],[],[],[],[],[],[],[],[]];
+		$this->params['cardsA'] =[[],[],[],[],[],[],[],[],[]];
+		$this->params['cardsB'] =[[],[],[],[],[],[],[],[],[]];
+
 		return $this->render('../printed.list.html', $this->params);
 	}
 	/**
@@ -103,7 +105,7 @@ class Order_printedController extends \common\controllers\BaseUserController
 		$logo = dirname(Yii::$app->BasePath).'/frontend/web/data/system/byhhgzh.png';
 		$templateFile = dirname(Yii::$app->BasePath).'/frontend/web/data/template/printed_card_b'.$order['ptf'].'.docx';
 		$orderExt = $order['orderExtm'];
-		$filename = 'F'.$order['ptf'].'['.$order['order_id'].']['.$order['postscript'].']送['.$orderExt['consignee'].'].docx';
+		$filename = 'F'.$order['ptf'].'['.$order['order_id'].']送['.$orderExt['consignee'].'].docx';
 		$resultFile = dirname(Yii::$app->BasePath).'/frontend/web/data/sales/'.$filename;
 		
 		// 创建新文档
@@ -112,7 +114,7 @@ class Order_printedController extends \common\controllers\BaseUserController
 		$templateProcessor->setValue('title', $orderExt['consignee']);// On footer
 		$templateProcessor->setValue('content',$order['content']); 
 
-		if(in_array($order['ptf'],[23,24,25])){
+		if(in_array($order['ptf'],[23,24,25,26,27,28])){
 			$sigers = explode(',',$order['postscript']);
 			$ct = count($sigers);
 			foreach($sigers as $k=>$v){

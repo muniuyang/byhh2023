@@ -4,7 +4,7 @@
    
     <div class="list w">
       <ul class="clearfix">
-		  <!--{foreach from=$cards item=record key=key}-->
+		  <!--{foreach from=$cardsA item=record key=key}-->
         <li class="clearfix float-left">
           <div class="lp float-left"> <a href="{url route='/order_printed/view' ptf=($key+1) order_id=$order_id}" target="_blank">
 		  <img src="/static/images/template/a{$key+1}.png" /></a> </div>
@@ -22,11 +22,12 @@
         </li>
 		<!--{/foreach}-->
 		
-    
+          <!--{foreach from=$cardsB item=record key=key}-->
+
         <li class="clearfix float-left">
-          <div class="lp float-left"> <a href="{url route='/order_printed/view' ptf=21 order_id=$order_id}" target="_blank"><img src="/static/images/template/b1.png" /></a> </div>
+          <div class="lp float-left"> <a href="{url route='/order_printed/view' ptf=(20+$key+1) order_id=$order_id}" target="_blank"><img src="/static/images/template/b{$key+1}.png" /></a> </div>
           <div class="mp float-left">
-            <div class="value1"><span style="font-size:18px;color:#05d7a8;">开业WPS（B1）</span></div>
+            <div class="value1"><span style="font-size:18px;color:#05d7a8;">开业WPS（B{$key+1}）</span></div>
             <br/>
             <div class="can"><em class="red">模版尺寸:A4</em></div>
           
@@ -39,72 +40,12 @@
     background-image: -webkit-gradient(linear, left top, left bottom, color-stop(0, #05d7a8), color-stop(1, #f02353));
     filter: progid: DXImageTransform.Microsoft.gradient(startColorstr='#05d7a8', endColorstr='#05d7a8', GradientType='0');
     -ms-filter: progid: DXImageTransform.Microsoft.gradient(startColorstr='#05d7a8', endColorstr='#05d7a8');
-    background-image: linear-gradient(to bottom, #05d7a8 0, #05d7a8 100%);"><a href="{url route='/order_printed/view' ptf=21 order_id=$order_id}" > <span class="line"></span> <em class="text" >立即打印</em> </a> </div>
+    background-image: linear-gradient(to bottom, #05d7a8 0, #05d7a8 100%);"><a href="{url route='/order_printed/view' ptf=(20+$key+1) order_id=$order_id}" > <span class="line"></span> <em class="text" >立即打印</em> </a> </div>
           </div>
           <div class="ins float-right"> <i class="i1"></i> <i class="i2"></i> </div>
         </li>
-        <li class="clearfix float-left">
-          <div class="lp float-left"> <a href="{url route='/order_printed/view' ptf=22 order_id=$order_id}" target="_blank"><img src="/static/images/template/b2.png" /></a> </div>
-          <div class="mp float-left">
-            <div class="value1"><span style="font-size:18px;color:#05d7a8;">开业WPS（B2）</span></div>
-            <br/>
-            <div class="can"><em class="red">模版尺寸:A4</em></div>
-          
-            <div class="type mt10"><b>祝:</b>湖北海业工程咨询设计有限公司</div>
-			<div class="type mt10">开业大吉，财源广进</div>
-            <div class="type mt10">林诉公馆  <b>恭贺</b></div>
-          </div>
-          <div class="rp float-right">
-            <div class="wp" style="background-image: -moz-linear-gradient(top, #05d7a8, #05d7a8);
-    background-image: -webkit-gradient(linear, left top, left bottom, color-stop(0, #05d7a8), color-stop(1, #f02353));
-    filter: progid: DXImageTransform.Microsoft.gradient(startColorstr='#05d7a8', endColorstr='#05d7a8', GradientType='0');
-    -ms-filter: progid: DXImageTransform.Microsoft.gradient(startColorstr='#05d7a8', endColorstr='#05d7a8');
-    background-image: linear-gradient(to bottom, #05d7a8 0, #05d7a8 100%);"><a href="{url route='/order_printed/view' ptf=22 order_id=$order_id}" > <span class="line"></span> <em class="text" >立即打印</em> </a> </div>
-          </div>
-          <div class="ins float-right"> <i class="i1"></i> <i class="i2"></i> </div>
-        </li>
-        <li class="clearfix float-left">
-          <div class="lp float-left"> 
-            <a href="{url route='/order_printed/view' ptf=24 order_id=$order_id}" target="_blank"><img src="/static/images/template/b4.png" /></a> </div>
-          <div class="mp float-left">
-            <div class="value1"><span style="font-size:18px;color:#05d7a8;">开业WPS（B4）</span></div>
-            <br/>
-            <div class="can"><em class="red">模版尺寸:A4</em></div>
-          
-            <div class="type mt10"><b>祝:</b>湖北海业工程咨询设计有限公司</div>
-			<div class="type mt10">开业大吉，财源广进</div>
-            <div class="type mt10"><div>柳喜成，李小芳  </br>柳喜成，李小芳</div><div><b>恭贺</b></div></div>
-          </div>
-          <div class="rp float-right">
-            <div class="wp" style="background-image: -moz-linear-gradient(top, #05d7a8, #05d7a8);
-    background-image: -webkit-gradient(linear, left top, left bottom, color-stop(0, #05d7a8), color-stop(1, #f02353));
-    filter: progid: DXImageTransform.Microsoft.gradient(startColorstr='#05d7a8', endColorstr='#05d7a8', GradientType='0');
-    -ms-filter: progid: DXImageTransform.Microsoft.gradient(startColorstr='#05d7a8', endColorstr='#05d7a8');
-    background-image: linear-gradient(to bottom, #05d7a8 0, #05d7a8 100%);"><a href="{url route='/order_printed/view' ptf=24 order_id=$order_id}" > <span class="line"></span> <em class="text" >立即打印</em> </a> </div>
-          </div>
-          <div class="ins float-right"> <i class="i1"></i> <i class="i2"></i> </div>
-        </li>
-        <li class="clearfix float-left">
-          <div class="lp float-left"> 
-            <a href="{url route='/order_printed/view' ptf=25 order_id=$order_id}" target="_blank"><img src="/static/images/template/b5.png" /></a> </div>
-          <div class="mp float-left">
-            <div class="value1"><span style="font-size:18px;color:#05d7a8;">开业WPS（B5）</span></div>
-            <br/>
-            <div class="can"><em class="red">模版尺寸:A4</em></div>
-          
-            <div class="type mt10"><b>祝:</b>湖北海业工程咨询设计有限公司</div>
-      <div class="type mt10">开业大吉，财源广进</div>
-            <div class="type mt10"><div>柳喜成，李小芳  </br>柳喜成，李小芳</div><div><b>恭贺</b></div></div>
-          </div>
-          <div class="rp float-right">
-            <div class="wp" style="background-image: -moz-linear-gradient(top, #05d7a8, #05d7a8);
-    background-image: -webkit-gradient(linear, left top, left bottom, color-stop(0, #05d7a8), color-stop(1, #f02353));
-    filter: progid: DXImageTransform.Microsoft.gradient(startColorstr='#05d7a8', endColorstr='#05d7a8', GradientType='0');
-    -ms-filter: progid: DXImageTransform.Microsoft.gradient(startColorstr='#05d7a8', endColorstr='#05d7a8');
-    background-image: linear-gradient(to bottom, #05d7a8 0, #05d7a8 100%);"><a href="{url route='/order_printed/view' ptf=25 order_id=$order_id}" > <span class="line"></span> <em class="text" >立即打印</em> </a> </div>
-          </div>
-          <div class="ins float-right"> <i class="i1"></i> <i class="i2"></i> </div>
-        </li>
+    <!--{/foreach}-->
+
       </ul>
       <div class="clearfix pb10 center">{include file="page.bottom.html"}</div>
     </div>
