@@ -56,15 +56,10 @@ class Seller_orderAdjusttimeForm extends Model
   		//$his = date('H:i:s');
   		//$date = explode(' ',$post->add_time)[0];
   		//$post->add_time = $post->add_time.' '.$his;
+  		$post->add_time = strtotime($post->add_time);
 		if($post->add_time){
-			//var_dump(strtotime($post->add_time));die;
-			$model->add_time = strtotime($post->add_time);
+			$model->add_time = $post->add_time;
 		}
-				//		var_dump(trim($post->add_time));die;
-
-				//var_dump(strtotime($post->add_time));die;
-
-		//var_dump($model->attributes);die;
 		if($post->postscript){
 			$model->postscript = trim($post->postscript);
 		}
