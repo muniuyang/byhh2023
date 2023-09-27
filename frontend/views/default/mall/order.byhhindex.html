@@ -68,8 +68,12 @@
 	</div>
 </script>
 
+ 
 <script type="text/html" id="colBar">
-	<a class="ml5 mr5 blue pointer" lay-event="view">查看</a>
+  <a class="ml5 mr5 blue pointer" lay-event="edit">编辑</a>
+    <a class="ml5 mr5 blue pointer" lay-event="del" confirm="删除后将不能恢复，确认删除该项吗？">删除</a>
+  <a class="ml5 mr5 blue pointer" lay-event="printed">卡片</a>
+  <a class="ml5 mr5 blue pointer" lay-event="view">查看</a>
 </script>
 <script>
   layui.use('table', function () {
@@ -86,22 +90,24 @@
       //, size: 'lg'
       , cols: [[
         { type: 'checkbox', fixed: 'left' }
-        , { field: 'order_id', title: 'ID', width: 70, fixed: 'left', unresize: true, sort: true }
-        , { field: 'goods_image', title: '图片', width: 60,templet:function(res){
+    , { field: 'order_id', title: 'ID', width: 70, fixed: 'left', unresize: true, sort: true ,templet:function(res){
+          return "<a href='/buyer_order/view.html?order_id="+res.order_id+"' target='_blank'>"+res.order_id+"(打印)</a>";
+        }}
+    , { field: 'goods_image', title: '图片', width: 60,templet:function(res){
 				return '<img src='+res.goods_image+' style="with:60px;"/>' ;
 			}}
 		, { field: 'goods_name', title: '标题(*款式*)', width: 260 }
-        , { field: 'store_name', title: '店铺名称', width: 90 }
-        , { field: 'consignee', title: '收货人(*收花人*)', width: 150 ,align: 'center',style:'color: #FF8800;'}
+    , { field: 'store_name', title: '店铺名称', width: 90 }
+    , { field: 'consignee', title: '收货人(*收花人*)', width: 150 ,align: 'center',style:'color: #FF8800;'}
 		, { field: 'address', title: '收货地址(*收花人*)', width: 230 ,align: 'center',style:'color: #FF8800;'}
 		, { field: 'signature', title: '签名落款(*赠花人*)', width: 200 ,align: 'center',style:'color: #00FF00;'}
 		, { field: 'real_name', title: '买货人(*订花人*)', width: 140 ,align: 'center',style:'color: #00AA00;',templet:function(res){
 				return res.real_name;//+'('+res.buyer_name+')' ;
 			}}
 		, { field: 'goods_amount', title: '商品售价', width: 110, sort: true, align: 'center' }
-        , { field: 'order_amount', title: '订单金额', width: 110, sort: true, align: 'center' }
+    , { field: 'order_amount', title: '订单金额', width: 110, sort: true, align: 'center' }
 		, { field: 'shipping_fee', title: '运送费', width: 110, sort: true, align: 'center' }
-        , { field: 'status', title: '订单状态', width: 160, sort: true, align: 'center',templet:function(res){
+    , { field: 'status', title: '订单状态', width: 160, sort: true, align: 'center',templet:function(res){
 			if(res.status == '交易完成'){
 				res.status = '<font color=green>'+res.status+'</font>';
 			}
@@ -116,11 +122,13 @@
 			}
 				return res.status ? res.status : '';
 			}}
-        , { field: 'payment_name', title: '支付方式', width: 120 }
-        , { field: 'add_time', title: '下单时间', width: 170, sort: true, align: 'center' }
-        , { field: 'pay_time', title: '付款时间', width: 170, sort: true, align: 'center' }
-        , { field: 'finished_time', title: '完成时间', width: 170, sort: true, align: 'center' }
-        , { fixed: 'right', title: '操作', toolbar: '#colBar', width: 120, align: 'center' }
+      , { field: 'payment_name', title: '支付方式', width: 120 }
+      , { field: 'add_time', title: '下单时间', width: 170, sort: true, align: 'center' }
+      , { field: 'pay_time', title: '付款时间', width: 170, sort: true, align: 'center' }
+      , { field: 'finished_time', title: '完成时间', width: 170, sort: true, align: 'center' }
+      , { fixed: 'right', title: '操作', toolbar: '#colBar', width: 200, align: 'center', templet:function(res){
+        return '<font color=orange>'+res.status+'</font>';
+        }}
       ]]
       , page: {
         theme: 'blue'
@@ -146,9 +154,18 @@
     //监听行工具事件
     table.on('tool(tablegrid)', function (obj) {
       var data = obj.data;
-      if (obj.event === 'view') {
-        window.location.href = url(['orderbyhh/view', { id: data.order_id }]);
+      if(obj.event === 'printed'){
+        window.open(url(['order_printed/lists', { order_id: data.order_id }]));
+      }else if(obj.event === 'view'){
+        window.open(url(['buyer_order/view', { order_id: data.order_id }]));
+      }else if(obj.event === 'edit'){
+           alert("功能暂未开通！")
+      }else if(obj.event === 'del'){
+           alert("功能暂未开通！")
+      }else{
+
       }
+
     });
 	 
   });

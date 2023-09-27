@@ -45,9 +45,7 @@ class Seller_orderAdjusttimeForm extends Model
 			$this->errors = Language::get('no_such_order');
 			return false;
 		}
-		if($orderInfo){
-			$orderInfo['add_time'] = date('Y-m-d H:i:s',$orderInfo['add_time']);
-		}
+	 
 		return $orderInfo;
 	}
 	
@@ -55,19 +53,27 @@ class Seller_orderAdjusttimeForm extends Model
 	{
 			
 		$model = OrderModel::findOne($orderInfo['order_id']);
-		$model->add_time = strtotime($post->add_time);
+  		//$his = date('H:i:s');
+  		//$date = explode(' ',$post->add_time)[0];
+  		//$post->add_time = $post->add_time.' '.$his;
+		if($post->add_time){
+			//var_dump(strtotime($post->add_time));die;
+			$model->add_time = strtotime($post->add_time);
+		}
+				//		var_dump(trim($post->add_time));die;
+
+				//var_dump(strtotime($post->add_time));die;
+
+		//var_dump($model->attributes);die;
 		if($post->postscript){
 			$model->postscript = trim($post->postscript);
 		}
-
-		//die('333');
 		$model->pay_alter = 1;
 		if(!$model->save()) {
 			$this->errors = $model->errors;
 			return false;
 		}
-
-		DepositTradeModel::updateAll(['add_time' => $post->add_time, 'pay_alter' => 1], ['bizOrderId' => $orderInfo['order_sn']]);
+		DepositTradeModel::updateAll(['add_time' => $model->add_time, 'pay_alter' => 1], ['bizOrderId' => $orderInfo['order_sn']]);
 
 		//写日志
 		$model = new OrderLogModel();
