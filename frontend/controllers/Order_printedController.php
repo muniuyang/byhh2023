@@ -112,6 +112,9 @@ class Order_printedController extends \common\controllers\BaseUserController
 		$templateProcessor = new \PhpOffice\PhpWord\TemplateProcessor($templateFile);
 		$templateProcessor->setValue('address',$orderExt['address']);// On section/content
 		$templateProcessor->setValue('title', $orderExt['consignee']);// On footer
+		if(!$order['content']){
+			$order['content'] = "开业大吉,生意兴隆";
+		}
 		$templateProcessor->setValue('content',$order['content']); 
 
 		if(in_array($order['ptf'],[23,24,25,26,27,28])){
