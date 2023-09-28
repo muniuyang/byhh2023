@@ -34,7 +34,7 @@ use common\library\Def;
 class OrderController extends \common\controllers\BaseUserController
 {
 	/**
-	 * 初始化 jcheng
+	 * 初始化 
 	 * @var array $view 当前视图
 	 * @var array $params 传递给视图的公共参数
 	 */
