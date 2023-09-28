@@ -87,7 +87,7 @@ return [
 		 ]
 	],
 	// set default route
-	'defaultRoute' => 'default1',
+	'defaultRoute' => 'default',
 	// set target language to be chinese
 	'language' => 'zh-CN',
     // set source language to be English
