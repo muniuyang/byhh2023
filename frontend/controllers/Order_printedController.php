@@ -92,11 +92,14 @@ class Order_printedController extends \common\controllers\BaseUserController
 		$this->params['dialog_id'] = $post->dialog_id;
 		if(stripos("find-".$post->dialog_id,'a')){
 			$this->params['dialog_show'] = 'a-action';
+			$ns = str_split($this->params['dialog_id']);
+			$this->params['cardsA'] =[['id'=>'a'.$ns[1]],['id'=>'a'.$ns[1]],['id'=>'a'.$ns[1]]];
 		}else if(stripos("find-".$post->dialog_id,'b')){
 			$this->params['dialog_show'] = 'b-action';
 		}else{
 			return Message::warning("没找到模版，模版不存在！");
 		}
+
 		return $this->render('../printed.dailog.html', $this->params);
 	}
 	/**

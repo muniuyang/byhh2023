@@ -15,10 +15,11 @@ var d = "{$dialog_show }";
     <div class="content_line" style="width:100%;">
       <div class="list" style="">
         <ul class="clearfix">
+                <!--{foreach from=$cardsA item=record key=key}-->
+
           <li class="clearfix float-left">
-                <img src="/static/images/template/{$dialog_id}.png" style="width:220px;height:360px;margin-right:5px;"></li>
-          <li class="clearfix float-left">
-            <img src="/static/images/template/{$dialog_id}.png" style="width:220px;height:360px;margin-right:5px;"></li>
+                <img src="/static/images/template/{$record.id}.png" style="width:220px;height:360px;margin-right:5px;"></li>
+                  <!--{/foreach}-->
         </ul>
       </div>
     </div>

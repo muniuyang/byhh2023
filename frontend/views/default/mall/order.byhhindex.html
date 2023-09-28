@@ -91,7 +91,7 @@
       , cols: [[
         { type: 'checkbox', fixed: 'left' }
     , { field: 'order_id', title: 'ID', width: 70, fixed: 'left', unresize: true, sort: true ,templet:function(res){
-          return "<a href='/buyer_order/view.html?order_id="+res.order_id+"' target='_blank'>"+res.order_id+"(打印)</a>";
+          return res.order_id;
         }}
     , { field: 'goods_image', title: '图片', width: 60,templet:function(res){
 				return '<img src='+res.goods_image+' style="with:60px;"/>' ;
@@ -107,7 +107,7 @@
 		, { field: 'goods_amount', title: '商品售价', width: 110, sort: true, align: 'center' }
     , { field: 'order_amount', title: '订单金额', width: 110, sort: true, align: 'center' }
 		, { field: 'shipping_fee', title: '运送费', width: 110, sort: true, align: 'center' }
-    , { field: 'status', title: '订单状态', width: 160, sort: true, align: 'center',templet:function(res){
+    , { field: 'status', title: '订单状态', width: 130, sort: true, align: 'center',templet:function(res){
 			if(res.status == '交易完成'){
 				res.status = '<font color=green>'+res.status+'</font>';
 			}

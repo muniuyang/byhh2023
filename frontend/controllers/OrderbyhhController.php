@@ -81,15 +81,20 @@ class OrderbyhhController extends \common\controllers\BaseUserController
 		{
 			$query = OrderModel::find()->alias('o')->select('o.order_id,o.order_sn,o.buyer_name,o.seller_name as store_name,o.goods_amount,o.order_amount,o.payment_name,o.status,o.add_time,o.pay_time,o.finished_time,
 			oe.consignee,oe.signature,oe.address,oe.shipping_fee,obi.real_name,og.goods_name,og.goods_image');
-			$query = $this->getConditions($post, $query)
-			->joinWith('orderExtm oe', false)
+			$query = $this->getConditions($post, $query);
+
+			$query = $query->joinWith('orderExtm oe', false)
 			->joinWith('orderBuyerInfo obi', false)
 			->joinWith('orderGoods og', false)
 			->orderBy(['o.order_id' => SORT_DESC]);
 			
 			//var_dump($query->createCommand()->getRawSql());die;
+
+
 			$page = Page::getPage($query->count(), $post->limit ? $post->limit : 20);
 			$list = $query->offset($page->offset)->limit($page->limit)->asArray()->all();
+
+			//var_dump($list);die;
 			foreach ($list as $key => $value)
 			{
 				$list[$key]['tradeNo'] = DepositTradeModel::find()->select('tradeNo')->where(['bizOrderId' => $value['order_sn']])->scalar();// 是否申请过退款
@@ -136,17 +141,28 @@ class OrderbyhhController extends \common\controllers\BaseUserController
 				return Message::popWarning("请输入用户名!");
 			}
 			if(in_array(Yii::$app->user->id,Yii::$app->params['createRights'])){//权限判断[START]JchengCustom
-				$umodel = new \frontend\models\UserRegisterForm();
-				$username = $post->username ;
-				$umodel->username  = $username;
-				$umodel->phone_mob = '';
-				$umodel->password  =  $post->password;
-				$umodel->confirmPassword = $post->password;
-				$umodel->agree =1;
-				$user = $umodel->register(['real_name'=>$username]);
+
+
+				$usModel = \common\models\UserModel::find()->where(['or',
+					['like', 'username', $post->username],
+					['like', 'real_name', $post->username]
+				]);
+				//$sql = $usModel->createCommand()->getRawSql(); 
+				$user = $usModel->one();
 				if(!$user){
-					return Message::popWarning($umodel->errors);
+					$umodel = new \frontend\models\UserRegisterForm();
+					$username = $post->username ;
+					$umodel->username  = $username;
+					$umodel->phone_mob = '';
+					$umodel->password  =  $post->password;
+					$umodel->confirmPassword = $post->password;
+					$umodel->agree =1;
+					$user = $umodel->register(['real_name'=>$username]);
+					if(!$user){
+						return Message::popWarning($umodel->errors);
+					}
 				}
+				//var_dump($post);die;
 				if($post->utype==1) {
 					$ubmodel = new \common\models\UserBillModel();
 					$ubmodel->userid = $user->userid;
@@ -355,12 +371,14 @@ class OrderbyhhController extends \common\controllers\BaseUserController
 	{
 		$result = array(
             Def::ORDER_PENDING		=> Language::get('order_pending'),
-            Def::ORDER_SUBMITTED	=> Language::get('order_submitted'),
+           // Def::ORDER_SUBMITTED	=> Language::get('order_submitted'),
             Def::ORDER_ACCEPTED		=> Language::get('order_accepted'),
             Def::ORDER_SHIPPED		=> Language::get('order_shipped'),
             Def::ORDER_FINISHED		=> Language::get('order_finished'),
             Def::ORDER_CANCELED		=> Language::get('order_canceled'),
         );
+
+       // var_dump($result);die;
 		if($status !== null) {
 			return isset($result[$status]) ? $result[$status] : '';
 		}
@@ -368,42 +386,43 @@ class OrderbyhhController extends \common\controllers\BaseUserController
 	}
 	
 	private function getConditions($post, $query = null)
-	{
-	
-		if($post->field == 'real_name'){
-			/*
-			$Pinyin =  new Pinyin();
-			$pinyinArr = $Pinyin->convert($post->search_name);
-			foreach ($pinyinArr as $pinyin) {
-				$loginStr .= substr($pinyin, 0, 1);
-			}
-			$username  = $loginStr.'2023';	
-			*/
-			$username = $post->search_name;
-			$post->field = 'buyer_name';
-			$post->search_name = $username;
-			//var_dump($username);die;
-		}
-		
+	{	
 		
 		//var_dump($query->createCommand()->getRawSql());die;
 		
 		if($query === null) {
 			foreach(array_keys(ArrayHelper::toArray($post)) as $field) {
-				
 				if(in_array($field, ['search_name', 'status', 'add_time_from', 'add_time_to', 'order_amount_from', 'order_amount_to'])) {
 					return true;
 				}
 			}
 			return false;
 		}
-		//var_dump($post);die;
+		//var_dump($query);die;
 		if($post->field && $post->search_name && in_array($post->field, array_keys($this->getSearchOption()))) {
-			$query->andWhere([$post->field => $post->search_name]);
+
+			if($post->field == 'buyer_name'){
+				$post->field = "o.buyer_name";//订货人登陆名
+			}else if($post->field == 'real_name'){
+				$post->field = "obi.real_name";//订货人实名
+			}else if($post->field == 'signature'){
+				$post->field ='oe.signature';//签名落款
+			}else if($post->field == 'consignee'){
+				$post->field ='oe.consignee';//收货人
+			}else if($post->field == 'seller_name'){
+				$post->field ='o.seller_name';//店铺名
+			}
+			//$query->andWhere([$post->field => $post->search_name]);
+			$query->andWhere(['like',$post->field , $post->search_name]);
+
 		}
-		if($post->status) {
+
+
+		if(isset($post->status)) {
 			$query->andWhere(['o.status' => $post->status]);
 		}
+		//var_dump($query->createCommand()->getRawSql());die;
+
 		if($post->add_time_from) $post->add_time_from = Timezone::gmstr2time($post->add_time_from);
 		if($post->add_time_to) $post->add_time_to = Timezone::gmstr2time_end($post->add_time_to);
 		if($post->add_time_from && $post->add_time_to) {
