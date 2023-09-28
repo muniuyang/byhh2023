@@ -53,15 +53,13 @@ class AddressForm extends Model
 	
 	public function save($post, $valid = true)
 	{
-		//var_dump($this->addr_id);die;
+		//var_dump($post);die;
 		if($valid === true && !$this->valid($post)) {
 			return false;
 		}
 		$userid = Yii::$app->user->id;
 		/**********************[START]JchengCustom **********************/
-		if(in_array(Yii::$app->user->id,Yii::$app->params['createRights']) && $post->userid){//权限判断[START]JchengCustom
-			$userid = $post->userid;
-		}
+
 		if(in_array(Yii::$app->user->id,Yii::$app->params['createRights'])){//权限判断[START]JchengCustom
 			$model = AddressModel::find()->where(['addr_id' => $this->addr_id])->one();
 		}else{

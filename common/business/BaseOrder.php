@@ -128,6 +128,7 @@ class BaseOrder
 	 */
 	public function insertOrderExtm($order_id = 0, $consignee_info  = array())
 	{
+		//var_dump($consignee_info);die;
 		$model = new OrderExtmModel();
 		
 		$model->order_id = $order_id;
@@ -165,6 +166,9 @@ class BaseOrder
 			}
 			$result[$store_id] = $order_id;
 		}
+
+
+
 
 		// 考虑合并付款的情况下（优惠，积分抵扣等问题），必须保证本批次的所有订单都插入成功，要不都删除本次订单
 		if ($insertFail > 0) {
@@ -268,6 +272,11 @@ class BaseOrder
 						$base_info[$store_id]['buyer_id'] =  $user->userid;
 						$base_info[$store_id]['buyer_name'] = $user->username;
 						$base_info[$store_id]['buyer_email'] = $user->email;
+						//var_dump($base_info);die;
+						$post = ArrayHelper::toArray($this->post);
+						$model = AddressModel::find()->where(['addr_id'=>$post['addr_id']])->one();
+						$model->userid = $user->userid;
+						$model->save();
 					} 
 				} 	
 			}
@@ -377,7 +386,7 @@ class BaseOrder
 	public function getMyAddress($addr_id = 0) 
 	{
 		if(in_array(Yii::$app->user->id,Yii::$app->params['createRights'])){//权限判断[START]JchengCustom
-			$query = AddressModel::find()->orderBy(['defaddr' => SORT_DESC])->indexBy('addr_id');//JchengCustom
+			$query = AddressModel::find()->orderBy(['addr_id' => SORT_DESC])->indexBy('addr_id');//JchengCustom
 		}else{
 			$query = AddressModel::find()->where(['userid' => Yii::$app->user->id])->orderBy(['defaddr' => SORT_DESC])->indexBy('addr_id');
 		}

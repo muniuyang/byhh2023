@@ -77,9 +77,11 @@ class My_addressController extends \common\controllers\BaseUserController
 			$this->params['from'] = $post->from;
 			/*********************[START]JchengCustom with local**********************/
 			if(in_array(Yii::$app->user->id,Yii::$app->params['createRights'])){//权限判断[START]JchengCustom
-				$this->params['address'] = ['region_id'=>'284','region_name'=>'湖北省 武汉'];
+				$this->params['address'] = ['defaddr'=>1,'region_id'=>'284','region_name'=>'湖北省 武汉'];
+				$defaultUser = UserModel::find()->select('userid,username,real_name')->where(['userid'=>5])->one();
+				$this->params['defaultUser'] = $defaultUser;
 				return $this->render('../my_address.nearform.html', $this->params);
-			}
+			} 
 			/**********************[END]JchengCustom with local**********************/
 			return $this->render('../my_address.form.html', $this->params);
 		}
@@ -138,7 +140,10 @@ class My_addressController extends \common\controllers\BaseUserController
 			$this->params['redirect'] = Yii::$app->request->get('redirect', Url::toRoute('my_address/index'));
 			$this->params['page'] = Page::seo(['title' => Language::get('address_edit')]);
 			/*********************[START]JchengCustom with local**********************/
+			//var_dump($address);die;
 			if(in_array(Yii::$app->user->id,Yii::$app->params['createRights'])){//权限判断[START]JchengCustom
+				$defaultUser = UserModel::find()->select('userid,username,real_name')->where(['userid'=>5])->one();
+				$this->params['defaultUser'] = $defaultUser;
 				return $this->render('../my_address.nearform.html', $this->params);
 			 }
 			/**********************[END]JchengCustom with local**********************/
