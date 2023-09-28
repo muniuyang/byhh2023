@@ -10,6 +10,7 @@ var d = "{$dialog_show }";
 </script>
 <div class="eject_con">
   <form  method="post" target="iframe" action="{url route='orderbyhh/cuser'}">
+<<<<<<< HEAD
     <div class="content_line" style="margin:0 auto;">
       <!--{if $dialog_show eq 'a-action'}-->
         <div class="list" style="width:900px;margin:0 auto;overflow: hidden;">
@@ -26,8 +27,27 @@ var d = "{$dialog_show }";
           <img src="/static/images/template/{$dialog_id}.png" style="width:100%;height:300px;margin:0 auto;margin-right:10px;"></li>
         </div>
         <!--{/if}-->
+=======
+    <!--{if $dialog_show eq 'a-action'}-->
+    <div class="content_line" style="width:100%;">
+      <div class="list" style="">
+        <ul class="clearfix">
+          <li class="clearfix float-left">
+                <img src="/static/images/template/{$dialog_id}.png" style="width:220px;height:360px;margin-right:5px;"></li>
+          <li class="clearfix float-left">
+            <img src="/static/images/template/{$dialog_id}.png" style="width:220px;height:360px;margin-right:5px;"></li>
+        </ul>
+      </div>
+>>>>>>> 6021eee29ac5a3e4737f98b7f742b318b50148d7
     </div>
-
+    <!--{/if}-->
+    <!--{if $dialog_show eq 'b-action'}-->
+    <div class="content_line" style="width:650px;margin:0 auto;overflow: inherit;">
+      <div class="list" style="">
+        <img src="/static/images/template/{$dialog_id}.png" style="width:100%;height:360;margin:0 auto;"></li>
+      </div>
+    </div>
+    <!--{/if}-->
   </form>
 </div>
 
