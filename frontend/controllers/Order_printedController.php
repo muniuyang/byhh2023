@@ -19,6 +19,7 @@ use PhpOffice\PhpWord\PhpWord;
 use PhpOffice\PhpWord\Settings;
 use yii\helpers\ArrayHelper;
 use yii\helpers\Url;
+use common\library\Resource;
 
 use common\library\Basewind;
 use common\library\Message;
@@ -80,8 +81,23 @@ class Order_printedController extends \common\controllers\BaseUserController
 		$this->params['order_id'] = $post->order_id;
 		$this->params['cardsA'] =[[],[],[],[],[],[],[],[],[]];
 		$this->params['cardsB'] =[[],[],[],[],[],[],[],[],[]];
-
+		$this->params['_foot_tags'] = Resource::import([
+			'script' => 'jquery.ui/jquery.ui.js,jquery.ui/i18n/' . Yii::$app->language . '.js, dialog/dialog.js',
+            'style' =>  'jquery.ui/themes/smoothness/jquery.ui.css,dialog/dialog.css'
+		]);
 		return $this->render('../printed.list.html', $this->params);
+	}
+	public function actionIview(){
+		$post = Basewind::trimAll(Yii::$app->request->get(), true, ['order_id','ptf']);
+		$this->params['dialog_id'] = $post->dialog_id;
+		if(stripos("find-".$post->dialog_id,'a')){
+			$this->params['dialog_show'] = 'a-action';
+		}else if(stripos("find-".$post->dialog_id,'b')){
+			$this->params['dialog_show'] = 'b-action';
+		}else{
+			return Message::warning("没找到模版，模版不存在！");
+		}
+		return $this->render('../printed.dailog.html', $this->params);
 	}
 	/**
 	* 打印开始

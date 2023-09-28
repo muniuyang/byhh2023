@@ -1,13 +1,23 @@
 {include file="header.html"}
-<div id="main" class="w-full">
-  <div class="voucher_center w">
+<div id="main-box" class="w-full">
+  <div class="voucher_center">
    
-    <div class="list w">
+    <div class="list" style="width:1200px;margin:0 auto;">
       <ul class="clearfix">
 		  <!--{foreach from=$cardsA item=record key=key}-->
         <li class="clearfix float-left">
-          <div class="lp float-left"> <a href="{url route='/order_printed/view' ptf=($key+1) order_id=$order_id}" target="_blank">
-		  <img src="/static/images/template/a{$key+1}.png" /></a> </div>
+          <div class="lp float-left"> 
+            <a href="javascript:;" 
+              uri="{url route='order_printed/iview'}" 
+              dialog_width="450" 
+              dialog_title="卡片模版预览" 
+              dialog_data="iddd" 
+              ectype="dialog"
+              dialog_id="a{$key+1}" 
+              id="iview-dailog"
+              data-img="/static/images/template/a{$key+1}.png">
+		          <img src="/static/images/template/a{$key+1}.png" /></a>
+         </div>
           <div class="mp float-left">
             <div class="value1"><span style="font-size:18px;color:#f23030;">花束WPS（A{$key+1}）</span></div>
             <br/>
@@ -25,7 +35,18 @@
           <!--{foreach from=$cardsB item=record key=key}-->
 
         <li class="clearfix float-left">
-          <div class="lp float-left"> <a href="{url route='/order_printed/view' ptf=(20+$key+1) order_id=$order_id}" target="_blank"><img src="/static/images/template/b{$key+1}.png" /></a> </div>
+          <div class="lp float-left"> 
+
+ <a href="javascript:;" 
+              uri="{url route='order_printed/iview'}" 
+              dialog_width="450" 
+              dialog_title="卡片模版预览" 
+              ectype="dialog"
+              dialog_id="b{$key+1}" 
+              id="iview-dailog"
+              data-img="/static/images/template/b{$key+1}.png">
+              <img src="/static/images/template/b{$key+1}.png" /></a>
+          </div>
           <div class="mp float-left">
             <div class="value1"><span style="font-size:18px;color:#05d7a8;">开业WPS（B{$key+1}）</span></div>
             <br/>
@@ -51,4 +72,28 @@
     </div>
   </div>
 </div> 
+<div id="showDetail"><img src="" /></div>
+
+<script>
+$(function () {
+
+  $('.show-detail-dailog').click(function(){
+    $("#showDetail img").attr('src',$(this).data('img'))
+  $("#showDetail").dialog({
+        height:"500",
+        width:"500",
+         
+        modal:false,//是否模式对话框
+        draggable:true,//是否允许拖拽
+        resizable:true,//是否允许缩放
+        title:"图片预览",//对话框标题
+        show:"slide",
+        hide:"explode"
+    });
+
+  })
+
+})
+</script>
+<iframe id="iframe" name="iframe" src="about:blank" frameborder="0" width="0" height="0" style="display:none"></iframe>
 {include file="footer.html"}

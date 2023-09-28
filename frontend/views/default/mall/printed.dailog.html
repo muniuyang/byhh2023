@@ -1,0 +1,33 @@
+  <link href="{res file='css/user.css'}" rel="stylesheet" type="text/css" />
+
+<script type="text/javascript">
+$(function(){
+    $('#cancel_button').click(function(){
+        DialogManager.close('{$dialog_id}');
+    });
+});
+var d = "{$dialog_show }";
+</script>
+<div class="eject_con">
+  <form  method="post" target="iframe" action="{url route='orderbyhh/cuser'}">
+    <div class="content_line" style="margin:0 auto;">
+      <!--{if $dialog_show eq 'a-action'}-->
+        <div class="list" style="width:900px;margin:0 auto;overflow: hidden;">
+          <ul class="clearfix">
+        <li class="clearfix float-left">
+              <img src="/static/images/template/{$dialog_id}.png" style="width:180px;height:300px;margin-left:15px;margin-right:10px;"></li>
+        <li class="clearfix float-left">
+              <img src="/static/images/template/{$dialog_id}.png" style="width:180px;height:300px;margin-right:10px;"></li>
+          </ul>
+        </div>
+        <!--{/if}-->
+        <!--{if $dialog_show eq 'b-action'}-->
+        <div class="list" style="width:100%;margin:0 auto;overflow: hidden;">
+          <img src="/static/images/template/{$dialog_id}.png" style="width:100%;height:300px;margin:0 auto;margin-right:10px;"></li>
+        </div>
+        <!--{/if}-->
+    </div>
+
+  </form>
+</div>
+
