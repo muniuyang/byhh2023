@@ -79,7 +79,7 @@ class Order_printedController extends \common\controllers\BaseUserController
 		$post = Basewind::trimAll(Yii::$app->request->get(), true, ['order_id','ptf']);
 		//var_dump($post);
 		$this->params['order_id'] = $post->order_id;
-		$this->params['cardsA'] =[[],[],[],[],[],[],[],[],[]];
+		$this->params['cardsA'] =[[],[],[],[],[],[],[],[],[],[],[]];
 		$this->params['cardsB'] =[[],[],[],[],[],[],[],[],[]];
 		$this->params['_foot_tags'] = Resource::import([
 			'script' => 'jquery.ui/jquery.ui.js,jquery.ui/i18n/' . Yii::$app->language . '.js, dialog/dialog.js',
@@ -92,8 +92,10 @@ class Order_printedController extends \common\controllers\BaseUserController
 		$this->params['dialog_id'] = $post->dialog_id;
 		if(stripos("find-".$post->dialog_id,'a')){
 			$this->params['dialog_show'] = 'a-action';
-			$ns = str_split($this->params['dialog_id']);
-			$this->params['cardsA'] =[['id'=>'a'.$ns[1]],['id'=>'a'.$ns[1]],['id'=>'a'.$ns[1]]];
+			//$ns = str_split($this->params['dialog_id']);
+			preg_match('/\d+/',$this->params['dialog_id'],$matchs);
+			//var_dump($matchs);die;
+			$this->params['cardsA'] =[['id'=>'a'.$matchs[0]],['id'=>'a'.$matchs[0].'-1']];
 		}else if(stripos("find-".$post->dialog_id,'b')){
 			$this->params['dialog_show'] = 'b-action';
 		}else{
