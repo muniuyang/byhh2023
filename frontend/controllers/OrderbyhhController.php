@@ -420,6 +420,7 @@ class OrderbyhhController extends \common\controllers\BaseUserController
 		}
 
 		if($post->status) {
+			
 			$post->status = $post->status == 999 ? 0 : $post->status;
 			$query->andWhere(['o.status' => $post->status]);
 		}
