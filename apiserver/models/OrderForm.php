@@ -44,7 +44,8 @@ class OrderForm extends Model
 			->joinWith('orderExtm oe', false)
 			->where(['>', 'o.order_id', 0])
 			->orderBy(['o.order_id' => SORT_DESC]);
-		
+
+
 		if($post->otype) {
 			$query->andWhere(['otype' => $post->otype]);
 		}
@@ -86,9 +87,15 @@ class OrderForm extends Model
 				$model->select('rec_id,spec_id,order_id,goods_id,goods_name,goods_image,specification,price,quantity');
 			}]);
 		}
-		
+				//var_dump($query->createCommand()->getRawSql());die;
+
+
 		$page = Page::getPage($query->count(), $post->page_size, false, $post->page);
 		$list = $query->offset($page->offset)->limit($page->limit)->asArray()->all();
+
+
+
+
 		foreach($list as $key => $value) {
 			$list[$key] = $this->formatDate($value);
 			
