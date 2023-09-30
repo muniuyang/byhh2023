@@ -70,6 +70,7 @@ class RefundController extends Controller
 		if(!($record = $query->asArray()->one())) {
 			return $respond->output(Respond::RECORD_NOTEXIST, Language::get('no_such_refund'));
 		}
+		var_dump($record);die;
 		if(($record['bizIdentity'] == Def::TRADE_ORDER) && !empty($record['bizOrderId'])) {
 			$record['order_sn'] = $record['bizOrderId'];
 			$record['order_id'] = OrderModel::find()->select('order_id')->where(['order_sn' => $record['order_sn']])->scalar();

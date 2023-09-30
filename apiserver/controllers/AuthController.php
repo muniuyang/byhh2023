@@ -47,6 +47,7 @@ class AuthController extends Controller
 	 */
 	public function actionToken()
 	{
+		//die('33');
 		// 验证签名
 		$respond = new Respond();
 		if (!$respond->verify(false, true)) {

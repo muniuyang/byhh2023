@@ -81,6 +81,7 @@ class OrderbyhhController extends \common\controllers\BaseUserController
 		{
 			$query = OrderModel::find()->alias('o')->select('o.order_id,o.order_sn,o.buyer_name,o.seller_name as store_name,o.goods_amount,o.order_amount,o.payment_name,o.status,o.add_time,o.pay_time,o.finished_time,
 			oe.consignee,oe.signature,oe.address,oe.shipping_fee,obi.real_name,og.goods_name,og.goods_image');
+			//var_dump($post);die;
 			$query = $this->getConditions($post, $query);
 
 			$query = $query->joinWith('orderExtm oe', false)
@@ -375,10 +376,11 @@ class OrderbyhhController extends \common\controllers\BaseUserController
             Def::ORDER_ACCEPTED		=> Language::get('order_accepted'),
             Def::ORDER_SHIPPED		=> Language::get('order_shipped'),
             Def::ORDER_FINISHED		=> Language::get('order_finished'),
-            Def::ORDER_CANCELED		=> Language::get('order_canceled'),
+           // Def::ORDER_CANCELED		=> Language::get('order_canceled'),
+            '999'	=> Language::get('order_canceled'),
         );
 
-       // var_dump($result);die;
+      // var_dump($result);die;
 		if($status !== null) {
 			return isset($result[$status]) ? $result[$status] : '';
 		}
@@ -417,8 +419,8 @@ class OrderbyhhController extends \common\controllers\BaseUserController
 
 		}
 
-
-		if(isset($post->status)) {
+		if($post->status) {
+			$post->status = $post->status == 999 ? 0 : $post->status;
 			$query->andWhere(['o.status' => $post->status]);
 		}
 		//var_dump($query->createCommand()->getRawSql());die;
