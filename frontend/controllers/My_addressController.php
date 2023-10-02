@@ -78,8 +78,10 @@ class My_addressController extends \common\controllers\BaseUserController
 			/*********************[START]JchengCustom with local**********************/
 			if(in_array(Yii::$app->user->id,Yii::$app->params['createRights'])){//权限判断[START]JchengCustom
 				$this->params['address'] = ['defaddr'=>1,'region_id'=>'284','region_name'=>'湖北省 武汉'];
-				$defaultUser = UserModel::find()->select('userid,username,real_name')->where(['userid'=>5])->one();
-				$this->params['defaultUser'] = $defaultUser;
+				$defaultUsers = UserModel::find()->select('userid,username,real_name')
+				//->where(['userid'=>5])->one();
+				->where(['in','userid',[4,5]])->asArray()->all();
+				$this->params['defaultUsers'] = $defaultUsers;
 				return $this->render('../my_address.nearform.html', $this->params);
 			} 
 			/**********************[END]JchengCustom with local**********************/
@@ -142,8 +144,10 @@ class My_addressController extends \common\controllers\BaseUserController
 			/*********************[START]JchengCustom with local**********************/
 			//var_dump($address);die;
 			if(in_array(Yii::$app->user->id,Yii::$app->params['createRights'])){//权限判断[START]JchengCustom
-				$defaultUser = UserModel::find()->select('userid,username,real_name')->where(['userid'=>5])->one();
-				$this->params['defaultUser'] = $defaultUser;
+				$defaultUsers = UserModel::find()->select('userid,username,real_name')
+				//->where(['userid'=>5])->one();
+				->where(['in','userid',[4,5]])->asArray()->all();
+				$this->params['defaultUsers'] = $defaultUsers;
 				return $this->render('../my_address.nearform.html', $this->params);
 			 }
 			/**********************[END]JchengCustom with local**********************/

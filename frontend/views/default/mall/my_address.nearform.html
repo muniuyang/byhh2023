@@ -55,12 +55,14 @@
 		    <input type="text" class="text width_normal subscriber" name="subscriber" value="{$address.subscriber|escape}"/>
 		  </p>
       <p style="line-height: 24px;">
+              <!--{foreach from=$defaultUsers item=record key=key}-->
+
         <label style="color:#b4b4b4;">
-          <input type="radio" class="default-user"  style="color:#b4b4b4;margin-right:5px;margin-left:10px;" name="defaultUser" value="{$defaultUser['real_name']}" {if $address.defaddr eq 0}checked="checked"{/if} />
-         启用默认</label>
-        <label style="color:#b4b4b4;">
-          <input type="radio" class="default-user" style="color:#b4b4b4;" name="defaultUser" value="" {if $address.defaddr eq 1}checked="checked"{/if} />
-          关闭默认 </label>
+          <input type="radio" class="default-user"  style="color:#b4b4b4;margin-right:5px;margin-left:10px;" name="defaultUser" value="{$record['real_name']|escape}" />
+         {$record.real_name|escape}</label>
+            <!--{/foreach}-->
+
+      
                   <label class="field_message" ><span class="field_notice">{$lang.subscriber_desc}</span></label>
       </p>
 		</li>
