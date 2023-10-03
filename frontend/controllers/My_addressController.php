@@ -224,7 +224,7 @@ class My_addressController extends \common\controllers\BaseUserController
 			// 获取订单模型
 			$model = new \frontend\models\Buyer_orderViewForm();
 			if(!($extroInfo = $model->formData($post))) {
-				die('33');
+				//die('33');
 				return Message::warning($model->errors);
 			}
 			//var_dump($extroInfo);die('33');
