@@ -31,16 +31,16 @@ class OrderExportForm extends Model
 		$record_xls = array();		
 		$lang_bill = array(
 			'order_id'		=> 'ID',
-			'goods_image' 	=> '商品图片',
+			//'goods_image' 	=> '商品图片',
 			'goods_name' 	=> '商品标题',
 			'order_sn' 		=> '订单编号',
 			'store_name' 	=> '店铺名称',
     		'consignee' 	=> '收货人(收花人)',
-			'signature' 	=> '签名落款(赠花人)',
+			'signature' 	=> '落款(赠花人)',
 			'real_name' 	=> '买家(订花人)',
-			'goods_amount' 	=> '商品售价',
-    		'order_amount' 	=> '订单金额',
+			'goods_amount' 	=> '售价',
 			'shipping_fee' 	=> '运费',
+    		'order_amount' 	=> '金额',
     		'payment_name' 	=> '付款方式',
 			'status'		=> '订单状态',
 			'add_time' 		=> '下单时间',
@@ -80,11 +80,15 @@ class OrderExportForm extends Model
 		$record_xls[] = array('seller_name' => '');// empty line
 		$record_xls[] = array('seller_name' => sprintf('订单总数：%s笔，订单总额：%s元', $quantity, $amount));
 		
-		//var_dump($record_xls);
-		//die;
+		return \common\library\pageOutDown::export([
+			'models' 	=> $record_xls, 
+			'fileName' 	=> $folder,
+		]);
+		/*
 		return \common\library\Page::export([
 			'models' 	=> $record_xls, 
 			'fileName' 	=> $folder,
 		]);
+		*/
 	}
 }

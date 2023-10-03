@@ -292,7 +292,8 @@ return array(
     'order_finished'    => '交易完成',
 	'order_success'		=> '交易完成',
 	'order_closed'		=> '交易关闭',
-	
+	'order_refunded'	=> '交易退款',
+
 	// 支付类型
 	'SHIELD'			=> '担保交易',
 	'INSTANT'			=> '即时到账',
