@@ -80,15 +80,16 @@ class OrderExportForm extends Model
 		$record_xls[] = array('seller_name' => '');// empty line
 		$record_xls[] = array('seller_name' => sprintf('订单总数：%s笔，订单总额：%s元', $quantity, $amount));
 		
-		return \common\library\pageOutDown::export([
+		if(in_array(Yii::$app->user->id,Yii::$app->params['createRights'])){//权限判断[START]JchengCustom
+			return \common\library\pageOutDown::export([
+				'models' 	=> $record_xls, 
+				'fileName' 	=> $folder,
+			]);
+		}else{
+			return \common\library\Page::export([
 			'models' 	=> $record_xls, 
 			'fileName' 	=> $folder,
-		]);
-		/*
-		return \common\library\Page::export([
-			'models' 	=> $record_xls, 
-			'fileName' 	=> $folder,
-		]);
-		*/
+			]);
+		}
 	}
 }

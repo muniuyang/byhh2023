@@ -126,11 +126,24 @@ class PageOutDown
 
 		$cells = str_split('ABCDEFGHIJKLMNOPQRSTUVWXYZ');
 		$nsheelsData = self::defaultRecord($sheelsData);
+		//var_export($nsheelsData);die;
+		$header = array_slice($nsheelsData, 0,3);
+
+		foreach($header as $hk=>$hval){//行
+	 		foreach($hval as $k=>$v){//列
+	 			$cell = $cells[$k].($hk+1);
+				$objPHPExcel->setActiveSheetIndex(0)->setCellValue($cell, $v);
+			}
+		}
+		$objPHPExcel->getActiveSheet()->freezePane('A4');
+		$objPHPExcel->getActiveSheet()->setTitle('博艺花卉20230928');
+
+		$body = array_slice($nsheelsData, 3);
 		$sumTitle = $sumOne = '';$sumTwo='';$sumThree='';$total = 0;
-		foreach($nsheelsData as $key=>$record){
+		foreach($body as $key=>$record){
 			$i=0;
 	 		foreach($record as $k=>$v){
-	 			$cell = $cells[$i].($key+1);
+	 			$cell = $cells[$i].($key+4);
 				$objPHPExcel->setActiveSheetIndex(0)->setCellValue($cell, $v);
 				//设置行高
 				if(in_array($k,['address'])){$w = 28;}
@@ -148,7 +161,7 @@ class PageOutDown
 		        		->getNumberFormat()->setFormatCode(\PHPExcel_Style_NumberFormat::FORMAT_TEXT);
 		        }
 				//设置字颜色
-				if($key>3 && in_array($k,['real_name','order_amount'])){
+				if(in_array($k,['real_name','order_amount'])){
 					$objPHPExcel->getActiveSheet()->getStyle($cell)->getFont()->getColor()
 								->setARGB('FF6600');	
 				}
@@ -168,21 +181,21 @@ class PageOutDown
 					$objPHPExcel->getActiveSheet()->getStyle($cell)->getFont()->getColor()
 								->setARGB(\PHPExcel_Style_Color::COLOR_GREEN);
 				}else if('交易关闭' == $v && $k== 'status'){
-					//echo "<br/>".$cell."===>".$v."<br/>";
 					$objPHPExcel->getActiveSheet()->getStyle($cell)->getFont()->getColor()
 								->setARGB(\PHPExcel_Style_Color::COLOR_BLACK);
 				}
 				//设置位置
-				if($key>3 && in_array($k,['address','status','goods_name'])){
-											//echo "<br/>".$cells[$i]."===>(".$k.")".$v."<br/>";
+				if(in_array($k,['address','status','goods_name'])){
+					//echo "<br/>".$cells[$i]."(".$i.")"."(".$key.")===>(".$k.")".$v."<br/>";
 					$objPHPExcel->getActiveSheet()->getStyle($cells[$i])->getAlignment()
 						->setHorizontal(\PHPExcel_Style_Alignment::HORIZONTAL_LEFT);
 				}else{
-
+					//echo "<br/>2".$cells[$i]."(".$i.")"."(".$key.")===>(".$k.")".$v."<br/>";
 					$objPHPExcel->getActiveSheet()->getStyle($cells[$i])->getAlignment()
 						->setHorizontal(\PHPExcel_Style_Alignment::HORIZONTAL_CENTER);
 				}
-
+				$objPHPExcel->getActiveSheet()->getStyle($cells[$i])->getAlignment()
+					->setVertical(\PHPExcel_Style_Alignment::VERTICAL_CENTER);
 				//求和设置上
 				if('order_amount' == $k){$sumOne = $cells[$i];}
 				if('shipping_fee' == $k){$sumTwo = $cells[$i];}
@@ -201,13 +214,7 @@ class PageOutDown
 
 		//冻结第一行
 		$objPHPExcel->setActiveSheetIndex(0);
-		$objPHPExcel->getActiveSheet()->freezePane('A4');
-
-		//die;
-		$objPHPExcel->getActiveSheet()->setTitle('博艺花卉20230928');
-
-            		$objPHPExcel->setActiveSheetIndex(0);
-
+		
 		// Set active sheet index to the first sheet, so Excel opens this as the first sheet
 		return $objPHPExcel;
 	}
@@ -234,6 +241,7 @@ class PageOutDown
 		$list = array_merge($rlist,$nlist);
 		return $list;
 	}
+
 	public static function writeLog($key = '', $word = '') 
 	{
 		//$word = json_encode($word); // for AJAX debug
