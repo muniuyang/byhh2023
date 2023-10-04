@@ -79,8 +79,30 @@ class Order_printedController extends \common\controllers\BaseUserController
 		$post = Basewind::trimAll(Yii::$app->request->get(), true, ['order_id','ptf']);
 		//var_dump($post);
 		$this->params['order_id'] = $post->order_id;
-		$this->params['cardsA'] =[[],[],[],[],[],[],[],[],[],[],[]];
-		$this->params['cardsB'] =[[],[],[],[],[],[],[],[],[]];
+		$this->params['cardsA'] =[
+			['k'=>'wpsa01','w'=>'10.8cm','h'=>'7.5cm'],
+			['k'=>'wpsa02','w'=>'24cm','h'=>'12cm'],
+			['k'=>'wpsa03','w'=>'12.5cm','h'=>'19cm'],
+			['k'=>'wpsa04','w'=>'18.8cm','h'=>'14cm'],
+			['k'=>'wpsa05','w'=>'9cm','h'=>'9cm'],
+			['k'=>'wpsa06','w'=>'18.8cm','h'=>'14cm'],
+			['k'=>'wpsa07','w'=>'12cm','h'=>'9cm'],
+			['k'=>'wpsa08','w'=>'9.8cm','h'=>'14cm'],
+			['k'=>'wpsa09','w'=>'8cm','h'=>'14cm'],
+			['k'=>'wpsa10','w'=>'9.1cm','h'=>'11cm'],
+			['k'=>'wpsa11','w'=>'11cm','h'=>'9.1cm']
+		];
+		$this->params['cardsB'] =[
+			['k'=>'wpsb01','w'=>'29.7cm','h'=>'21cm'],
+			['k'=>'wpsb02','w'=>'29.7cm','h'=>'21cm'],
+			['k'=>'wpsb03','w'=>'29.7cm','h'=>'21cm'],
+			['k'=>'wpsb04','w'=>'29.7cm','h'=>'21cm'],
+			['k'=>'wpsb05','w'=>'29.7cm','h'=>'21cm'],
+			['k'=>'wpsb06','w'=>'29.7cm','h'=>'21cm'],
+			['k'=>'wpsb07','w'=>'29.7cm','h'=>'21cm'],
+			['k'=>'wpsb08','w'=>'29.7cm','h'=>'21cm'],
+			['k'=>'wpsb09','w'=>'29.7cm','h'=>'21cm']
+		];
 		$this->params['_foot_tags'] = Resource::import([
 			'script' => 'jquery.ui/jquery.ui.js,jquery.ui/i18n/' . Yii::$app->language . '.js, dialog/dialog.js',
             'style' =>  'jquery.ui/themes/smoothness/jquery.ui.css,dialog/dialog.css'

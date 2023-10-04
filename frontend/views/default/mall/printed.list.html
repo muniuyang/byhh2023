@@ -15,15 +15,16 @@
               ectype="dialog"
               dialog_id="a{$key+1}" 
               id="iview-dailog"
-              data-img="/data/template/img/a{$key+1}.png">
-		          <img src="/data/template/img/a{$key+1}.png" /></a>
+              data-img="/data/template/img/a{$key+1}-1.png">
+		          <img src="/data/template/img/a{$key+1}-1.png" /></a>
          </div>
           <div class="mp float-left">
             <div class="value1"><span style="font-size:18px;color:#f23030;">花束WPS（A{$key+1}）</span></div>
             <br/>
-            <div class="can"><em class="red">亲爱的!</em></div> <br/>
-			<div class="can">喜迁新居喜洋洋，福星高照福满堂。</div>
-            <div class="type mt10" style="float:right;">衣铭服饰  <b>赠</b></div>
+            <div class="type can"><em class="red" style="padding:0;">模版尺寸：{$record.w} * {$record.h}</em></div>
+			      <div class="can" style="font-weight: bold;">亲爱的，惠惠!</div>
+            <div class="type mt10">&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;祝：生日快乐，天天开心</div>
+            <div class="type mt10" style="float:right;">程进  <b>赠</b></div>
           </div>
           <div class="rp float-right">
             <div class="wp"><a href="{url route='/order_printed/view' ptf={$key+1} order_id=$order_id}" > <span class="line"></span> <em class="text">立即打印</em> </a> </div>
@@ -50,11 +51,11 @@
           <div class="mp float-left">
             <div class="value1"><span style="font-size:18px;color:#05d7a8;">开业WPS（B{$key+1}）</span></div>
             <br/>
-            <div class="can"><em class="red">模版尺寸:A4</em></div>
+            <div class="type can"><em class="red" style="padding:0;">模版尺寸：{$record.w} * {$record.h}</em></div>
           
             <div class="type mt10"><b>祝:</b>菲莉泓媛服饰</div>
-            <div class="type mt10">开业大吉，财源广进</div>
-            <div class="type mt10">衣铭服饰  <b>恭贺</b></div>
+            <div class="type mt10" >&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;开业大吉，财源广进</div>
+            <div class="type mt10" style="float:right;">衣铭服饰  <b>恭贺</b></div>
           </div>
           <div class="rp float-right">
             <div class="wp" style=" background-image: -moz-linear-gradient(top, #05d7a8, #05d7a8);
