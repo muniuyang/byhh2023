@@ -25,13 +25,13 @@ class OrderExportForm extends Model
 {
 	public $errors = null;
 	
-	public static function download($list)
+	public static function download($list,$sheetName='')
 	{
 		// 文件数组
 		$record_xls = array();		
 		$lang_bill = array(
 			'order_id'		=> 'ID',
-			//'goods_image' 	=> '商品图片',
+			'goods_image' 	=> '商品图片',
 			'goods_name' 	=> '商品标题',
 			'order_sn' 		=> '订单编号',
 			'store_name' 	=> '店铺名称',
@@ -49,6 +49,11 @@ class OrderExportForm extends Model
 			'pay_message'	=> '买家留言',
 			'postscript'	=> '备注',
 		);
+		if(in_array(Yii::$app->user->id,Yii::$app->params['createRights'])){//权限判断[START]JchengCustom
+			unset($lang_bill['order_id']);unset($lang_bill['goods_image']);unset($lang_bill['order_sn']);
+		}
+		
+		//var_dump($lang_bill);die;
 		$record_xls[] = array_values($lang_bill);
 		$folder = 'ORDER_'.Timezone::localDate('Ymdhis', Timezone::gmtime());
 
@@ -81,9 +86,12 @@ class OrderExportForm extends Model
 		$record_xls[] = array('seller_name' => sprintf('订单总数：%s笔，订单总额：%s元', $quantity, $amount));
 		
 		if(in_array(Yii::$app->user->id,Yii::$app->params['createRights'])){//权限判断[START]JchengCustom
+			$sheetName = $sheetName ?$sheetName.'-博艺花卉客户':'博艺花卉客户账单';
+			$folder = $sheetName.Timezone::localDate('Ymdhis', Timezone::gmtime());
 			return \common\library\pageOutDown::export([
 				'models' 	=> $record_xls, 
 				'fileName' 	=> $folder,
+				'sheetName' =>$sheetName
 			]);
 		}else{
 			return \common\library\Page::export([

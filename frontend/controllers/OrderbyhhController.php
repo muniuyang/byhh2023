@@ -352,7 +352,7 @@ class OrderbyhhController extends \common\controllers\BaseUserController
 			}
 		}
 		//var_dump($list);die;
-		return \frontend\models\OrderExportForm::download($list);		
+		return \frontend\models\OrderExportForm::download($list,$post->search_name);		
 	}
 	
 	private function getSearchOption()
