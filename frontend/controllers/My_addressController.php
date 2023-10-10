@@ -227,6 +227,7 @@ class My_addressController extends \common\controllers\BaseUserController
 				//die('33');
 				return Message::warning($model->errors);
 			}
+			$this->params['whatdays'] =['生日','七夕','情人节','三八妇女节','结婚','结婚纪念日','开业'];
 			//var_dump($extroInfo);die('33');
 			$this->params = array_merge($this->params, ['extro_info' => $extroInfo['orderExtm'], 'redirect' => $redirect]);
 			return $this->render('../my_extro.nearform.html', $this->params);
@@ -239,7 +240,7 @@ class My_addressController extends \common\controllers\BaseUserController
 			$post = Basewind::trimAll(Yii::$app->request->post(), true, ['order_id']);
 			//var_dump($post);die;
 			$model = new \frontend\models\ExtroForm(['order_id' => $post->order_id]);
-			
+
 			//$consignee = OrderExtmModel::find()->select('region_id')->where(['order_id' => $order_info['order_id']])->one();
 			
 			if(!($extroInfo = $model->save($post, $valid))) {

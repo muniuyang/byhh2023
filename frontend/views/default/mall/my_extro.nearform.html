@@ -77,6 +77,15 @@
             <label class="field_message"><span class="field_notice">如：”开业大吉，生意兴隆“</span></label>
           </p>
         </li> 
+		<li>
+		  <h3>&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;纪念日:</h3>
+		  <p style="line-height: 24px;">
+			  <select class="querySelect" name="what_day">
+				<option value="">--选择纪念日--</option>
+				{html_options  values=$whatdays output=$whatdays selected=$extro_info.what_day}
+			  </select>
+		  </p>
+		</li>
       </ul>
       <div class="submit">
 		  <input type="hidden" name="order_id" value="{$extro_info.order_id}" />

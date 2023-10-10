@@ -30,6 +30,9 @@ use PHPExcel_IOFactory;
  
 class PageOutDown
 {
+	
+	
+	public static $tmpPath = '@runtime/export';
 	/**
 	 * 导出xlsx文件
 	 */
@@ -44,7 +47,7 @@ class PageOutDown
 		header('Cache-Control: must-revalidate');
 		header('Pragma: public');
 		//*/
-		//die('33');
+ 
 
 		//$objPHPExcel->setTempDir(Yii::getAlias('@frontend/runtime'));
 		$objPHPExcel = self::phpExcel($objPHPExcel , $config,[]);
@@ -141,19 +144,32 @@ class PageOutDown
 		$sumTitle = $sumOne = '';$sumTwo='';$sumThree='';$total = 0;
 		foreach($body as $key=>$record){
 			$i=0;
+			self::outImageRecord($objPHPExcel,$key+4,$record);
 	 		foreach($record as $k=>$v){
 	 			$cell = $cells[$i].($key+4);
-				$objPHPExcel->setActiveSheetIndex(0)->setCellValue($cell, $v);
-				//设置行高
-				if(in_array($k,['postscript','pay_message'])){$w = 38;}
-				else if(in_array($k,['address'])){$w = 28;}
-				else if(in_array($k,['goods_name'])){$w = 24;}
-				else if(in_array($k,['add_time'])){$w = 22;}
-				else if(in_array($k,['order_sn','consignee','store_name','signature','real_name','phone_mob'])){$w = 14;}
-				else if(in_array($k,['status','payment_name'])){$w = 13;}
-				else if(in_array($k,['goods_amount','shipping_fee','order_amount'])){$w = 7;}
-				else if('ID' == $k ){$w = 2;}
-				else{$w = 5;}
+				if('goods_image' == $k ){
+					$w = 4.25;
+				}else{
+					$objPHPExcel->setActiveSheetIndex(0)->setCellValue($cell, $v);
+					if(in_array($k,['goods_amount','shipping_fee'])){
+						//设置删除线（全局）
+						//$objPHPExcel->getDefaultStyle()->getFont()->setStrikethrough(true); 
+						//设置删除线（单元格）
+						$objPHPExcel->getActiveSheet()->getStyle($cell)->getFont()->setStrikethrough(true);
+						$objPHPExcel->getActiveSheet()->getStyle($cell)->getFont()->getColor()->setARGB('FF0000');
+					}
+					//设置行高
+					if(in_array($k,['postscript','pay_message'])){$w = 38;}
+					else if(in_array($k,['address'])){$w = 28;}
+					else if(in_array($k,['goods_name'])){$w = 24;}
+					else if(in_array($k,['add_time'])){$w = 22;}
+					else if(in_array($k,['order_sn','consignee','store_name','signature','real_name','phone_mob'])){$w = 14;}
+					else if(in_array($k,['status','payment_name'])){$w = 13;}
+					else if(in_array($k,['goods_amount','shipping_fee','order_amount'])){$w = 7;}
+					//else if('goods_image' == $k ){$w = 10;}
+					else if('ID' == $k ){$w = 2;}
+					else{$w = 5;}
+				}
 				$objPHPExcel->getActiveSheet()->getColumnDimension($cells[$i])->setWidth($w);
 				//设置单元格为文本格式，很有用
 				if(in_array($k,['order_sn'])){
@@ -163,7 +179,11 @@ class PageOutDown
 				//设置字颜色
 				if(in_array($k,['real_name','order_amount'])){
 					$objPHPExcel->getActiveSheet()->getStyle($cell)->getFont()->getColor()
-								->setARGB('FF6600');	
+								->setARGB('00AA00');	
+				}
+				if(in_array($k,['consignee','signature','address','phone_mob'])){
+					$objPHPExcel->getActiveSheet()->getStyle($cell)->getFont()->getColor()
+								->setARGB('FF8800');	
 				}
 				if('等待卖家发货' == $v && $k== 'status'){
 					$objPHPExcel->getActiveSheet()->getStyle($cell)->getFont()->getColor()
@@ -195,6 +215,8 @@ class PageOutDown
 						->setHorizontal(\PHPExcel_Style_Alignment::HORIZONTAL_CENTER);
 				}
 				
+				
+				
 				//求和设置上
 				if('order_amount' == $k){$sumOne = $cells[$i];}
 				if('shipping_fee' == $k){$sumTwo = $cells[$i];}
@@ -207,9 +229,9 @@ class PageOutDown
 		//求和设置下
 		$objPHPExcel->getActiveSheet()
 				//->setCellValue($sumTitle.(2), "总计")
-				->setCellValue($sumOne.(2), "=SUM(".$sumOne."4:".$sumOne.($total+1).")")
-				->setCellValue($sumTwo.(2), "=SUM(".$sumTwo."4:".$sumTwo.($total+1).")")
-				->setCellValue($sumThree.(2), "=SUM(".$sumThree."4:".$sumThree.($total+1).")");
+				->setCellValue($sumOne.(2), "=SUM(".$sumOne."4:".$sumOne.($total+4).")")
+				->setCellValue($sumTwo.(2), "=SUM(".$sumTwo."4:".$sumTwo.($total+4).")")
+				->setCellValue($sumThree.(2), "=SUM(".$sumThree."4:".$sumThree.($total+4).")");
 
 		//冻结第一行
 		$objPHPExcel->setActiveSheetIndex(0);
@@ -243,7 +265,41 @@ class PageOutDown
 		$list = array_merge($rlist,$nlist);
 		return $list;
 	}
-
+	public static function outImageRecord($objPHPExcel,$k, $v){
+		$v['goods_image_path'] = strstr($v['goods_image'],'data');
+		if(!empty($v['goods_image'])) {
+			$objDrawing[$k] = new \PHPExcel_Worksheet_Drawing();			
+			if (file_exists($v['goods_image_path'])) {
+				// 图片生成 poster
+				$objDrawing[$k]->setPath($v['goods_image_path']);
+				// 设置宽度高度
+				$objDrawing[$k]->setHeight(30);//照片高度
+				$objDrawing[$k]->setWidth(30); //照片宽度
+				//设置图片要插入的单元格
+				$objDrawing[$k]->setCoordinates('A' . $k);
+				// 图片偏移距离
+				$objDrawing[$k]->setOffsetX(5);
+				$objDrawing[$k]->setOffsetY(5);
+				$objDrawing[$k]->setWorksheet($objPHPExcel->getActiveSheet());
+			}
+		}
+	}
+	public static function download($url, $path = './runtime/export/')
+	{
+	    $ch = curl_init();
+	    curl_setopt($ch, CURLOPT_URL, $url);
+	    curl_setopt($ch, CURLOPT_RETURNTRANSFER, 1);
+	    curl_setopt($ch, CURLOPT_CONNECTTIMEOUT, 90);
+	    curl_setopt($ch, CURLOPT_SSL_VERIFYPEER, false); // 信任任何证书
+	    $file = curl_exec($ch);
+	    curl_close($ch);
+	    $filename = pathinfo($url, PATHINFO_BASENAME);
+	    $resource = fopen($path . $filename, 'w');
+	    fwrite($resource, $file);
+	    fclose($resource);
+	    return $filename;
+	}
+ 
 	public static function writeLog($key = '', $word = '') 
 	{
 		//$word = json_encode($word); // for AJAX debug

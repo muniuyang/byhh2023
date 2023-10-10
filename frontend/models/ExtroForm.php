@@ -13,10 +13,11 @@ namespace frontend\models;
 
 use Yii;
 use yii\base\Model; 
-
+use common\models\OrderModel;
 use common\models\AddressModel;
 use common\models\RegionModel;
 use common\models\OrderExtmModel;
+use common\models\UserModel;
 
 use common\library\Basewind;
 use common\library\Language;
@@ -74,11 +75,25 @@ class ExtroForm extends Model
 		$model->signature 	= $post->signature;//落款
 		$model->subscriber 	= $post->subscriber;//订花人
 		$model->content 	= $post->content;//祝贺语
+		$model->what_day 	= $post->what_day;//祝贺语
 		/**********************[START]JchengCustom with local**********************/
 		if(!$model->save()) {
 			$this->errors = $model->errors;
 			return false;
 		}
+		//修改订单的下单用户JchengCustom
+		$orderM = OrderModel::find()->where(['order_id'=>$model->order_id])->one();
+		if($user = UserModel::find()->where(['username' =>$model->subscriber])->one()) {
+			if($orderM->buyer_id != $user->userid){
+				$orderM->buyer_id = $user->userid;
+				$orderM->buyer_name = $model->subscriber;
+				$orderM->save();
+			}
+		}else{
+			
+		}
+		//var_dump($post);
+		//die('ddd');
 		return true;
 	}
 }

@@ -118,7 +118,7 @@ class Seller_orderController extends \common\controllers\BaseSellerController
 		
 		$model = new \frontend\models\Seller_orderAdjustfeeForm(['store_id' => $this->visitor['store_id']]);
 		if(!($orderInfo = $model->formData($get))) {		
-			var_dump($get);die('555');
+			//var_dump($get);die('555');
 			return Message::warning($model->errors);
 		}
 		if(in_array(Yii::$app->user->id,Yii::$app->params['createRights'])){//权限判断[START]JchengCustom

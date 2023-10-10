@@ -138,6 +138,7 @@ class Order_printedController extends \common\controllers\BaseUserController
 		$resultFile = dirname(Yii::$app->BasePath).'/frontend/web/data/sales/'.$filename;
 		// 创建新文档
 		$templateProcessor = new \PhpOffice\PhpWord\TemplateProcessor($templateFile);
+		$templateProcessor->setValue('title', $orderExt['consignee']);// On footer
 		$templateProcessor->setValue('signer',$order['postscript']); 
 		if(!$order['content']){
 		$order['content'] = "烛光闪闪，快乐幸福，生日快乐，心想事成，幸运之日，吉祥之日，愿愿顺心，事事如意，祝君生日快乐，开心幸福！";

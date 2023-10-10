@@ -80,7 +80,7 @@ class OrderbyhhController extends \common\controllers\BaseUserController
 		else
 		{
 			$query = OrderModel::find()->alias('o')->select('o.order_id,o.order_sn,o.buyer_name,o.seller_name as store_name,o.goods_amount,o.order_amount,o.payment_name,o.status,o.add_time,o.pay_time,o.finished_time,
-			oe.consignee,oe.signature,oe.address,oe.shipping_fee,obi.real_name,og.goods_name,og.goods_image');
+			oe.consignee,oe.signature,oe.address,oe.shipping_fee,oe.what_day,oe.content,obi.real_name,og.goods_name,og.goods_image');
 			//var_dump($post);die;
 			$query = $this->getConditions($post, $query);
 
@@ -186,7 +186,10 @@ class OrderbyhhController extends \common\controllers\BaseUserController
 		if(!$post->id) {
 			return Message::warning(Language::get('no_such_order'));
 		}
-		if(!($order = OrderModel::find()->alias('o')->select('o.*,oe.consignee,oe.region_name,oe.zipcode,oe.phone_tel,oe.phone_mob,oe.address,oe.shipping_name')->where(['o.order_id' => $post->id])->joinWith('orderExtm oe', false)->with('orderGoods')->asArray()->one())) {
+		if(!($order = OrderModel::find()->alias('o')->select('o.*,oe.consignee,oe.region_name,oe.zipcode,oe.phone_tel,oe.phone_mob,oe.address,oe.shipping_name')
+		->where(['o.order_id' => $post->id])
+		->joinWith('orderExtm oe', false)
+		->with('orderGoods')->asArray()->one())) {
 			return Message::warning(Language::get('no_such_order'));
 		}
 		$this->params['order'] = $order;

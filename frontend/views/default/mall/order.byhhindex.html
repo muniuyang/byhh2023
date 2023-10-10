@@ -60,9 +60,8 @@
 </div>
 <script type="text/html" id="toolbar">
 	<div class="layui-btn-container">
-	  <button class="layui-btn layui-btn-primary layui-border-black" lay-event="export"><i class="layui-icon layui-icon-export"></i>导出数据</button>
-
-	<a class="layui-btn layui-btn-primary layui-border-black" href="javascript:;" uri="{url route='orderbyhh/cuser'}" dialog_width="450" dialog_title="创建用户" ectype="dialog"
+	  <button class="layui-btn layui-btn-primary layui-bg-blue" lay-event="export"><i class="layui-icon layui-icon-export"></i>导出数据</button>
+	<a class="layui-btn layui-btn-primary layui-bg-orange" href="javascript:;" uri="{url route='orderbyhh/cuser'}" dialog_width="450" dialog_title="创建用户" ectype="dialog"
 	dialog_id="seller_order_adjust_fee" id="order{$order.orderExtm.order_id}_action_adjust_fee" ><i class="layui-icon layui-icon-username"></i>创建用户</a> 
 	</div>
 	</div>
@@ -70,13 +69,12 @@
 
  
 <script type="text/html" id="colBar">
-  <a class="ml5 mr5 blue pointer" lay-event="edit">编辑</a>
-    <a class="ml5 mr5 blue pointer" lay-event="del" confirm="删除后将不能恢复，确认删除该项吗？">删除</a>
   <a class="ml5 mr5 blue pointer" lay-event="printed">卡片</a>
   <a class="ml5 mr5 blue pointer" lay-event="view">查看</a>
 </script>
 <script>
-  layui.use('table', function () {
+  layui.use('table', function () 
+  {
     var table = layui.table;
 
     table.render({
@@ -96,39 +94,67 @@
     , { field: 'goods_image', title: '图片', width: 60,templet:function(res){
 				return '<img src='+res.goods_image+' style="with:60px;"/>' ;
 			}}
-		, { field: 'goods_name', title: '标题(*款式*)', width: 260 }
+		, { field: 'goods_name', title: '标题(*款式*)', width: 260 ,templet:function(res){
+			if(res.what_day == '生日'){
+				return "<i class='layui-icon layui-icon-gift' style='color:#FF8800;'></i>"+res.goods_name;//+'('+res.buyer_name+')' ;
+			}else if(res.what_day == '开业'){
+				return "<i class='layui-icon layui-icon-tree' style='color:#00AA00;'></i>"+res.goods_name;//+'('+res.buyer_name+')' ;
+			}else if(res.what_day == '七夕'){
+				return res.goods_name; 
+			}else if(res.what_day == '情人节'){
+				return res.goods_name; 
+			}else if(res.what_day == '结婚'){
+				return res.goods_name; 
+			}else if(res.what_day == '结婚纪念日'){
+				return res.goods_name; 
+			}else if(res.what_day == '三八妇女节'){
+				return res.goods_name; 
+			}else{
+				return "<i class='layui-icon layui-icon-help' style='color:#00aaff;'></i>"+res.goods_name;//+'('+res.buyer_name+')' ;
+			}
+		}}
     , { field: 'store_name', title: '店铺名称', width: 90 }
-    , { field: 'consignee', title: '收货人(*收花人*)', width: 150 ,align: 'center',style:'color: #FF8800;'}
-		, { field: 'address', title: '收货地址(*收花人*)', width: 230 ,align: 'center',style:'color: #FF8800;'}
-		, { field: 'signature', title: '签名落款(*赠花人*)', width: 200 ,align: 'center',style:'color: #00FF00;'}
+    , { field: 'consignee', title: '收货人(*收花人*)', width: 150 ,align: 'left',style:'color: #FF8800;',templet:function(res){
+				return "<em class='layui-icon layui-icon-dialogue consignee' lay-event='viewContent'  ectype='inline_edit' style='color:#00aaff;'></em>"+res.consignee;//+'('+res.buyer_name+')' ;
+			}}
+		, { field: 'address', title: '收货地址', width: 170 ,align: 'center',style:'color: #FF8800;'}
+		, { field: 'signature', title: '签名落款', width: 120 ,align: 'center',style:'color: #FF8800;'}
 		, { field: 'real_name', title: '买货人(*订花人*)', width: 140 ,align: 'center',style:'color: #00AA00;',templet:function(res){
 				return res.real_name;//+'('+res.buyer_name+')' ;
 			}}
-		, { field: 'goods_amount', title: '商品售价', width: 110, sort: true, align: 'center' }
-    , { field: 'order_amount', title: '订单金额', width: 110, sort: true, align: 'center' }
-		, { field: 'shipping_fee', title: '运送费', width: 110, sort: true, align: 'center' }
-    , { field: 'status', title: '订单状态', width: 130, sort: true, align: 'center',templet:function(res){
-			if(res.status == '交易完成'){
-				res.status = '<font color=green>'+res.status+'</font>';
-			}
-			if(res.status == '交易关闭'){
-				res.status = '<font color=gray>'+res.status+'</font>';
-			}
-			if(res.status == '等待买家付款'){
-				res.status = '<font color=orange>'+res.status+'</font>';
-			}
-			if(res.refund_status == 'SUCCESS'){
-				res.status = '<font color=red>退款成功</font>';
-			}
-				return res.status ? res.status : '';
-			}}
-      , { field: 'payment_name', title: '支付方式', width: 120 }
+		, { field: 'goods_amount', title: '商品售价', width: 110, sort: true, align: 'center' ,templet:function(res){
+		return "<span style=' text-decoration: line-through;color:red;'>"+res.goods_amount+"</span>"
+	} }
+		, { field: 'shipping_fee', title: '运送费', width: 110, sort: true, align: 'center' ,templet:function(res){
+		return "<span style=' text-decoration: line-through;color:red;'>"+res.shipping_fee+"</span>"
+	} }
+	, { field: 'order_amount', title: '订单金额', width: 110, sort: true, align: 'center',templet:function(res){
+		return "<span style='color:#00AA00;'>"+res.order_amount+"</span>"
+	} }
+	
+    
+ 
       , { field: 'add_time', title: '下单时间', width: 170, sort: true, align: 'center' }
       , { field: 'pay_time', title: '付款时间', width: 170, sort: true, align: 'center' }
       , { field: 'finished_time', title: '完成时间', width: 170, sort: true, align: 'center' }
-      , { fixed: 'right', title: '操作', toolbar: '#colBar', width: 200, align: 'center', templet:function(res){
-        return '<font color=orange>'+res.status+'</font>';
-        }}
+	 , { fixed: 'right', title: '订单状态', width: 155, sort: false, align: 'center',templet:function(res){
+	 		if(res.status == '交易完成'){
+	 			res.status = '<font color=green>'+res.status+'</font>';
+	 		}
+	 		if(res.status == '交易关闭'){
+	 			res.status = '<font color=gray>'+res.status+'</font>';
+	 		}
+	 		if(res.status == '等待买家付款'){
+	 			res.status = '<font color=orange>'+res.status+'</font>';
+	 		}
+	 		if(res.refund_status == 'SUCCESS'){
+	 			res.status = '<font color=red>退款成功</font>';
+	 		}
+				
+	 			return res.status ? res.status+"|"+res.payment_name : '';
+	 		}}
+	, { fixed: 'right', title: '操作', toolbar: '#colBar', width: 115, align: 'center'}
+	
       ]]
       , page: {
         theme: 'blue'
@@ -158,6 +184,9 @@
         window.open(url(['order_printed/lists', { order_id: data.order_id }]));
       }else if(obj.event === 'view'){
         window.open(url(['buyer_order/view', { order_id: data.order_id }]));
+	  }else if(obj.event =='viewContent'){
+		  $('.content-box').text(obj.data.content);
+		  $('#p_content').show();
       }else if(obj.event === 'edit'){
            alert("功能暂未开通！")
       }else if(obj.event === 'del'){
@@ -167,10 +196,12 @@
       }
 
     });
-	 
   });
 
   $(function () {
+	$('.layui-icon-close').click(function(){
+		$('#p_content').hide();
+	})
     $('#add_time_from').datepicker({ dateFormat: 'yy-mm-dd' });
     $('#add_time_to').datepicker({ dateFormat: 'yy-mm-dd' });
 	$('.buyerSelect').change(function(){
@@ -181,4 +212,15 @@
 </script>
 <iframe id="iframe" name="iframe" src="about:blank" frameborder="0" width="0" height="0" style="display:none"></iframe>
 
+
+<div class="layui-layer layui-layer-tips layui-table-tips" id="p_content" type="tips" times="1" showtime="-1" 
+contype="object" style="z-index: 19891015; position: absolute; left: 650px;width:300px; top: 260px;display:none;">
+	<div id="" class="layui-layer-content">
+		<div class="layui-table-tips-main" style="margin-top: -48px;">
+			<p class="content-box"></p>
+		</div>
+		<i class="layui-icon layui-table-tips-c layui-icon-close"></i>
+	</div>
+	<span class="layui-layer-setwin"></span>
+</div>
 {include file="footer.byhh.html"}

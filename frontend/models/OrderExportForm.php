@@ -50,7 +50,8 @@ class OrderExportForm extends Model
 			'postscript'	=> '备注',
 		);
 		if(in_array(Yii::$app->user->id,Yii::$app->params['createRights'])){//权限判断[START]JchengCustom
-			unset($lang_bill['order_id']);unset($lang_bill['goods_image']);unset($lang_bill['order_sn']);
+			unset($lang_bill['order_id']);unset($lang_bill['order_sn']);//unset($lang_bill['goods_image']);
+			$lang_bill['goods_image'] = '图片';
 		}
 		
 		//var_dump($lang_bill);die;

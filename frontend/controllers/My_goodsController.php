@@ -815,6 +815,10 @@ class My_goodsController extends \common\controllers\BaseSellerController
 			$default_image = GoodsImageModel::find()->select('thumbnail')->where(['goods_id' => $goods_id, 'file_id' => $data['goods_file_id'][0]])->scalar();
 			if($default_image) {
 				GoodsModel::updateAll(['default_image' => $default_image], ['goods_id' => $goods_id]);
+				//JchengCustom
+				$img = \apiserver\library\Formatter::path($default_image, 'goods');
+				\common\models\OrderGoodsModel::updateAll(['goods_image' => $img],['goods_id' => $goods_id]);
+				//JchengCustom
 			}
 			GoodsImageModel::updateAll(['sort_order' => 255], ['goods_id' => $goods_id]);
 			GoodsImageModel::updateAll(['sort_order' => 1], ['goods_id' => $goods_id, 'file_id' => $data['goods_file_id'][0]]); 
