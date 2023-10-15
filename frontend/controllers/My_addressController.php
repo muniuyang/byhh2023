@@ -111,6 +111,7 @@ class My_addressController extends \common\controllers\BaseUserController
 			if(!($address = $model->save($post, $valid))){
 				return Message::popWarning($model->errors);
 			}
+			/*
 			$addressServ = \common\models\AddressServModel::find()->select('consignee,address')
 			->where(['and',['=', 'consignee', $post->consignee],['=', 'address', $post->address]]);
 			//var_dump($addressServ->createCommand()->getRawSql());
@@ -120,7 +121,7 @@ class My_addressController extends \common\controllers\BaseUserController
 				die('empty');
 			 }
  			
-			
+			*/
 			
 			/**********************[END]JchengCustom with local**********************/
 			return Message::popSuccess(Language::get('address_add_successed'), urldecode(Yii::$app->request->post('redirect', Url::toRoute('my_address/index'))));
