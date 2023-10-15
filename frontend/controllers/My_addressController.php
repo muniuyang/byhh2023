@@ -86,9 +86,7 @@ class My_addressController extends \common\controllers\BaseUserController
 			} 
 			/**********************[END]JchengCustom with local**********************/
 			return $this->render('../my_address.form.html', $this->params);
-		}
-		else
-		{
+		}else{
 			$valid = true;
 			$post = Basewind::trimAll(Yii::$app->request->post(), true, ['region_id', 'defaddr']);
 			/**********************[START]JchengCustom 根据添加收货地址的落款**********************/
@@ -110,9 +108,20 @@ class My_addressController extends \common\controllers\BaseUserController
 				$valid = false;
 			}
 			$model = new \frontend\models\AddressForm();
-			if(!($address = $model->save($post, $valid))) {
+			if(!($address = $model->save($post, $valid))){
 				return Message::popWarning($model->errors);
 			}
+			$addressServ = \common\models\AddressServModel::find()->select('consignee,address')
+			->where(['and',['=', 'consignee', $post->consignee],['=', 'address', $post->address]]);
+			//var_dump($addressServ->createCommand()->getRawSql());
+			 if(!($addressServ = $addressServ->asArray()->one())){
+				var_dump($addressServ);die;
+			 }else{
+				die('empty');
+			 }
+ 			
+			
+			
 			/**********************[END]JchengCustom with local**********************/
 			return Message::popSuccess(Language::get('address_add_successed'), urldecode(Yii::$app->request->post('redirect', Url::toRoute('my_address/index'))));
 		}
@@ -198,8 +207,8 @@ class My_addressController extends \common\controllers\BaseUserController
 		else
 		{
 			$post = Basewind::trimAll(Yii::$app->request->get(), true);
-			$query = OrderExtmModel::find()->select('address')->where(['like', 'consignee', $post->keyword])
-			->orderBy(['order_id' => SORT_DESC]);
+			//$query = OrderExtmModel::find()->select('address')->where(['like', 'consignee', $post->keyword])->orderBy(['order_id' => SORT_DESC]);
+			$query = \common\models\AddressServModel::find()->select('address')->where(['like', 'consignee', $post->keyword])->orderBy(['sid' => SORT_DESC]);
 			$list = $query->asArray()->all();
 			return Json::encode(['code' => 0, 'msg' => '', 'count' => $query->count(), 'data' => $list]);
 		}

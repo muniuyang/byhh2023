@@ -92,7 +92,7 @@ class OrderbyhhController extends \common\controllers\BaseUserController
 			//var_dump($query->createCommand()->getRawSql());die;
 
 
-			$page = Page::getPage($query->count(), $post->limit ? $post->limit : 20);
+			$page = Page::getPage($query->count(), $post->limit ? $post->limit : 14);
 			$list = $query->offset($page->offset)->limit($page->limit)->asArray()->all();
 
 			//var_dump($list);die;

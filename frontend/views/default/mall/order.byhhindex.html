@@ -82,7 +82,7 @@
       //,skin: 'line'
       , url: url(['orderbyhh/index', $("#formSearch").serializeJson()])
       , toolbar: '#toolbar'
-	  ,limit:20
+	  ,limit:14
       , defaultToolbar: ['filter', /*'exports',*/ 'print']
       , title: '订单列表'
       //, size: 'lg'
@@ -94,7 +94,7 @@
     , { field: 'goods_image', title: '图片', width: 60,templet:function(res){
 				return '<img src='+res.goods_image+' style="with:60px;"/>' ;
 			}}
-		, { field: 'goods_name', title: '标题(*款式*)', width: 260 ,templet:function(res){
+		, { field: 'goods_name', title: '标题(*款式*)', width: 250 ,templet:function(res){
 			if(res.what_day == '生日'){
 				return "<i class='layui-icon layui-icon-gift' style='color:#FF8800;'></i> <a href='javascript:;' lay-event='goodsView'>"+res.goods_name+"</a>";
 			}else if(res.what_day == '开业'){
@@ -118,14 +118,14 @@
 				return "<em class='layui-icon layui-icon-dialogue consignee' lay-event='viewContent'  ectype='inline_edit' style='color:#00aaff;'></em>"+res.consignee;//+'('+res.buyer_name+')' ;
 			}}
 		, { field: 'address', title: '收货地址', width: 170 ,align: 'center',style:'color: #FF8800;'}
-		, { field: 'signature', title: '签名落款', width: 120 ,align: 'center',style:'color: #FF8800;'}
+		, { field: 'signature', title: '签名落款', width: 110 ,align: 'center',style:'color: #FF8800;'}
 		, { field: 'real_name', title: '买货人(*订花人*)', width: 140 ,align: 'center',style:'color: #00AA00;',templet:function(res){
 				return res.real_name;//+'('+res.buyer_name+')' ;
 			}}
 		, { field: 'goods_amount', title: '商品售价', width: 110, sort: true, align: 'center' ,templet:function(res){
 		return "<span style=' text-decoration: line-through;color:red;'>"+res.goods_amount+"</span>"
 	} }
-		, { field: 'shipping_fee', title: '运送费', width: 110, sort: true, align: 'center' ,templet:function(res){
+		, { field: 'shipping_fee', title: '运送费', width: 100, sort: true, align: 'center' ,templet:function(res){
 		return "<span style=' text-decoration: line-through;color:red;'>"+res.shipping_fee+"</span>"
 	} }
 	, { field: 'order_amount', title: '订单金额', width: 110, sort: true, align: 'center',templet:function(res){
@@ -135,9 +135,7 @@
     
  
       , { field: 'add_time', title: '下单时间', width: 170, sort: true, align: 'center' }
-      , { field: 'pay_time', title: '付款时间', width: 170, sort: true, align: 'center' }
-      , { field: 'finished_time', title: '完成时间', width: 170, sort: true, align: 'center' }
-	 , { fixed: 'right', title: '订单状态', width: 155, sort: false, align: 'center',templet:function(res){
+	  , { field: 'status', title: '支付状态', width: 110, sort: false, align: 'center',templet:function(res){
 	 		if(res.status == '交易完成'){
 	 			res.status = '<font color=green>'+res.status+'</font>';
 	 		}
@@ -150,9 +148,13 @@
 	 		if(res.refund_status == 'SUCCESS'){
 	 			res.status = '<font color=red>退款成功</font>';
 	 		}
-				
-	 			return res.status ? res.status+"|"+res.payment_name : '';
-	 		}}
+	 		return res.status  ;
+	  }}	  
+      , { field: 'pay_time', title: '付款时间', width: 170, sort: true, align: 'center' }
+      , { field: 'finished_time', title: '完成时间', width: 170, sort: true, align: 'center' }
+	 , { fixed: 'right', title: '支付方式', width: 90, sort: false, align: 'center',templet:function(res){
+	 		return res.payment_name  ;
+	  }}
 	, { fixed: 'right', title: '操作', toolbar: '#colBar', width: 115, align: 'center'}
 	
       ]]

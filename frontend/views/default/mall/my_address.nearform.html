@@ -127,12 +127,14 @@ $(function(){
  
 		$.getJSON("{url route='my_address/search'}", { 'keyword' : $('.I_Consignee').val()}, function(data) {
 			html = '';
-			if(data.code == 0) {
+			if(data.code == 0 && data.count>0) {
 				$('.I_Address').val(data.data[0].address);
 				$.each(data.data,function(i, item){	
 					html += '<li style="padding: 10px 0 0;color:#FF8800;">[地址]('+(i+1)+'): <span>'+item.address+'</span></li>';
 				});
 				$('.I_Consignee_list').html("<ul>"+html+"</ul>");
+			}else{
+				$('.I_Consignee_list').html("");
 			}
 		});
 	}); 
