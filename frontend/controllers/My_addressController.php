@@ -107,21 +107,33 @@ class My_addressController extends \common\controllers\BaseUserController
 				}
 				$valid = false;
 			}
+			
 			$model = new \frontend\models\AddressForm();
 			if(!($address = $model->save($post, $valid))){
 				return Message::popWarning($model->errors);
 			}
-			/*
+			
 			$addressServ = \common\models\AddressServModel::find()->select('consignee,address')
 			->where(['and',['=', 'consignee', $post->consignee],['=', 'address', $post->address]]);
 			//var_dump($addressServ->createCommand()->getRawSql());
-			 if(!($addressServ = $addressServ->asArray()->one())){
-				var_dump($addressServ);die;
+			$oneRecord = $addressServ->asArray()->one();
+			 if(empty($oneRecord)){
+				$addressServ = new \common\models\AddressServModel();
+				$addressServ->consignee = $post->consignee;
+				$addressServ->region_id = $post->region_id;
+				$addressServ->region_name = $post->region_name;
+				$addressServ->address = $post->address;
+				$addressServ->phone_tel = $post->phone_tel;
+				$addressServ->zipcode = $post->zipcode;
+				$addressServ->phone_mob = $post->phone_mob;
+				$addressServ->content = $post->content;
+				$addressServ->defaddr = $post->defaddr;
+				$addressServ->save();
 			 }else{
-				die('empty');
+				 
 			 }
  			
-			*/
+			
 			
 			/**********************[END]JchengCustom with local**********************/
 			return Message::popSuccess(Language::get('address_add_successed'), urldecode(Yii::$app->request->post('redirect', Url::toRoute('my_address/index'))));
@@ -208,8 +220,8 @@ class My_addressController extends \common\controllers\BaseUserController
 		else
 		{
 			$post = Basewind::trimAll(Yii::$app->request->get(), true);
-			$query = OrderExtmModel::find()->select('address')->where(['like', 'consignee', $post->keyword])->orderBy(['order_id' => SORT_DESC]);
-			//$query = \common\models\AddressServModel::find()->select('address')->where(['like', 'consignee', $post->keyword])->orderBy(['sid' => SORT_DESC]);
+			//$query = OrderExtmModel::find()->select('address')->where(['like', 'consignee', $post->keyword])->orderBy(['order_id' => SORT_DESC]);
+			$query = \common\models\AddressServModel::find()->select('address')->where(['like', 'consignee', $post->keyword])->orderBy(['sid' => SORT_DESC]);
 			$list = $query->asArray()->all();
 			return Json::encode(['code' => 0, 'msg' => '', 'count' => $query->count(), 'data' => $list]);
 		}
