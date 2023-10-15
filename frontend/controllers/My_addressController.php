@@ -208,8 +208,8 @@ class My_addressController extends \common\controllers\BaseUserController
 		else
 		{
 			$post = Basewind::trimAll(Yii::$app->request->get(), true);
-			//$query = OrderExtmModel::find()->select('address')->where(['like', 'consignee', $post->keyword])->orderBy(['order_id' => SORT_DESC]);
-			$query = \common\models\AddressServModel::find()->select('address')->where(['like', 'consignee', $post->keyword])->orderBy(['sid' => SORT_DESC]);
+			$query = OrderExtmModel::find()->select('address')->where(['like', 'consignee', $post->keyword])->orderBy(['order_id' => SORT_DESC]);
+			//$query = \common\models\AddressServModel::find()->select('address')->where(['like', 'consignee', $post->keyword])->orderBy(['sid' => SORT_DESC]);
 			$list = $query->asArray()->all();
 			return Json::encode(['code' => 0, 'msg' => '', 'count' => $query->count(), 'data' => $list]);
 		}
