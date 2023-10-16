@@ -6,7 +6,12 @@
       <h2>{$lang.order_detail}</h2>
 	 
       <div class="mb20 mt10 ml10 clearfix">
-        <div class="state float-left pl10">{$lang.order_status}&nbsp;:&nbsp;<strong>{Def::getOrderStatus($order.status)}</strong></div>
+        <div class="state float-left pl10">{$lang.order_status}&nbsp;:&nbsp;<strong>{Def::getOrderStatus($order.status)}</strong>
+		{if $order.status eq 11}
+			<a href="{url route='cashier/index' order_id=$order.orderExtm.order_id}"  class="layui-btn layui-bg-blue"
+		 ><i class="layui-icon layui-icon-rmb"></i>去支付</a> 
+		 {/if}
+		</div>
         <div class="num float-left">{$lang.order_sn}&nbsp;:&nbsp;{$order.order_sn}</div>
         <div class="time float-left">{$lang.add_time}&nbsp;:&nbsp;{$order.order_add_time|date_format:"%Y.%m.%d %H:%M:%S"}</div>
       </div>
@@ -95,6 +100,8 @@
 		 ectype="dialog" class="layui-btn layui-bg-blue" uri="{url route='my_address/extro' redirect=$redirect order_id=$order.orderExtm.order_id}" 
 		 dialog_id="my_address_extro" name="order_id">
 				  <i class="layui-icon layui-icon-edit"></i>修改地址</a>
+				  <a href="/order_printed/lists.html?order_id={$order.order_id}&ptf=1" class="layui-btn layui-bg-orange" >
+				  <i class="layui-icon layui-icon-print"></i>打印卡片</a>
 		</form>
         <!--{if $order.orderExtm.zipcode}-->,&nbsp;{$order.orderExtm.zipcode|escape}<!--{/if}--><br /><br />
         {$lang.shipping_way}&nbsp;:&nbsp;{$order.orderExtm.shipping_name|escape} 
@@ -105,25 +112,7 @@
         <!--{/if}--> 
        
       </div>
-	  <style>
-		.printed {
-		      margin-left: 10px;
-		      background: url("../static/images/member/print.png") 3px center no-repeat #fff;
-		      background-size: 20%;
-		      color: #3366CC;
-		      border: 1px #3366CC solid;
-		      padding: 9px 10px 9px 20px;
-		      border-radius: 4px;
-		  }
-		  .btnbos{
-			  width:100%;height:60px;line-height:60px;text-align:center;margin: 0 auto;
-		  }
-	  </style>
-	  <div class="btnbos">{$order.orderGoods[0].cate_name|escape} 
-		  <a href="/order_printed/lists.html?order_id={$order.order_id}&ptf=1"  class="printed" dialog_title="打印订单" 
-		   ectype="batchopt" uri="/seller_order/printed.html" dialog_id="seller_order_printed" name="order_id">
-		  		 打印卡片</a>
-	  </div>
+ 
     </div>
   </div>
 </div>
