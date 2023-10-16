@@ -74,7 +74,22 @@
                 <td class="align2">{$goods.quantity}</td>
                 <!--{if $smarty.foreach.fe_goods.first}-->
                 <td valign="top" class="align2 bottom-blue" rowspan="{$order.goods_quantities}"><div class="mt15"><!--{if $order.payment_name}-->{$order.payment_name|escape}<!--{/if}--></div></td>
-                <td valign="top" class="align2 bottom-blue" rowspan="{$order.goods_quantities}"><div class="mt15"><b id="order{$order.order_id}_order_amount">{$order.order_amount|price_format}</b></div></td>
+               <!--
+				<td valign="top" class="align2 bottom-blue" rowspan="{$order.goods_quantities}">
+					<div class="mt15"><b id="order{$order.order_id}_order_amount">{$order.order_amount|price_format}</b></div>	
+				</td>
+				-->
+				<td valign="top" class="align2 bottom-blue" rowspan="{$order.goods_quantities}"><strong>{$order.order_amount}</strong><br />
+				  <span class="gray-color">(含运费:{$order.shipping_fee})</span>
+				  <div class="btn-order-status"> 
+				    <!--调整费用--> 
+				    <a href="javascript:;" uri="{url route='seller_order/adjustfee' order_id=$order.order_id}" dialog_width="450" 
+					dialog_title="{$lang.adjust_fee}" ectype="dialog"  dialog_id="seller_order_adjust_fee"
+					 id="order{$order.order_id}_action_adjust_fee" >调整费用</a> 
+				   
+				  </div></td>
+				
+				
                 <td valign="top" width="100" class="align2 bottom-blue" rowspan="{$order.goods_quantities}"><div class="btn-order-status">
                     <p><span class="{if $order.status eq 0}gray-color{else}color4{/if}">
                     {Def::getOrderStatus($order.status)}</span></p>

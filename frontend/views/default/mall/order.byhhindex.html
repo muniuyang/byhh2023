@@ -114,28 +114,28 @@
 			}
 		}}
     , { field: 'store_name', title: '店铺名称', width: 90 }
-    , { field: 'consignee', title: '收货人(*收花人*)', width: 150 ,align: 'left',style:'color: #FF8800;',templet:function(res){
-				return "<em class='layui-icon layui-icon-dialogue consignee' lay-event='viewContent'  ectype='inline_edit' style='color:#00aaff;'></em>"+res.consignee;//+'('+res.buyer_name+')' ;
+    , { field: 'consignee', title: '收货人(*收花人*)', width: 110 ,align: 'left',style:'color: #FF8800;',templet:function(res){
+				return "<em class='layui-icon layui-icon-dialogue consignee' lay-event='viewContent'    style='color:#00aaff;'></em>"+res.consignee;//+'('+res.buyer_name+')' ;
 			}}
 		, { field: 'address', title: '收货地址', width: 170 ,align: 'center',style:'color: #FF8800;'}
-		, { field: 'signature', title: '签名落款', width: 110 ,align: 'center',style:'color: #FF8800;'}
+		, { field: 'signature', title: '签名落款', width: 140 ,align: 'center',style:'color: #FF8800;'}
 		, { field: 'real_name', title: '买货人(*订花人*)', width: 140 ,align: 'center',style:'color: #00AA00;',templet:function(res){
 				return res.real_name;//+'('+res.buyer_name+')' ;
 			}}
-		, { field: 'goods_amount', title: '商品售价', width: 110, sort: true, align: 'center' ,templet:function(res){
+		, { field: 'goods_amount', title: '售价', width: 100, sort: true, align: 'center' ,templet:function(res){
 		return "<span style=' text-decoration: line-through;color:red;'>"+res.goods_amount+"</span>"
 	} }
 		, { field: 'shipping_fee', title: '运送费', width: 100, sort: true, align: 'center' ,templet:function(res){
 		return "<span style=' text-decoration: line-through;color:red;'>"+res.shipping_fee+"</span>"
 	} }
-	, { field: 'order_amount', title: '订单金额', width: 110, sort: true, align: 'center',templet:function(res){
-		return "<span style='color:#00AA00;'>"+res.order_amount+"</span>"
+	, { field: 'order_amount', title: '金额', width: 100, sort: true, align: 'center',templet:function(res){
+		return "<span style='color:#00AA00;' controller='orderbyhh' fieldid='"+res.order_id+"' fieldname='order_amount'  ectype='inline_edit' >"+res.order_amount+"</span>"
 	} }
 	
     
  
       , { field: 'add_time', title: '下单时间', width: 170, sort: true, align: 'center' }
-	  , { field: 'status', title: '支付状态', width: 110, sort: false, align: 'center',templet:function(res){
+	  , { field: 'status', title: '支付状态', width: 130, sort: false, align: 'center',templet:function(res){
 	 		if(res.status == '交易完成'){
 	 			res.status = '<font color=green>'+res.status+'</font>';
 	 		}

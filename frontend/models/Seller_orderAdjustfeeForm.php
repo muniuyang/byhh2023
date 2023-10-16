@@ -34,14 +34,14 @@ class Seller_orderAdjustfeeForm extends Model
 	public $errors = null;
 	
 	public function formData($post = null)
-	{
+	{	//var_dump($post);
 		if(in_array(Yii::$app->user->id,Yii::$app->params['createRights'])){//权限判断[START]JchengCustom
 		
 			$orderInfo = OrderModel::find()->alias('o')->select('o.order_id,order_sn,buyer_name,order_amount,goods_amount,discount,adjust_amount,shipping_fee')
 			->joinWith('orderExtm ex',false)->where(['o.order_id' => $post->order_id])
 			//->createCommand()->getRawSql();
 			->asArray()->one();
-			//var_dump($post->order_id);var_dump($orderInfo);
+			//var_dump($post->order_id);var_dump($orderInfo);die;
 			if(!$post->order_id || !($orderInfo)) {
 				$this->errors = Language::get('no_such_order');
 				return false;

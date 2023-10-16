@@ -126,7 +126,7 @@ class My_addressController extends \common\controllers\BaseUserController
 				$addressServ->phone_tel = $post->phone_tel;
 				$addressServ->zipcode = $post->zipcode;
 				$addressServ->phone_mob = $post->phone_mob;
-				$addressServ->content = $post->content;
+				//$addressServ->content = $post->content;
 				$addressServ->defaddr = $post->defaddr;
 				$addressServ->save();
 			 }else{

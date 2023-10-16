@@ -85,6 +85,7 @@ class My_goodsController extends \common\controllers\BaseSellerController
             $goodsList[$key]['cate_name'] = GcategoryModel::formatCateName($goods['cate_name']);
 			$goods['default_image'] || $goodsList[$key]['default_image'] = Yii::$app->params['default_goods_image'];
         }
+		//var_dump($goodsList);die;
 		$this->params['goods_list'] = $goodsList;
 		$this->params['pagination'] = Page::formatPage($page);
 		
@@ -97,12 +98,13 @@ class My_goodsController extends \common\controllers\BaseSellerController
 		
 		// 当前用户中心菜单
 		$this->params['_usermenu'] = Page::setMenu('my_goods', 'goods_list');
-
+		//var_dump(Yii::$app->language);die;
 		$this->params['_foot_tags'] = Resource::import([
 			'script' => 'jquery.ui/jquery.ui.js,jquery.ui/i18n/' . Yii::$app->language . '.js, dialog/dialog.js,inline_edit.js',
             'style' =>  'jquery.ui/themes/smoothness/jquery.ui.css,dialog/dialog.css'
 		]);
 		$this->params['page'] = Page::seo(['title' => Language::get('goods_list')]);
+	//	var_dump($this->params);die;
         return $this->render('../my_goods.index.html', $this->params);
 	}
 	/* 商品发布 */

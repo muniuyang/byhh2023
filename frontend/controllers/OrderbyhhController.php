@@ -58,7 +58,7 @@ class OrderbyhhController extends \common\controllers\BaseUserController
 			$this->params['search_options'] = $this->getSearchOption();
 			$this->params['status_list'] = $this->getStatus();
 			$this->params['_foot_tags'] = Resource::import([
-				'script' => 'jquery.ui/jquery.ui.js,jquery.ui/i18n/' . Yii::$app->language . '.js,jquery.plugins/jquery.validate.js,dialog/dialog.js,mlselection.js,user.js,jquery.plugins/jquery.form.js',
+				'script' => 'jquery.ui/jquery.ui.js,jquery.ui/i18n/' . Yii::$app->language . '.js,jquery.plugins/jquery.validate.js,dialog/dialog.js,mlselection.js,user.js,jquery.plugins/jquery.form.js,inline_edit.js',
 				'style' =>  'jquery.ui/themes/smoothness/jquery.ui.css,dialog/dialog.css'
 			]);
 			
@@ -122,7 +122,7 @@ class OrderbyhhController extends \common\controllers\BaseUserController
 		
 	}
 	/**
-	 * 修改订单地址信息
+	 * 创建年结单用户
 	 */
 	public function actionCuser()
 	{
@@ -178,7 +178,31 @@ class OrderbyhhController extends \common\controllers\BaseUserController
 		}
 	}
 	
-	
+	/**
+	 * 修改订单信息
+	 */
+	public function actionEditcol()
+	{
+		$get = Basewind::trimAll(Yii::$app->request->get(), true);
+	 
+		if(in_array(Yii::$app->user->id,Yii::$app->params['createRights'])){//权限判断[START]JchengCustom
+			if(in_array($get->column, ['order_amount'])) {
+				$params = (object) array();
+				$params->order_id = $get->id;
+ 				$params->{$get->column} = $get->value;
+				$model = new \frontend\models\Seller_orderAdjustfeeForm(['store_id' => $this->visitor['store_id']]);
+				if(!($orderInfo = $model->formData($params))) {		
+					return Message::warning($model->errors);
+				}
+			}
+			if(!$model->submit($params, $orderInfo)) {
+				return Message::popWarning($model->errors);
+			}
+			return Message::display(Language::get('edit_ok'));
+		}else{
+			return Message::popWarning("权限不够");
+		}
+	}
 	
 	public function actionView()
 	{
