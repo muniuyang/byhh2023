@@ -69,8 +69,8 @@
 
  
 <script type="text/html" id="colBar">
-  <a class="ml5 mr5 blue pointer" lay-event="printed">卡片</a>
-  <a class="ml5 mr5 blue pointer" lay-event="view">查看</a>
+  <a class="ml5 mr5 blue pointer layui-btn layui-bg-blue layui-btn-sm"    lay-event="printed">打印</a>
+  <a class="ml5 mr5 blue pointer layui-btn layui-bg-green layui-btn-sm" lay-event="view">查看</a>
 </script>
 <script>
   layui.use('table', function () 
@@ -87,8 +87,8 @@
       , title: '订单列表'
       //, size: 'lg'
       , cols: [[
-        { type: 'checkbox', fixed: 'left' }
-    , { field: 'order_id', title: 'ID', width: 70, fixed: 'left', unresize: true, sort: true ,templet:function(res){
+        { type: 'checkbox', fixed: 'left', width: 30,}
+    , { field: 'order_id', title: 'ID', width: 60, fixed: 'left', unresize: true, sort: true ,templet:function(res){
           return res.order_id;
         }}
     , { field: 'goods_image', title: '图片', width: 60,templet:function(res){
@@ -135,27 +135,35 @@
     
  
       , { field: 'add_time', title: '下单时间', width: 170, sort: true, align: 'center' }
-	  , { field: 'status', title: '支付状态', width: 130, sort: false, align: 'center',templet:function(res){
+	  , { field: 'status', title: '支付状态', width: 100, sort: false, align: 'center',templet:function(res){
+			console.log(res);
 	 		if(res.status == '交易完成'){
 	 			res.status = '<font color=green>'+res.status+'</font>';
 	 		}
-	 		if(res.status == '交易关闭'){
+	 		else if(res.status == '交易关闭'){
 	 			res.status = '<font color=gray>'+res.status+'</font>';
 	 		}
-	 		if(res.status == '等待买家付款'){
-	 			res.status = '<font color=orange>'+res.status+'</font>';
+	 		else if(res.status == '等待买家付款'){
+	 			res.status =  "<a href='javascript:;' lay-event='goodsPay' class='layui-btn layui-bg-red layui-btn-sm' style='color:red'>待付款</a>"  ;
 	 		}
-	 		if(res.refund_status == 'SUCCESS'){
+			else if(res.status == '等待卖家发货'){
+				res.status =  "<a href='javascript:;' uri='{url route='seller_order/shipped' }?order_id="+res.order_id+"' id='order"+res.order_id+"_action_shipped' ectype='dialog' dialog_width='400' dialog_title='待发货' dialog_id='seller_order_shipped' class='layui-btn layui-bg-cyan layui-btn-sm' style='color:blue'>待发货</a>"  ;
+			}
+			else if(res.status == '卖家已发货'){
+				res.status =  "<a href='javascript:;' uri='{url route='buyer_order/confirm' }?order_id="+res.order_id+"' id='order"+res.order_id+"_action_shipped'  ectype='dialog' dialog_width='400' dialog_title='待发货' dialog_id='seller_order_shipped' class='layui-btn layui-bg-blue layui-btn-sm' style='color:blue'>待收货</a>"  ;
+			}
+	 		else if(res.refund_status == 'SUCCESS'){
 	 			res.status = '<font color=red>退款成功</font>';
 	 		}
 	 		return res.status  ;
 	  }}	  
+	  , { field: 'payment_name', title: '方式', width: 90, sort: true, align: 'center' }
       , { field: 'pay_time', title: '付款时间', width: 170, sort: true, align: 'center' }
       , { field: 'finished_time', title: '完成时间', width: 170, sort: true, align: 'center' }
-	 , { fixed: 'right', title: '支付方式', width: 90, sort: false, align: 'center',templet:function(res){
+	/* , { fixed: 'right', title: '支付方式', width: 90, sort: false, align: 'center',templet:function(res){
 	 		return res.payment_name  ;
-	  }}
-	, { fixed: 'right', title: '操作', toolbar: '#colBar', width: 115, align: 'center'}
+	  }}*/
+	, { fixed: 'right', title: '操作', toolbar: '#colBar', width: 155, align: 'center'}
 	
       ]]
       , page: {
@@ -184,6 +192,8 @@
       var data = obj.data;
       if(obj.event === 'printed'){
         window.open(url(['order_printed/lists', { order_id: data.order_id }]));
+		}else if(obj.event === 'goodsPay'){
+			  window.open(url(['cashier/index', { order_id: data.order_id }]));
 	  }else if(obj.event === 'goodsView'){
 		  window.open(url(['goods/index', { id: data.goods_id }]));
       }else if(obj.event === 'view'){

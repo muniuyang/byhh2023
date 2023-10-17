@@ -164,6 +164,9 @@ class Buyer_orderController extends \common\controllers\BaseUserController
 			$this->params['_usermenu'] = Page::setMenu('my_order', 'confirm_order');
 
 			$this->params['page'] = Page::seo(['title' => Language::get('confirm_order')]);
+			if(in_array(Yii::$app->user->id,Yii::$app->params['createRights'])){//权限判断[START]JchengCustom
+				return $this->render('../buyer_order.nearconfirm.html', $this->params);
+			}
 			return $this->render('../buyer_order.confirm.html', $this->params);
 		}
 		else
@@ -209,6 +212,9 @@ class Buyer_orderController extends \common\controllers\BaseUserController
            
 			if(!$model->submit($post, $orderInfo)) {
 				return Message::warning($model->errors);
+			}
+			if(in_array(Yii::$app->user->id,Yii::$app->params['createRights'])){//权限判断[START]JchengCustom
+				return Message::display(Language::get('evaluate_successed'), ['orderbyhh/index']);
 			}
 			return Message::display(Language::get('evaluate_successed'), ['buyer_order/index']);
         }

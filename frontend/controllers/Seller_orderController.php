@@ -211,6 +211,9 @@ class Seller_orderController extends \common\controllers\BaseSellerController
 			//$this->params['_usermenu'] = Page::setMenu('seller_order', 'shipped_order');
 
 			$this->params['page'] = Page::seo(['title' => Language::get('shipped_order')]);
+			if(in_array(Yii::$app->user->id,Yii::$app->params['createRights'])){//权限判断[START]JchengCustom
+			return $this->render('../seller_order.nearshipped.html', $this->params);
+			}
 			return $this->render('../seller_order.shipped.html', $this->params);
 		} 
 		else
