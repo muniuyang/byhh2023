@@ -96,21 +96,21 @@
 			}}
 		, { field: 'goods_name', title: '标题(*款式*)', width: 250 ,templet:function(res){
 			if(res.what_day == '生日'){
-				return "<i class='layui-icon layui-icon-gift' style='color:#FF8800;'></i> <a href='javascript:;' lay-event='goodsView'>"+res.goods_name+"</a>";
+				return "<i class='layui-icon layui-icon-gift' style='color:#FF8800;'></i> <a href='javascript:;' lay-event='goodsView'>"+res.goods_name+"("+res.quantity+")</a>";
 			}else if(res.what_day == '开业'){
-				return "<i class='layui-icon layui-icon-tree' style='color:#00AA00;'></i> <a href='javascript:;' lay-event='goodsView'>"+res.goods_name+"</a>"
+				return "<i class='layui-icon layui-icon-tree' style='color:#00AA00;'></i> <a href='javascript:;' lay-event='goodsView'>"+res.goods_name+"("+res.quantity+")</a>"
 			}else if(res.what_day == '七夕'){
-				return  "<a href='javascript:;' lay-event='goodsView'>"+res.goods_name+"</a>"
+				return  "<a href='javascript:;' lay-event='goodsView'>"+res.goods_name+"("+res.quantity+")</a>"
 			}else if(res.what_day == '情人节'){
-				return  "<a href='javascript:;' lay-event='goodsView'>"+res.goods_name+"</a>"
+				return  "<a href='javascript:;' lay-event='goodsView'>"+res.goods_name+"("+res.quantity+")</a>"
 			}else if(res.what_day == '结婚'){
-				return  "<a href='javascript:;' lay-event='goodsView'>"+res.goods_name+"</a>"
+				return  "<a href='javascript:;' lay-event='goodsView'>"+res.goods_name+"("+res.quantity+")</a>"
 			}else if(res.what_day == '结婚纪念日'){
-				return  "<a href='javascript:;' lay-event='goodsView'>"+res.goods_name+"</a>"
+				return  "<a href='javascript:;' lay-event='goodsView'>"+res.goods_name+"("+res.quantity+")</a>"
 			}else if(res.what_day == '三八妇女节'){
-				return  "<a href='javascript:;' lay-event='goodsView'>"+res.goods_name+"</a>"
+				return  "<a href='javascript:;' lay-event='goodsView'>"+res.goods_name+"("+res.quantity+")</a>"
 			}else{
-				return "<i class='layui-icon layui-icon-help' style='color:#00aaff;'></i> <a href='javascript:;' lay-event='goodsView'>"+res.goods_name+"</a>"
+				return "<i class='layui-icon layui-icon-help' style='color:#00aaff;'></i> <a href='javascript:;' lay-event='goodsView'>"+res.goods_name+"("+res.quantity+")</a>"
 			}
 		}}
     , { field: 'store_name', title: '店名', width: 90 }
