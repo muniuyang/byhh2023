@@ -124,16 +124,18 @@ class UserController extends \common\controllers\BaseUserController
         }
 		//var_dump($_SERVER['HTTP_USER_AGENT']);
 		 /**********************[START]JchengCustom with local**********************/
-		/*$browserName = Basewind::browserName();
+		$browserName = Basewind::browserName();
+		//var_dump($browserName);
 		if($browserName == 'Firefox'){//权限判断[START]JchengCustom	
-			$this->params['loginName'] = '博艺花卉';
+			$this->params['loginName'] = '系统管理员';
 		}else if($browserName == 'QQ'){
-			$this->params['loginName'] = '散单零售';
-		}else if($browserName == 'Chrome'){
 			$this->params['loginName'] = '开业零售';
+		}else if($browserName == 'Chrome'){
+			$this->params['loginName'] = '博艺花卉';
 		}else if($browserName == 'MSIE'){
 			$this->params['loginName'] = '散单零售';
-		}*/
+		}
+		/*
 		$post = Basewind::trimAll(Yii::$app->request->get(), true, []);
 
 		//var_dump($post);die;
@@ -146,6 +148,7 @@ class UserController extends \common\controllers\BaseUserController
 		}else{
 			$this->params['loginName'] = 'admin';
 		}
+		*/
 		/**********************[END]JchengCustom with local**********************/
 		
 		
