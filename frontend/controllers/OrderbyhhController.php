@@ -178,7 +178,7 @@ class OrderbyhhController extends \common\controllers\BaseUserController
 		}
 	}
 	/**
-	 * 创建年结单用户
+	 * 创建收货用户地址
 	 */
 	public function actionCaddress()
 	{
@@ -192,6 +192,13 @@ class OrderbyhhController extends \common\controllers\BaseUserController
 			return $this->render('../order.byhhaddressform.html', $this->params);
 		}else{
 			$post = Basewind::trimAll(Yii::$app->request->post(), true);
+			if(!$post->consignee){
+				return Message::popWarning("请输入收货人!");
+			}
+			if(!$post->address){
+				return Message::popWarning("请输入详细地址!");
+			}
+
 			if(in_array(Yii::$app->user->id,Yii::$app->params['createRights'])){//权限判断[START]JchengCustom
 				$addressServ = \common\models\AddressServModel::find()->select('consignee,address')
 				->where(['and',['=', 'consignee', $post->consignee],['=', 'address', $post->address]]);
@@ -310,7 +317,9 @@ class OrderbyhhController extends \common\controllers\BaseUserController
 		else
 		{
 			$post = Basewind::trimAll(Yii::$app->request->post(), true, ['order_id']);
-			
+			if(!$post->goods_id){
+				return Message::popWarning("请输入商品ID!");
+			}
 			$orderOldGood =\common\models\OrderGoodsModel::find()->where(['order_id' => $post->order_id]);
 			//var_dump($orderOldGood->createCommand()->getRawSql());die;
 			$orderOldGood = $orderOldGood->one();
