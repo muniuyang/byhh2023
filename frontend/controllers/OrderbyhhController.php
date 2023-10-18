@@ -131,6 +131,9 @@ class OrderbyhhController extends \common\controllers\BaseUserController
 			$post = Basewind::trimAll(Yii::$app->request->get(), true);
 			$this->params['action'] = Url::toRoute(['orderbyhh/extro', 'from' => 'cuser']);
 			$redirect = Url::toRoute(['orderbyhh/index']);
+			$this->params['regions'] = \common\models\RegionModel::find()->select('region_name')->where(['parent_id' => 0, 'if_show' => 1])->indexBy('region_id')->column();
+
+			$this->params['address'] = ['defaddr'=>1,'region_id'=>'284','region_name'=>'湖北省 武汉'];
 			$this->params = array_merge($this->params, ['redirect' => $redirect]);
 			return $this->render('../order.byhhuserform.html', $this->params);
 		}else{
@@ -164,13 +167,32 @@ class OrderbyhhController extends \common\controllers\BaseUserController
 					}
 				}
 				//var_dump($post);die;
-				if($post->utype==1) {
+				if($post->utype==1) {//年结用户
 					$ubmodel = new \common\models\UserBillModel();
 					$ubmodel->userid = $user->userid;
 					if(!$ubmodel->save()) {
 						return Message::popWarning($ubmodel->errors);
 					}
 				}
+				if($post->address){
+					$post->consignee = $post->username;
+					$addressServ = \common\models\AddressServModel::find()->select('consignee,address')
+					->where(['and',['=', 'consignee', $post->consignee],['=', 'address', $post->address]]);
+					//var_dump($addressServ->createCommand()->getRawSql());
+					$oneRecord = $addressServ->asArray()->one();
+					if(empty($oneRecord)){
+						$addressServ = new \common\models\AddressServModel();
+						$addressServ->consignee = $post->consignee;
+						$addressServ->region_id = $post->region_id;
+						$addressServ->region_name = $post->region_name;
+						$addressServ->address = $post->address;
+						$addressServ->zipcode = $post->zipcode;
+						$addressServ->phone_mob = $post->phone_mob;
+						$addressServ->save();
+					}
+				}
+
+
 			}else{
 				return Message::popWarning("权限不够");
 			}
@@ -187,6 +209,8 @@ class OrderbyhhController extends \common\controllers\BaseUserController
 			$post = Basewind::trimAll(Yii::$app->request->get(), true);
 			$this->params['action'] = Url::toRoute(['orderbyhh/caddress', 'from' => 'address']);
 			$redirect = Url::toRoute(['orderbyhh/index']);
+			$this->params['regions'] = \common\models\RegionModel::find()->select('region_name')->where(['parent_id' => 0, 'if_show' => 1])->indexBy('region_id')->column();
+
 			$this->params['address'] = ['defaddr'=>1,'region_id'=>'284','region_name'=>'湖北省 武汉'];
 			$this->params = array_merge($this->params, ['redirect' => $redirect]);
 			return $this->render('../order.byhhaddressform.html', $this->params);
