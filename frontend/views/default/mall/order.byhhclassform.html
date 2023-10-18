@@ -1,0 +1,50 @@
+	<link href="{res file='css/user.css'}" rel="stylesheet" type="text/css" />
+
+<div class="eject_con">
+  <div class="add">
+    <div id="warning"></div>
+    <form method="post" action="{$action}" id="address_form" target="iframe">
+      <ul>
+		<li>
+		  <h3>&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;纪念日:</h3>
+		  <p style="line-height: 24px;">
+			  <select class="querySelect" name="what_day">
+				<option value="">--选择纪念日--</option>
+				{html_options  values=$whatdays output=$whatdays selected=$orderExt.what_day}
+			  </select>
+		  </p>
+		</li>
+		</ul>
+      <div class="submit">
+      	<input type="hidden" name="redirect" value="{$redirect}" />
+		<input type="hidden" name="order_id" value="{$order_id}" />
+		<input type="hidden" name="from" value="{$from}" />
+        <input type="submit" class="btn" value="{$lang.submit}" />
+      </div>
+    </form>
+  </div>
+</div>
+<script type="text/javascript">
+  var defaultUser = "{$defaultUser['real_name']}";
+$(function(){
+    regionInit("region");
+    $('.default-user').click(function(){
+        $('.subscriber').val($(this).val())
+    })
+	$('.B_Consignee .I_Consignee').change(function(){
+ 
+		$.getJSON("{url route='orderbyhh/search'}", { 'keyword' : $('.I_Consignee').val()}, function(data) {
+			html = '';
+			if(data.code == 0 && data.count>0) {
+				$('.I_Address').val(data.data[0].address);
+				$.each(data.data,function(i, item){	
+					html += '<li style="width:538px;padding: 10px 0 0;color:#FF8800;">[地址]('+(i+1)+'): <span>'+item.address+'</span></li>';
+				});
+				$('.I_Consignee_list').html("<ul style='width:538px;'>"+html+"</ul>");
+			}else{
+				$('.I_Consignee_list').html("");
+			}
+		});
+	}); 
+});
+</script>

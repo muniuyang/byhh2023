@@ -177,9 +177,97 @@ class OrderbyhhController extends \common\controllers\BaseUserController
 			return Message::popSuccess("添加成功", urldecode(Yii::$app->request->post('redirect', Url::toRoute('orderbyhh/index'))));
 		}
 	}
-	
 	/**
-	 * 修改订单信息
+	 * 创建年结单用户
+	 */
+	public function actionCaddress()
+	{
+		if(!Yii::$app->request->isPost)
+		{
+			$post = Basewind::trimAll(Yii::$app->request->get(), true);
+			$this->params['action'] = Url::toRoute(['orderbyhh/caddress', 'from' => 'address']);
+			$redirect = Url::toRoute(['orderbyhh/index']);
+			$this->params['address'] = ['defaddr'=>1,'region_id'=>'284','region_name'=>'湖北省 武汉'];
+			$this->params = array_merge($this->params, ['redirect' => $redirect]);
+			return $this->render('../order.byhhaddressform.html', $this->params);
+		}else{
+			$post = Basewind::trimAll(Yii::$app->request->post(), true);
+			if(in_array(Yii::$app->user->id,Yii::$app->params['createRights'])){//权限判断[START]JchengCustom
+				$addressServ = \common\models\AddressServModel::find()->select('consignee,address')
+				->where(['and',['=', 'consignee', $post->consignee],['=', 'address', $post->address]]);
+				//var_dump($addressServ->createCommand()->getRawSql());
+				$oneRecord = $addressServ->asArray()->one();
+				if(empty($oneRecord)){
+					$addressServ = new \common\models\AddressServModel();
+					$addressServ->consignee = $post->consignee;
+					$addressServ->region_id = $post->region_id;
+					$addressServ->region_name = $post->region_name;
+					$addressServ->address = $post->address;
+					$addressServ->zipcode = $post->zipcode;
+					$addressServ->phone_mob = $post->phone_mob;
+					$addressServ->save();
+				 }else{
+					 
+				 }
+			}else{
+				return Message::popWarning("权限不够");
+			}
+			return Message::popSuccess("添加成功", urldecode(Yii::$app->request->post('redirect', Url::toRoute('orderbyhh/index'))));
+		}
+	}
+	/**
+	 * 创建年结单用户
+	 */
+	public function actionSearch()
+	{
+		/**********************[END]JchengCustom with local**********************/
+		if(!Yii::$app->request->isAjax)
+		{
+			 
+			 
+		}
+		else
+		{
+			$post = Basewind::trimAll(Yii::$app->request->get(), true);
+			//$query = OrderExtmModel::find()->select('address')->where(['like', 'consignee', $post->keyword])->orderBy(['order_id' => SORT_DESC]);
+			$query = \common\models\AddressServModel::find()->select('address')->where(['like', 'consignee', $post->keyword])->orderBy(['sid' => SORT_DESC]);
+			$list = $query->asArray()->all();
+			return Json::encode(['code' => 0, 'msg' => '', 'count' => $query->count(), 'data' => $list]);
+		}
+	}	
+	/**
+	 * 修改分类
+	 */
+	public function actionClass()
+	{
+		/**********************[END]JchengCustom with local**********************/
+		if(!Yii::$app->request->isPost)
+		{
+			$post = Basewind::trimAll(Yii::$app->request->get(), true);
+			$this->params['action'] = Url::toRoute(['orderbyhh/class', 'order_id' => $post->order_id, 'from' => 'class']);
+			$redirect = Url::toRoute(['orderbyhh/index']);
+			$this->params['whatdays'] = ['生日','七夕','情人节','三八妇女节','结婚','结婚纪念日','开业'];
+			$this->params['orderExt'] = \common\models\OrderExtmModel::find()->where(['order_id' => $post->order_id])->one();
+			
+			$this->params = array_merge($this->params, ['redirect' => $redirect,'order_id' => $post->order_id]);
+			return $this->render('../order.byhhclassform.html', $this->params);	 	 
+		}
+		else
+		{
+			$post = Basewind::trimAll(Yii::$app->request->post(), true, ['order_id']);
+			$orderExt =\common\models\OrderExtmModel::find()->where(['order_id' => $post->order_id]);
+			//var_dump($orderExt->createCommand()->getRawSql());die;
+			$orderExt = $orderExt->one();
+			//var_dump($orderExt);die;
+			$orderExt->what_day = $post->what_day;
+			if(!$orderExt->save()) {
+				return Message::popWarning($orderExt->errors);
+			}
+			return Message::popSuccess("编辑成功", urldecode(Yii::$app->request->post('redirect', Url::toRoute('orderbyhh/index'))));
+		}
+	}	
+	/**
+	 * 修改订单价格
 	 */
 	public function actionEditcol()
 	{
@@ -203,7 +291,54 @@ class OrderbyhhController extends \common\controllers\BaseUserController
 			return Message::popWarning("权限不够");
 		}
 	}
-	
+	/**
+	 * 修改订单商品信息
+	 */
+	public function actionEditgood()
+	{
+		/**********************[END]JchengCustom with local**********************/
+		if(!Yii::$app->request->isPost)
+		{
+			$post = Basewind::trimAll(Yii::$app->request->get(), true);
+			$this->params['action'] = Url::toRoute(['orderbyhh/editgood', 'order_id' => $post->order_id, 'from' => 'class']);
+			$redirect = Url::toRoute(['orderbyhh/index']);
+			$this->params['orderExt'] = \common\models\OrderGoodsModel::find()->where(['order_id' => $post->order_id])->one();
+			//var_dump($this->params['orderExt']);die;
+			$this->params = array_merge($this->params, ['redirect' => $redirect,'order_id' => $post->order_id]);
+			return $this->render('../order.byhhgoodform.html', $this->params);	 	 
+		}
+		else
+		{
+			$post = Basewind::trimAll(Yii::$app->request->post(), true, ['order_id']);
+			
+			$orderOldGood =\common\models\OrderGoodsModel::find()->where(['order_id' => $post->order_id]);
+			//var_dump($orderOldGood->createCommand()->getRawSql());die;
+			$orderOldGood = $orderOldGood->one();
+			
+			$goods =\common\models\GoodsModel::find()->where(['goods_id' => $post->goods_id]);
+			//var_dump($goods->createCommand()->getRawSql());die;
+			$goods = $goods->one();
+
+			$orderGood =\common\models\OrderGoodsModel::find()->where(['order_id' => $orderOldGood->order_id,'goods_id' => $orderOldGood->goods_id]);
+			//var_dump($orderGood->createCommand()->getRawSql());die;
+			$orderGood = $orderGood->one();
+			//var_dump($orderGood);die;
+			
+			$orderGood->goods_id   	 = $goods->goods_id;
+			$orderGood->goods_name   = $goods->goods_name;
+			$orderGood->price = $goods->price;
+			$orderGood->goods_image  = $goods->default_image ? $goods->default_image :'/data/system/default_goods_image.jpg';
+			if(!$orderGood->save()) {
+				return Message::popWarning($orderGood->errors);
+			}
+            $order = \common\models\OrderModel::find()->where(['order_id' => $post->order_id])->one();
+			$order->goods_amount = $goods->price;
+			if(!$order->save()) {
+				return Message::popWarning($order->errors);
+			}
+			return Message::popSuccess("编辑成功", urldecode(Yii::$app->request->post('redirect', Url::toRoute('orderbyhh/index'))));
+		}
+	}
 	public function actionView()
 	{
 		$post = Basewind::trimAll(Yii::$app->request->get(), true, ['id']);

@@ -63,6 +63,8 @@
 	  <button class="layui-btn layui-btn-primary layui-bg-blue" lay-event="export"><i class="layui-icon layui-icon-export"></i>导出数据</button>
 	<a class="layui-btn layui-btn-primary layui-bg-orange" href="javascript:;" uri="{url route='orderbyhh/cuser'}" dialog_width="450" dialog_title="创建用户" ectype="dialog"
 	dialog_id="seller_order_adjust_fee" id="order{$order.orderExtm.order_id}_action_adjust_fee" ><i class="layui-icon layui-icon-username"></i>创建用户</a> 
+	<a class="layui-btn layui-btn-primary layui-bg-green" href="javascript:;" uri="{url route='orderbyhh/caddress'}" dialog_width="600" dialog_title="创建地址" ectype="dialog"
+	dialog_id="seller_order_adjust_fee" id="order{$order.orderExtm.order_id}_action_address" ><i class="layui-icon layui-icon-location"></i>创建地址</a>
 	</div>
 	</div>
 </script>
@@ -78,88 +80,85 @@
     var table = layui.table;
 
     table.render({
-      elem: '#tablegrid'
-      //,skin: 'line'
-      , url: url(['orderbyhh/index', $("#formSearch").serializeJson()])
-      , toolbar: '#toolbar'
-	  ,limit:14
-      , defaultToolbar: ['filter', /*'exports',*/ 'print']
-      , title: '订单列表'
-      //, size: 'lg'
-      , cols: [[
-        { type: 'checkbox', fixed: 'left', width: 30,}
+	elem: '#tablegrid'
+	//,skin: 'line'
+	, url: url(['orderbyhh/index', $("#formSearch").serializeJson()])
+	, toolbar: '#toolbar'
+	,limit:14
+	, defaultToolbar: ['filter', /*'exports',*/ 'print']
+	, title: '订单列表'
+	//, size: 'lg'
+	, cols: [[
+	{ type: 'checkbox', fixed: 'left', width: 30,}
     , { field: 'order_id', title: 'ID', width: 60, fixed: 'left', unresize: true, sort: true ,templet:function(res){
-          return res.order_id;
+          return "<i uri='{url route='orderbyhh/editgood' }?order_id="+res.order_id+"' id='order"+res.order_id+"_action_upgood' dialog_id='seller_order_upgood'  ectype='dialog' dialog_width='450' dialog_title='变更订单商品'  style='cursor: pointer;color:#FF8800;' lay-event='goodsUpdate'>"+res.order_id+"</i>";
         }}
     , { field: 'goods_image', title: '图片', width: 60,templet:function(res){
 				return '<img src='+res.goods_image+' style="with:60px;"/>' ;
 			}}
-		, { field: 'goods_name', title: '标题(*款式*)', width: 250 ,templet:function(res){
-			if(res.what_day == '生日'){
-				return "<i class='layui-icon layui-icon-gift' style='color:#FF8800;'></i> <a href='javascript:;' lay-event='goodsView'>"+res.goods_name+"("+res.quantity+")</a>";
-			}else if(res.what_day == '开业'){
-				return "<i class='layui-icon layui-icon-tree' style='color:#00AA00;'></i> <a href='javascript:;' lay-event='goodsView'>"+res.goods_name+"("+res.quantity+")</a>"
-			}else if(res.what_day == '七夕'){
-				return  "<a href='javascript:;' lay-event='goodsView'>"+res.goods_name+"("+res.quantity+")</a>"
-			}else if(res.what_day == '情人节'){
-				return  "<a href='javascript:;' lay-event='goodsView'>"+res.goods_name+"("+res.quantity+")</a>"
-			}else if(res.what_day == '结婚'){
-				return  "<a href='javascript:;' lay-event='goodsView'>"+res.goods_name+"("+res.quantity+")</a>"
-			}else if(res.what_day == '结婚纪念日'){
-				return  "<a href='javascript:;' lay-event='goodsView'>"+res.goods_name+"("+res.quantity+")</a>"
-			}else if(res.what_day == '三八妇女节'){
-				return  "<a href='javascript:;' lay-event='goodsView'>"+res.goods_name+"("+res.quantity+")</a>"
-			}else{
-				return "<i class='layui-icon layui-icon-help' style='color:#00aaff;'></i> <a href='javascript:;' lay-event='goodsView'>"+res.goods_name+"("+res.quantity+")</a>"
-			}
-		}}
-    , { field: 'store_name', title: '店名', width: 90 }
-    , { field: 'consignee', title: '收货人(*收花人*)', width: 110 ,align: 'left',style:'color: #FF8800;',templet:function(res){
-				return "<em class='layui-icon layui-icon-dialogue consignee' lay-event='viewContent'    style='color:#00aaff;'></em>"+res.consignee;//+'('+res.buyer_name+')' ;
-			}}
-		, { field: 'address', title: '收货地址', width: 170 ,align: 'center',style:'color: #FF8800;'}
-		, { field: 'signature', title: '签名落款', width: 140 ,align: 'center',style:'color: #FF8800;'}
-		, { field: 'real_name', title: '买货人(*订花人*)', width: 140 ,align: 'center',style:'color: #00AA00;',templet:function(res){
-				return res.real_name;//+'('+res.buyer_name+')' ;
-			}}
-		, { field: 'goods_amount', title: '售价', width: 100, sort: true, align: 'center' ,templet:function(res){
+	, { field: 'goods_name', title: '标题(*款式*)', width: 250 ,templet:function(res){
+		if(res.what_day == '生日'){
+			return "<i uri='{url route='orderbyhh/class' }?order_id="+res.order_id+"' id='order"+res.order_id+"_action_whatday' dialog_id='seller_order_whatday'  ectype='dialog' dialog_width='400' dialog_title='纪念日' class='layui-icon layui-icon-gift' style='cursor: pointer;color:#FF8800;' lay-event='goodsClass'></i> <a href='javascript:;' lay-event='goodsView'>"+res.goods_name+"("+res.quantity+")</a>";
+		}else if(res.what_day == '开业'){
+			return "<i uri='{url route='orderbyhh/class' }?order_id="+res.order_id+"' id='order"+res.order_id+"_action_whatday' dialog_id='seller_order_whatday'  ectype='dialog' dialog_width='400' dialog_title='纪念日' class='layui-icon layui-icon-tree' style='cursor: pointer;color:#00AA00;' lay-event='goodsClass'></i> <a href='javascript:;' lay-event='goodsView'>"+res.goods_name+"("+res.quantity+")</a>"
+		}else if(res.what_day == '七夕'){
+			return  "<a href='javascript:;' lay-event='goodsView'>"+res.goods_name+"("+res.quantity+")</a>"
+		}else if(res.what_day == '情人节'){
+			return  "<a href='javascript:;' lay-event='goodsView'>"+res.goods_name+"("+res.quantity+")</a>"
+		}else if(res.what_day == '结婚'){
+			return  "<a href='javascript:;' lay-event='goodsView'>"+res.goods_name+"("+res.quantity+")</a>"
+		}else if(res.what_day == '结婚纪念日'){
+			return  "<a href='javascript:;' lay-event='goodsView'>"+res.goods_name+"("+res.quantity+")</a>"
+		}else if(res.what_day == '三八妇女节'){
+			return  "<a href='javascript:;' lay-event='goodsView'>"+res.goods_name+"("+res.quantity+")</a>"
+		}else{
+			return "<i uri='{url route='orderbyhh/class' }?order_id="+res.order_id+"' id='order"+res.order_id+"_action_whatday' dialog_id='seller_order_whatday'  ectype='dialog' dialog_width='400' dialog_title='纪念日' class='layui-icon layui-icon-help' style='cursor: pointer;color:#00aaff;' lay-event='goodsClass'></i> <a href='javascript:;' lay-event='goodsView'>"+res.goods_name+"("+res.quantity+")</a>"
+		}
+	}}
+	, { field: 'store_name', title: '店名', width: 90 }
+	, { field: 'consignee', title: '收货人(*收花人*)', width: 110 ,align: 'left',style:'color: #FF8800;',templet:function(res){
+		return "<em class='layui-icon layui-icon-dialogue consignee' lay-event='viewContent'    style='color:#00aaff;'></em>"+res.consignee;//+'('+res.buyer_name+')' ;
+	}}
+	, { field: 'address', title: '收货地址', width: 170 ,align: 'center',style:'color: #FF8800;'}
+	, { field: 'signature', title: '签名落款', width: 140 ,align: 'center',style:'color: #FF8800;'}
+	, { field: 'real_name', title: '买货人(*订花人*)', width: 140 ,align: 'center',style:'color: #00AA00;',templet:function(res){
+		return res.real_name;//+'('+res.buyer_name+')' ;
+	}}
+	, { field: 'goods_amount', title: '售价', width: 100, sort: true, align: 'center' ,templet:function(res){
 		return "<span style=' text-decoration: line-through;color:red;'>"+res.goods_amount+"</span>"
 	} }
-		, { field: 'shipping_fee', title: '运送费', width: 100, sort: true, align: 'center' ,templet:function(res){
+	, { field: 'shipping_fee', title: '运送费', width: 100, sort: true, align: 'center' ,templet:function(res){
 		return "<span style=' text-decoration: line-through;color:red;'>"+res.shipping_fee+"</span>"
 	} }
 	, { field: 'order_amount', title: '金额', width: 100, sort: true, align: 'center',templet:function(res){
 		return "<span style='color:#00AA00;' controller='orderbyhh' fieldid='"+res.order_id+"' fieldname='order_amount'  ectype='inline_edit' >"+res.order_amount+"</span>"
 	} }
-	
-    
- 
-      , { field: 'add_time', title: '下单时间', width: 170, sort: true, align: 'center' }
-	  , { field: 'status', title: '支付状态', width: 100, sort: false, align: 'center',templet:function(res){
-			console.log(res);
-	 		if(res.status == '交易完成'){
-	 			res.status = '<font color=green>'+res.status+'</font>';
-	 		}
-	 		else if(res.status == '交易关闭'){
-	 			res.status = '<font color=gray>'+res.status+'</font>';
-	 		}
-	 		else if(res.status == '等待买家付款'){
-	 			res.status =  "<a href='javascript:;' lay-event='goodsPay' class='layui-btn layui-bg-red layui-btn-sm' style='color:red'>待付款</a>"  ;
-	 		}
-			else if(res.status == '等待卖家发货'){
-				res.status =  "<a href='javascript:;' uri='{url route='seller_order/shipped' }?order_id="+res.order_id+"' id='order"+res.order_id+"_action_shipped' ectype='dialog' dialog_width='400' dialog_title='待发货' dialog_id='seller_order_shipped' class='layui-btn layui-bg-cyan layui-btn-sm' style='color:blue'>待发货</a>"  ;
-			}
-			else if(res.status == '卖家已发货'){
-				res.status =  "<a href='javascript:;' uri='{url route='buyer_order/confirm' }?order_id="+res.order_id+"' id='order"+res.order_id+"_action_shipped'  ectype='dialog' dialog_width='400' dialog_title='待发货' dialog_id='seller_order_shipped' class='layui-btn layui-bg-blue layui-btn-sm' style='color:blue'>待收货</a>"  ;
-			}
-	 		else if(res.refund_status == 'SUCCESS'){
-	 			res.status = '<font color=red>退款成功</font>';
-	 		}
-	 		return res.status  ;
-	  }}	  
-	  , { field: 'payment_name', title: '方式', width: 90, sort: true, align: 'center' }
-      , { field: 'pay_time', title: '付款时间', width: 170, sort: true, align: 'center' }
-      , { field: 'finished_time', title: '完成时间', width: 170, sort: true, align: 'center' }
+	, { field: 'add_time', title: '下单时间', width: 170, sort: true, align: 'center' }
+	, { field: 'status', title: '支付状态', width: 100, sort: false, align: 'center',templet:function(res){
+		//console.log(res);
+		if(res.status == '交易完成'){
+			res.status = '<font color=green>'+res.status+'</font>';
+		}
+		else if(res.status == '交易关闭'){
+			res.status = '<font color=gray>'+res.status+'</font>';
+		}
+		else if(res.status == '等待买家付款'){
+			res.status =  "<a href='javascript:;' lay-event='goodsPay' class='layui-btn layui-bg-red layui-btn-sm' style='color:red'>待付款</a>"  ;
+		}
+		else if(res.status == '等待卖家发货'){
+			res.status =  "<a href='javascript:;' uri='{url route='seller_order/shipped' }?order_id="+res.order_id+"' id='order"+res.order_id+"_action_shipped' ectype='dialog' dialog_width='400' dialog_title='待发货' dialog_id='seller_order_shipped' class='layui-btn layui-bg-cyan layui-btn-sm' style='color:blue'>待发货</a>"  ;
+		}
+		else if(res.status == '卖家已发货'){
+			res.status =  "<a href='javascript:;' uri='{url route='buyer_order/confirm' }?order_id="+res.order_id+"' id='order"+res.order_id+"_action_shipped'  ectype='dialog' dialog_width='400' dialog_title='待发货' dialog_id='seller_order_shipped' class='layui-btn layui-bg-blue layui-btn-sm' style='color:blue'>待收货</a>"  ;
+		}
+		else if(res.refund_status == 'SUCCESS'){
+			res.status = '<font color=red>退款成功</font>';
+		}
+		return res.status  ;
+	}}	  
+	, { field: 'payment_name', title: '方式', width: 90, sort: true, align: 'center' }
+	, { field: 'pay_time', title: '付款时间', width: 170, sort: true, align: 'center' }
+	, { field: 'finished_time', title: '完成时间', width: 170, sort: true, align: 'center' }
 	/* , { fixed: 'right', title: '支付方式', width: 90, sort: false, align: 'center',templet:function(res){
 	 		return res.payment_name  ;
 	  }}*/
@@ -189,26 +188,27 @@
 
     //监听行工具事件
     table.on('tool(tablegrid)', function (obj) {
-      var data = obj.data;
-      if(obj.event === 'printed'){
-        window.open(url(['order_printed/lists', { order_id: data.order_id }]));
+		var data = obj.data;
+		if(obj.event === 'printed'){
+			window.open(url(['order_printed/lists', { order_id: data.order_id }]));
 		}else if(obj.event === 'goodsPay'){
-			  window.open(url(['cashier/index', { order_id: data.order_id }]));
-	  }else if(obj.event === 'goodsView'){
-		  window.open(url(['goods/index', { id: data.goods_id }]));
-      }else if(obj.event === 'view'){
-        window.open(url(['buyer_order/view', { order_id: data.order_id }]));
-	  }else if(obj.event === 'viewContent'){
-		  $('.content-box').text(data.content);
-		  $('#p_content').show();
-      }else if(obj.event === 'edit'){
-           alert("功能暂未开通！")
-      }else if(obj.event === 'del'){
-           alert("功能暂未开通！")
-      }else{
+			window.open(url(['cashier/index', { order_id: data.order_id }]));
+		}else if(obj.event === 'goodsView'){
+			window.open(url(['goods/index', { id: data.goods_id }]));
+		}else if(obj.event === 'goodsClass'){
 
-      }
+		}else if(obj.event === 'view'){
+			window.open(url(['buyer_order/view', { order_id: data.order_id }]));
+		}else if(obj.event === 'viewContent'){
+			$('.content-box').text(data.content);
+			$('#p_content').show();
+		}else if(obj.event === 'edit'){
+			alert("功能暂未开通！")
+		}else if(obj.event === 'del'){
+			alert("功能暂未开通！")
+		}else{
 
+		}
     });
   });
 

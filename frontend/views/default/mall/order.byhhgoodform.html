@@ -1,0 +1,48 @@
+	<link href="{res file='css/user.css'}" rel="stylesheet" type="text/css" />
+
+<div class="eject_con">
+  <div class="add">
+    <div id="warning"></div>
+    <form method="post" action="{$action}" id="address_form" target="iframe">
+      <ul>
+        <li class="B_Consignee">
+          <p>
+            <input type="text" class="text width_normal I_Consignee" placeholder="输入商品ID" name="goods_id" value="{$orderExt.goods_id}"/>
+            <label class="field_message"><span class="field_notice"><a href="{url route='/goods' id=$orderExt.goods_id}" target="_blank">[查看]</a>商品ID详情页查看</span></label>
+          </p>
+		  <div class="I_Consignee_list"></div>
+        </li>
+		</ul>
+      <div class="submit">
+      	<input type="hidden" name="redirect" value="{$redirect}" />
+		<input type="hidden" name="order_id" value="{$order_id}" />
+		<input type="hidden" name="from" value="{$from}" />
+        <input type="submit" class="btn" value="{$lang.submit}" />
+      </div>
+    </form>
+  </div>
+</div>
+<script type="text/javascript">
+  var defaultUser = "{$defaultUser['real_name']}";
+$(function(){
+    regionInit("region");
+    $('.default-user').click(function(){
+        $('.subscriber').val($(this).val())
+    })
+	$('.B_Consignee .I_Consignee').change(function(){
+ 
+		$.getJSON("{url route='orderbyhh/search'}", { 'keyword' : $('.I_Consignee').val()}, function(data) {
+			html = '';
+			if(data.code == 0 && data.count>0) {
+				$('.I_Address').val(data.data[0].address);
+				$.each(data.data,function(i, item){	
+					html += '<li style="width:538px;padding: 10px 0 0;color:#FF8800;">[地址]('+(i+1)+'): <span>'+item.address+'</span></li>';
+				});
+				$('.I_Consignee_list').html("<ul style='width:538px;'>"+html+"</ul>");
+			}else{
+				$('.I_Consignee_list').html("");
+			}
+		});
+	}); 
+});
+</script>

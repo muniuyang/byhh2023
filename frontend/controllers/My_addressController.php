@@ -117,7 +117,7 @@ class My_addressController extends \common\controllers\BaseUserController
 			->where(['and',['=', 'consignee', $post->consignee],['=', 'address', $post->address]]);
 			//var_dump($addressServ->createCommand()->getRawSql());
 			$oneRecord = $addressServ->asArray()->one();
-			 if(empty($oneRecord)){
+			if(empty($oneRecord)){
 				$addressServ = new \common\models\AddressServModel();
 				$addressServ->consignee = $post->consignee;
 				$addressServ->region_id = $post->region_id;
