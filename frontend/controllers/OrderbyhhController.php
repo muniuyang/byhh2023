@@ -344,26 +344,48 @@ class OrderbyhhController extends \common\controllers\BaseUserController
 			if(!$post->goods_id){
 				return Message::popWarning("请输入商品ID!");
 			}
+			
+ 
 			$orderOldGood =\common\models\OrderGoodsModel::find()->where(['order_id' => $post->order_id]);
 			//var_dump($orderOldGood->createCommand()->getRawSql());die;
 			$orderOldGood = $orderOldGood->one();
 			
-			$goods =\common\models\GoodsModel::find()->where(['goods_id' => $post->goods_id]);
+			//商品信息
+			$goods = \common\models\GoodsModel::find()->alias('g')
+			->select('g.*,gst.sales,gst.comments,gi.max_exchange')
+			->joinWith('goodsStatistics gst', false)
+			->joinWith('goodsIntegral gi', false)
+			->with([
+				'goodsImage'=>function($query){
+					$query->orderBy('sort_order');
+				}
+			])
+			->with('goodsSpec')
+			->where(['g.goods_id' =>$post->goods_id]);
 			//var_dump($goods->createCommand()->getRawSql());die;
 			$goods = $goods->one();
+			//var_dump($goods->goodsSpec[0]->spec_id);die;
+			//var_dump($goods);die;
+			//$goods =\common\models\GoodsModel::find()->where(['goods_id' => $post->goods_id]);
+			//$goods = $goods->one();
 
 			$orderGood =\common\models\OrderGoodsModel::find()->where(['order_id' => $orderOldGood->order_id,'goods_id' => $orderOldGood->goods_id]);
 			//var_dump($orderGood->createCommand()->getRawSql());die;
 			$orderGood = $orderGood->one();
 			//var_dump($orderGood);die;
 			
+			//修改商品信息
 			$orderGood->goods_id   	 = $goods->goods_id;
 			$orderGood->goods_name   = $goods->goods_name;
 			$orderGood->price = $goods->price;
-			$orderGood->goods_image  = $goods->default_image ? $goods->default_image :'/data/system/default_goods_image.jpg';
+			$orderGood->spec_id = $goods->goodsSpec[0]->spec_id;
+			
+			$orderGood->goods_image  = Page::urlFormat($goods->default_image, Yii::$app->params['default_goods_image']);
+			//$orderGood->goods_image  = $goods->default_image ? $goods->default_image :'/data/system/default_goods_image.jpg';
 			if(!$orderGood->save()) {
 				return Message::popWarning($orderGood->errors);
 			}
+			//修改order价格
             $order = \common\models\OrderModel::find()->where(['order_id' => $post->order_id])->one();
 			$order->goods_amount = $goods->price;
 			if(!$order->save()) {

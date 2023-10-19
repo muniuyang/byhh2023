@@ -96,7 +96,7 @@ class CartController extends \common\controllers\BaseMallController
     {
     	//die('ddd');
 		$post = Basewind::trimAll(Yii::$app->request->get(), true, ['spec_id', 'quantity', 'selected']);
-		
+
 		$model = new \frontend\models\CartForm();
 		if(($result = $model->valid($post)) === false) {
 			return Message::warning($model->errors);
