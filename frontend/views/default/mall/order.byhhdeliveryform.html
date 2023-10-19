@@ -1,0 +1,65 @@
+	<link href="{res file='css/user.css'}" rel="stylesheet" type="text/css" />
+
+<div class="eject_con">
+  <div class="add">
+    <div id="warning"></div>
+    <form method="post" action="{$action}" id="address_form" target="iframe">
+      <ul>
+        <li class="B_Consignee">
+          <h3>配送人: </h3>
+          <p>
+            <input type="text" class="text width_normal I_Consignee" name="consignee" value="{$delivery.consignee|escape}"/>
+            <label class="field_message"><span class="field_notice">配送人信息</span></label>
+          </p>
+		  <div class="I_Consignee_list"></div>
+        </li>
+ 
+        <li>
+          <h3>配送费: </h3>
+          <p>
+            <input type="text" class="text width_normal I_Address" name="amount" value="{$delivery.amount|escape}"/>
+            <label class="field_message"><span class="field_notice">配送金额</span></label>
+          </p>
+        </li>
+        <li>
+          <h3>{$lang.phone_mob}:</h3>
+          <p>
+            <input type="text" class="text width_normal" name="phone_mob" value="{$delivery.phone_mob}"/>
+            <label class="field_message"><span class="field_notice">{$lang.phone_mob}</span></label>
+          </p>
+        </li>
+      </ul>
+      <div class="submit">
+		<input type="hidden" name="order_id" value="{$delivery.order_id}" />
+		<input type="hidden" name="delivery_id" value="{$delivery.delivery_id}" />
+      	<input type="hidden" name="redirect" value="{$redirect}" />
+		<input type="hidden" name="from" value="{$from}" />
+        <input type="submit" class="btn" value="{$lang.submit}" />
+      </div>
+    </form>
+  </div>
+</div>
+<script type="text/javascript">
+  var defaultUser = "{$defaultUser['real_name']}";
+$(function(){
+    regionInit("region");
+    $('.default-user').click(function(){
+        $('.subscriber').val($(this).val())
+    })
+	$('.B_Consignee .I_Consignee').change(function(){
+		return;
+		$.getJSON("{url route='orderbyhh/search'}", { 'keyword' : $('.I_Consignee').val()}, function(data) {
+			html = '';
+			if(data.code == 0 && data.count>0) {
+				$('.I_Address').val(data.data[0].address);
+				$.each(data.data,function(i, item){	
+					html += '<li style="width:538px;padding: 10px 0 0;color:#FF8800;">[地址]('+(i+1)+'): <span>'+item.address+'</span></li>';
+				});
+				$('.I_Consignee_list').html("<ul style='width:538px;'>"+html+"</ul>");
+			}else{
+				$('.I_Consignee_list').html("");
+			}
+		});
+	}); 
+});
+</script>

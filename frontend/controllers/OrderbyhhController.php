@@ -200,6 +200,60 @@ class OrderbyhhController extends \common\controllers\BaseUserController
 		}
 	}
 	/**
+	 * 创建订单配送人
+	 */
+	public function actionCdelivery()
+	{
+		if(!Yii::$app->request->isPost)
+		{
+			$post = Basewind::trimAll(Yii::$app->request->get(), true);
+			$orderExt = \common\models\AddressDeliveryModel::find()->where(['order_id' => $post->order_id]);
+			//var_dump($orderExt->createCommand()->getRawSql());die;
+			$this->params['delivery'] = $orderExt->asArray()->one();
+ 
+			$this->params['action'] = Url::toRoute(['orderbyhh/cdelivery','order_id' => $post->order_id, 'from' => 'address']);
+			$redirect = Url::toRoute(['orderbyhh/index']);
+			$this->params['regions'] = \common\models\RegionModel::find()->select('region_name')->where(['parent_id' => 0, 'if_show' => 1])->indexBy('region_id')->column();
+			$this->params = array_merge($this->params, ['redirect' => $redirect,'order_id' => $post->order_id]);
+			return $this->render('../order.byhhdeliveryform.html', $this->params);
+		}else{
+			$post = Basewind::trimAll(Yii::$app->request->post(), true);
+			if(!$post->consignee){
+				return Message::popWarning("请输入配送人!");
+			}
+			if(!$post->amount){
+				return Message::popWarning("请输入金额!");
+			}
+			//var_dump($post);
+			//die();
+
+			//$orderExt = \common\models\OrderExtmModel::find()->where(['order_id' => $post->order_id]);
+			//var_dump($orderExt->createCommand()->getRawSql());die;
+			//$orderExt  = $orderExt->asArray()->one();
+			//var_dump($orderExt);
+		
+			$addressDelivery = \common\models\AddressDeliveryModel::find()->where(['delivery_id'=> $post->delivery_id]);
+			//var_dump($addressDelivery->createCommand()->getRawSql());
+			$oneRecord = $addressDelivery->one();
+			
+			//var_dump($oneRecord);die;
+			if(!empty($oneRecord)){
+				$oneRecord->consignee = $post->consignee;
+				$oneRecord->amount = $post->amount;
+				$oneRecord->phone_mob = $post->phone_mob;
+				$oneRecord->save();
+			}else{
+				$addressDelivery = new \common\models\AddressDeliveryModel();
+				$addressDelivery->order_id = $post->order_id;
+				$addressDelivery->consignee = $post->consignee;
+				$addressDelivery->amount = $post->amount;
+				$addressDelivery->phone_mob = $post->phone_mob;
+				$addressDelivery->save();	
+			}
+			return Message::popSuccess("添加成功", urldecode(Yii::$app->request->post('redirect', Url::toRoute('orderbyhh/index'))));
+		}
+	}
+	/**
 	 * 创建收货用户地址
 	 */
 	public function actionCaddress()

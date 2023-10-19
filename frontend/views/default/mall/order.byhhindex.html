@@ -128,7 +128,11 @@
 		return "<span style=' text-decoration: line-through;color:red;'>"+res.goods_amount+"</span>"
 	} }
 	, { field: 'shipping_fee', title: '运送费', width: 100, sort: true, align: 'center' ,templet:function(res){
-		return "<span style=' text-decoration: line-through;color:red;'>"+res.shipping_fee+"</span>"
+		
+		return "<i uri='{url route='orderbyhh/cdelivery' }?order_id="+res.order_id+"' id='order"+res.order_id+"_action_delivery'"
+		+" dialog_id='seller_order_delivery'  ectype='dialog' dialog_width='450' dialog_title='配送人'"
+				+" class='layui-icon layui-icon-release' style='cursor: pointer;color:#00ffff;' lay-event='goodsDelivery'></i>"
+				+"<span style=' text-decoration: line-through;color:red;'>"+res.shipping_fee+"</span>"
 	} }
 	, { field: 'order_amount', title: '金额', width: 100, sort: true, align: 'center',templet:function(res){
 		return "<span style='color:#00AA00;' controller='orderbyhh' fieldid='"+res.order_id+"' fieldname='order_amount'  ectype='inline_edit' >"+res.order_amount+"</span>"
