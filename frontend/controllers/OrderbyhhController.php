@@ -121,6 +121,50 @@ class OrderbyhhController extends \common\controllers\BaseUserController
 		var_dump($post);die;
 		
 	}
+	
+	/**
+	 * 修改订单地址信息
+	 */
+	public function actionExtro(){
+		$post = Basewind::trimAll(Yii::$app->request->get(), true, ['order_id']);
+		//var_dump($post);  
+		if(!Yii::$app->request->isPost)
+		{
+	
+			$this->params['action'] = Url::toRoute(['orderbyhh/extro', 'order_id' => $post->order_id]);
+			$redirect = Url::toRoute(['orderbyhh/index', 'order_id' => $post->order_id]);
+			$this->params['regions'] = \common\models\RegionModel::find()->select('region_name')->where(['parent_id' => 0, 'if_show' => 1])->indexBy('region_id')->column();
+			if($post->redirect){
+				$redirect =$post->redirect;
+			}
+			// 获取订单模型
+			$model = new \frontend\models\Buyer_orderViewForm();
+			if(!($extroInfo = $model->formData($post))) {
+				//die('33');
+				return Message::warning($model->errors);
+			}
+			$this->params['whatdays'] =['生日','七夕','情人节','三八妇女节','结婚','结婚纪念日','开业'];
+			//var_dump($extroInfo);die('33');
+			$this->params = array_merge($this->params, ['extro_info' => $extroInfo['orderExtm'], 'redirect' => $redirect]);
+			return $this->render('../my_extro.nearextroform.html', $this->params);
+		}else{
+			if(in_array(Yii::$app->user->id,Yii::$app->params['createRights'])){//权限判断[START]JchengCustom
+				$valid = false;
+			}else{
+				$valid = true;
+			}
+			$post = Basewind::trimAll(Yii::$app->request->post(), true, ['order_id']);
+			//var_dump($post);die;
+			$model = new \frontend\models\ExtroForm(['order_id' => $post->order_id]);
+	
+			//$consignee = OrderExtmModel::find()->select('region_id')->where(['order_id' => $order_info['order_id']])->one();
+			
+			if(!($extroInfo = $model->save($post, $valid))) {
+				return Message::popWarning($model->errors);
+			}
+			return Message::popSuccess(Language::get('address_edit_successed'), urldecode(Yii::$app->request->post('redirect', Url::toRoute('orderbyhh/index'))));
+		}
+	}
 	/**
 	 * 创建年结单用户
 	 */

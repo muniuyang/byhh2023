@@ -119,7 +119,13 @@
 	, { field: 'consignee', title: '收货人(*收花人*)', width: 110 ,align: 'left',style:'color: #FF8800;',templet:function(res){
 		return "<em class='layui-icon layui-icon-dialogue consignee' lay-event='viewContent'    style='color:#00aaff;'></em>"+res.consignee;//+'('+res.buyer_name+')' ;
 	}}
-	, { field: 'address', title: '收货地址', width: 170 ,align: 'center',style:'color: #FF8800;'}
+	, { field: 'address', title: '收货地址', width: 170 ,align: 'center',style:'color: #FF8800;',templet:function(res){
+		
+		return '<a href="JavaScript:;"   dialog_title="修改收货人信息" ectype="dialog" '
+		 +"uri={url route='orderbyhh/extro' redirect=$redirect }?order_id="+res.order_id
+		 +" dialog_id='my_address_extro' name='order_id'>"
+		 +"<i class='layui-icon layui-icon-edit'  style='cursor: pointer;color:#ff0000;'></i></a>"+ res.address;
+	}}
 	, { field: 'signature', title: '签名落款', width: 140 ,align: 'center',style:'color: #FF8800;'}
 	, { field: 'real_name', title: '买货人(*订花人*)', width: 140 ,align: 'center',style:'color: #00AA00;',templet:function(res){
 		return res.real_name;//+'('+res.buyer_name+')' ;
