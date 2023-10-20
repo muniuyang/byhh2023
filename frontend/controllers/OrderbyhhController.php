@@ -251,12 +251,25 @@ class OrderbyhhController extends \common\controllers\BaseUserController
 		if(!Yii::$app->request->isPost)
 		{
 			$post = Basewind::trimAll(Yii::$app->request->get(), true);
-			$orderExt = \common\models\AddressDeliveryModel::find()->where(['order_id' => $post->order_id]);
-			//var_dump($orderExt->createCommand()->getRawSql());die;
-			$this->params['delivery'] = $orderExt->asArray()->one();
- 
+			$addressDelivery = \common\models\AddressDeliveryModel::find()
+			->alias('o')
+			->select('o.*,ab.phone_mob,ab.consignee')
+			->joinWith('addressBook ab', false)
+			//->with('addressBook', false)
+			->where(['order_id' => $post->order_id]);
+			//var_dump($addressDelivery->createCommand()->getRawSql());die;
+			$addressDelivery = $addressDelivery->asArray()->one();
+			//var_dump($addressDelivery);die;
+			$this->params['delivery'] = $addressDelivery;
 			$this->params['action'] = Url::toRoute(['orderbyhh/cdelivery','order_id' => $post->order_id, 'from' => 'address']);
 			$redirect = Url::toRoute(['orderbyhh/index']);
+			
+			$addressBooks = \common\models\AddressBookModel::find()->asArray()->all();
+			
+			foreach($addressBooks as $k=>$v){
+				$this->params['deliveryUsers'][$k] = $v['consignee'];
+			}
+			//var_dump($this->params['deliveryUsers']);die;
 			$this->params['regions'] = \common\models\RegionModel::find()->select('region_name')->where(['parent_id' => 0, 'if_show' => 1])->indexBy('region_id')->column();
 			$this->params = array_merge($this->params, ['redirect' => $redirect,'order_id' => $post->order_id]);
 			return $this->render('../order.byhhdeliveryform.html', $this->params);
@@ -268,32 +281,31 @@ class OrderbyhhController extends \common\controllers\BaseUserController
 			if(!$post->amount){
 				return Message::popWarning("请输入金额!");
 			}
-			//var_dump($post);
-			//die();
-
-			//$orderExt = \common\models\OrderExtmModel::find()->where(['order_id' => $post->order_id]);
-			//var_dump($orderExt->createCommand()->getRawSql());die;
-			//$orderExt  = $orderExt->asArray()->one();
-			//var_dump($orderExt);
-		
+			 
 			$addressDelivery = \common\models\AddressDeliveryModel::find()->where(['delivery_id'=> $post->delivery_id]);
-			//var_dump($addressDelivery->createCommand()->getRawSql());
-			$oneRecord = $addressDelivery->one();
+			$addressBook = \common\models\AddressBookModel::find()
+			->where(['or',['=', 'consignee', $post->consignee],['=', 'phone_mob', $post->phone_mob]]);
+			//var_dump($addressBook->createCommand()->getRawSql());die;
 			
-			//var_dump($oneRecord);die;
-			if(!empty($oneRecord)){
-				$oneRecord->consignee = $post->consignee;
-				$oneRecord->amount = $post->amount;
-				$oneRecord->phone_mob = $post->phone_mob;
-				$oneRecord->save();
-			}else{
-				$addressDelivery = new \common\models\AddressDeliveryModel();
-				$addressDelivery->order_id = $post->order_id;
-				$addressDelivery->consignee = $post->consignee;
-				$addressDelivery->amount = $post->amount;
-				$addressDelivery->phone_mob = $post->phone_mob;
-				$addressDelivery->save();	
+			
+			$addressBook = $addressBook->one();
+			if(empty($addressBook)){
+				$addressBook = new \common\models\AddressBookModel();
 			}
+			$addressBook->consignee = $post->consignee;
+			if($post->phone_mob){
+				$addressBook->phone_mob = $post->phone_mob;
+			}
+			$addressBook->save();
+			//var_dump($addressBook);die;
+			$addressDelivery = $addressDelivery->one();
+			if(empty($addressDelivery)){
+				$addressDelivery = new \common\models\AddressDeliveryModel(); 
+			}
+			$addressDelivery->order_id = $post->order_id;
+			$addressDelivery->amount   = $post->amount ? $post->amount :10;
+			$addressDelivery->book_id  = $addressBook->book_id;
+			$addressDelivery->save();
 			return Message::popSuccess("添加成功", urldecode(Yii::$app->request->post('redirect', Url::toRoute('orderbyhh/index'))));
 		}
 	}
@@ -357,10 +369,18 @@ class OrderbyhhController extends \common\controllers\BaseUserController
 		}
 		else
 		{
+				
 			$post = Basewind::trimAll(Yii::$app->request->get(), true);
-			//$query = OrderExtmModel::find()->select('address')->where(['like', 'consignee', $post->keyword])->orderBy(['order_id' => SORT_DESC]);
-			$query = \common\models\AddressServModel::find()->select('address')->where(['like', 'consignee', $post->keyword])->orderBy(['sid' => SORT_DESC]);
-			$list = $query->asArray()->all();
+			if($post->from == 'delivery'){
+				$query = \common\models\AddressBookModel::find()
+				->where(['consignee'=>$post->keyword]);
+				$list = $query->one();
+			}else{
+				//$query = OrderExtmModel::find()->select('address')->where(['like', 'consignee', $post->keyword])->orderBy(['order_id' => SORT_DESC]);
+				$query = \common\models\AddressServModel::find()->select('address')->where(['like', 'consignee', $post->keyword])->orderBy(['sid' => SORT_DESC]);
+				$list = $query->asArray()->all();	
+			}
+
 			return Json::encode(['code' => 0, 'msg' => '', 'count' => $query->count(), 'data' => $list]);
 		}
 	}	

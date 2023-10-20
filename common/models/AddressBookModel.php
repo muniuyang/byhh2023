@@ -15,22 +15,18 @@ use Yii;
 use yii\db\ActiveRecord;
 
 /**
- * @Id AddressServModel.php 2023.10.15 $
- * @author jcheng
+ * @Id AddressModel.php 2018.4.22 $
+ * @author mosir
  */
 
-class AddressDeliveryModel extends ActiveRecord
+class AddressBookModel extends ActiveRecord
 {
     /**
      * @inheritdoc
      */
     public static function tableName()
     {
-        return '{{%address_delivery}}';
+        return '{{%address_book}}';
     }
-	 // 关联表
-	 public function getAddressBook()
-	 {
-		return parent::hasOne(AddressBookModel::className(), ['book_id' => 'book_id']);
-	 }
+	 
 }

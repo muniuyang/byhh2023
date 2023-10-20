@@ -87,6 +87,11 @@ class PaynotifyController extends \common\controllers\BaseMallController
 		$this->params['payInfo'] = $payment->getLinksOfPage($tradeInfo);
 		
 		$this->params['page'] = Page::seo(['title' => Language::get('paynotify_status')]);
+		if(in_array(Yii::$app->user->id,Yii::$app->params['createRights'])){
+			if($this->params['payInfo']['status']=='ACCEPTED'){
+				return $this->redirect(['orderbyhh/index', 'orderId' => $post->payTradeNo]);
+			}
+		}
         return $this->render('../paynotify.index.html', $this->params);
 	}
 	
