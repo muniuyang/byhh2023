@@ -203,7 +203,8 @@
 			window.open(url(['order_printed/lists', { order_id: data.order_id }]));
 		}else if(obj.event === 'goodsPay'){
 			//window.open(url(['cashier/index', { order_id: data.order_id }]));
-			location.href = url(['cashier/index', { order_id: data.order_id }]);
+			//return console.log(url(['cashier/index', { order_id: data.order_id ,'from':'orderbyhh'}]));
+			location.href = url(['cashier/index', { order_id: data.order_id ,'from':'orderbyhh'}]);
 		}else if(obj.event === 'goodsView'){
 			window.open(url(['goods/index', { id: data.goods_id }]));
 		}else if(obj.event === 'goodsClass'){

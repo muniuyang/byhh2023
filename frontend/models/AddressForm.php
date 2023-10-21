@@ -83,6 +83,8 @@ class AddressForm extends Model
 		/**********************[START]JchengCustom with local**********************/
 		$model->signature 	= $post->signature;//落款
 		$model->subscriber 	= $post->subscriber;//订花人
+		$model->book_id 	= $post->book_id?$post->book_id:0;//配送人信息
+		$model->book_amount = $post->book_amount?$post->book_amount:10;//配送费
 		/**********************[START]JchengCustom with local**********************/
 		if(!$model->save()) {
 			$this->errors = $model->errors;

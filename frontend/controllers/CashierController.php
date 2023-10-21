@@ -66,8 +66,11 @@ class CashierController extends \common\controllers\BaseUserController
 		}
 		/**********************[START]JchengCustom with local**********************/
 		
-		
 		// 到收银台付款
+		/**********************[START]JchengCustom with local**********************/
+		if(in_array(Yii::$app->user->id,Yii::$app->params['createRights'])){//权限判断[START]JchengCustom
+			return $this->redirect(['cashier/gateway', 'bizOrderId' => $bizOrderId, 'bizIdentity' => Def::TRADE_ORDER,'from'=>$post->from]);
+		}
 		return $this->redirect(['cashier/gateway', 'bizOrderId' => $bizOrderId, 'bizIdentity' => Def::TRADE_ORDER]);
 	}
 
@@ -95,7 +98,10 @@ class CashierController extends \common\controllers\BaseUserController
 		if (!$orderId || $model->errors) {
 			return Message::warning($model->errors);
 		}
-
+		/**********************[START]JchengCustom with local**********************/
+		if(in_array(Yii::$app->user->id,Yii::$app->params['createRights'])){//权限判断[START]JchengCustom
+			return $this->redirect(['cashier/pay', 'orderId' => implode(',', $orderId),'from'=>$post->from]);
+		}
 		return $this->redirect(['cashier/pay', 'orderId' => implode(',', $orderId)]);
 	}
 
@@ -164,7 +170,11 @@ class CashierController extends \common\controllers\BaseUserController
 
 			$this->params['page'] = Page::seo(['title' => Language::get('cashier')]);
 			if(in_array(Yii::$app->user->id,Yii::$app->params['createRights'])){//权限判断[START]JchengCustom
-				return $this->render('../cashier.nearindex.html', $this->params);
+				$post = Basewind::trimAll(Yii::$app->request->get(), true);
+				if($post->from == 'orderbyhh'){
+					return $this->render('../cashier.nearindex.html', $this->params);
+				}
+				return $this->redirect(['orderbyhh/index', 'from' => 'payPage']);
 			}else{
 				return $this->render('../cashier.index.html', $this->params);
 			}

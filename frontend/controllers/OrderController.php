@@ -116,6 +116,8 @@ class OrderController extends \common\controllers\BaseUserController
 		}
 		else
 		{
+			
+			//var_dump($goods_info);die;
 			$post = Basewind::trimAll(Yii::$app->request->post(), true);
 			// 获取订单模型
             $order_type = Business::getInstance('order')->build($otype, $post);

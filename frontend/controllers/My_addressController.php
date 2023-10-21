@@ -82,6 +82,11 @@ class My_addressController extends \common\controllers\BaseUserController
 				//->where(['userid'=>5])->one();
 				->where(['in','userid',[4,5]])->asArray()->all();
 				$this->params['defaultUsers'] = $defaultUsers;
+				
+				$addressBooks = \common\models\AddressBookModel::find()->asArray()->all();
+				foreach($addressBooks as $k=>$v){
+					$this->params['deliveryUsers'][$v['book_id']] = $v['consignee'];
+				}
 				return $this->render('../my_address.nearform.html', $this->params);
 			} 
 			/**********************[END]JchengCustom with local**********************/
@@ -105,6 +110,7 @@ class My_addressController extends \common\controllers\BaseUserController
 						return Message::popWarning("*请填写订花人名称^_^!");
 					}
 				}
+				$post->book_amount  = $post->book_amount ? $post->book_amount:10;
 				$valid = false;
 			}
 			
@@ -159,6 +165,8 @@ class My_addressController extends \common\controllers\BaseUserController
 			$this->params['regions'] = RegionModel::find()->select('region_name')->where(['parent_id' => 0, 'if_show' => 1])->indexBy('region_id')->column();
 			$congra = \common\models\CongratulationsModel::find()->where(['addr_id' =>$addr_id])->one();
  			$address['content'] = $congra->content;	
+			
+			//var_dump($address);die;
 			$this->params['address'] = $address;
 			$this->params['action'] = Url::toRoute(['my_address/edit', 'addr_id' => $addr_id]);
 			$this->params['redirect'] = Yii::$app->request->get('redirect', Url::toRoute('my_address/index'));
@@ -170,6 +178,10 @@ class My_addressController extends \common\controllers\BaseUserController
 				//->where(['userid'=>5])->one();
 				->where(['in','userid',[4,5]])->asArray()->all();
 				$this->params['defaultUsers'] = $defaultUsers;
+				$addressBooks = \common\models\AddressBookModel::find()->asArray()->all();
+				foreach($addressBooks as $k=>$v){
+					$this->params['deliveryUsers'][$v['book_id']] = $v['consignee'];
+				}
 				return $this->render('../my_address.nearform.html', $this->params);
 			 }
 			/**********************[END]JchengCustom with local**********************/
@@ -200,6 +212,7 @@ class My_addressController extends \common\controllers\BaseUserController
 			}
 			$address = AddressModel::find()->where(['addr_id' => $addr_id])->asArray()->one();
 			/**********************[END]JchengCustom with local**********************/
+
 			$model = new \frontend\models\AddressForm(['addr_id' => $addr_id]);
 			if(!($address = $model->save($post, $valid))) {
 				return Message::popWarning($model->errors);

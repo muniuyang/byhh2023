@@ -104,7 +104,7 @@ class NormalOrder extends BaseOrder
 		if (!($consignee_info = $this->handleConsigneeInfo($goods_info))) {
 			return false;
 		}
-
+		//var_dump($consignee_info);die;
 		/*****[注册用户]*****************[START]JchengCustom with local[提交订单替人下单]**********************/
 	
 		if (!($base_info = parent::handleUserInsert($base_info, $consignee_info))) {

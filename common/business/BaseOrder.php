@@ -128,9 +128,19 @@ class BaseOrder
 	 */
 	public function insertOrderExtm($order_id = 0, $consignee_info  = array())
 	{
+		
+		if(in_array(Yii::$app->user->id,Yii::$app->params['createRights'])){//权限判断[START]JchengCustom
+			$addressBook = \common\models\AddressBookModel::find()->where(['book_id'=>$consignee_info['book_id']]);
+			$addressDelivery = new \common\models\AddressDeliveryModel(); 
+			$addressDelivery->order_id = $order_id;
+			$addressDelivery->amount   = $consignee_info['book_amount'];
+			$addressDelivery->book_id  = $consignee_info['book_id'];
+			$addressDelivery->save();
+			unset($consignee_info['book_id']);
+			unset($consignee_info['book_amount']);
+		}
 		//var_dump($consignee_info);die;
 		$model = new OrderExtmModel();
-		
 		$model->order_id = $order_id;
 		foreach($consignee_info as $key => $value) {
 			$model->$key = $value;
@@ -164,6 +174,7 @@ class BaseOrder
 				$this->errors = Language::get('create_order_failed');
 				break;
 			}
+
 			$result[$store_id] = $order_id;
 		}
 
@@ -308,6 +319,8 @@ class BaseOrder
 			//'signature' 	=>  $consignee_info['signature']
 			//'subscriber' 	=>  $consignee_info['subscriber'],
 			//'content' 		=>  $congra['content'],
+			//'book_id' 	=>  $consignee_info['book_id'],
+			//'book_amount' 	=>  $consignee_info['book_amount'],
 			/**********************[END]JchengCustom with local**********************/
         	$result[$store_id] = array(
 				'consignee'     =>  $consignee_info['consignee'],
@@ -320,6 +333,8 @@ class BaseOrder
 				'zipcode'       =>  $consignee_info['zipcode'],
 				'phone_tel'     =>  $consignee_info['phone_tel'],
 				'phone_mob'     =>  $consignee_info['phone_mob'],
+				'book_id' 	=>  $consignee_info['book_id'],
+				'book_amount' 	=>  $consignee_info['book_amount'],
 				'shipping_name' =>  addslashes(Language::get($delivery_info[$store_id])),
 				'shipping_fee'  =>  $shipping[$consignee_info['region_id']][$delivery_info[$store_id]]['logistic_fees'],
 			);
