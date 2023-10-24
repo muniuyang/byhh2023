@@ -310,6 +310,65 @@ class OrderbyhhController extends \common\controllers\BaseUserController
 		}
 	}
 	/**
+	 * 修改订花人信息
+	 */
+	public function actionEditbuyer()
+	{
+		/**********************[END]JchengCustom with local**********************/
+		if(!Yii::$app->request->isPost)
+		{
+			$post = Basewind::trimAll(Yii::$app->request->get(), true);
+			$this->params['action'] = Url::toRoute(['orderbyhh/editbuyer', 'order_id' => $post->order_id, 'from' => 'class']);
+			$redirect = Url::toRoute(['orderbyhh/index']);
+			$this->params['orderExt'] = \common\models\OrderGoodsModel::find()->where(['order_id' => $post->order_id])->one();
+			//var_dump($this->params['orderExt']);die;
+			$this->params = array_merge($this->params, ['redirect' => $redirect,'order_id' => $post->order_id]);
+			return $this->render('../order.byhheditbuyerform.html', $this->params);	 	 
+		}
+		else
+		{
+			$post = Basewind::trimAll(Yii::$app->request->post(), true, ['order_id']);
+			if(!$post->userid){
+				return Message::popWarning("请输入用户名或用户ID!");
+			}
+			$query = \common\models\UserModel::find()->where(['userid'=>$post->userid]);
+			//var_dump($query->createCommand()->getRawSql());die;
+			$user = $query->one();
+			//var_dump($list);
+			//die('eee');
+			//修改order购买者
+	        $order = \common\models\OrderModel::find()->where(['order_id' => $post->order_id])->one();
+			//var_dump($order->order_sn);die;
+			if(!empty($order)){
+				$order->buyer_id   = $user->userid;
+				$order->buyer_name = $user->username;
+				$order->buyer_email= $user->email;
+				if(!$order->save()) {
+					return Message::popWarning($order->errors);
+				}
+			}
+			//修改trade购买者
+			$trade = \common\models\DepositTradeModel::find()->where(['bizOrderId' => $order->order_sn])->one();
+			//var_dump($trade);die;
+			if(!empty($trade)){
+				$trade->buyer_id = $order->buyer_id;
+				if(!$trade->save()) {
+					return Message::popWarning($trade->errors);
+				}
+			}
+		   //修改trade购买者
+		   $record = \common\models\DepositRecordModel::find()->where(['tradeNo' => $trade->tradeNo])->one();
+		   //var_dump($record);die;
+		   if(!empty($record)){
+			   $record->userid = $trade->buyer_id;
+			   if(!$record->save()) {
+				return Message::popWarning($record->errors);
+			   }
+		   }
+			return Message::popSuccess("编辑成功", urldecode(Yii::$app->request->post('redirect', Url::toRoute('orderbyhh/index'))));
+		}
+	}
+	/**
 	 * 创建收货用户地址
 	 */
 	public function actionCaddress()
@@ -375,6 +434,15 @@ class OrderbyhhController extends \common\controllers\BaseUserController
 				$query = \common\models\AddressBookModel::find()
 				->where(['consignee'=>$post->keyword]);
 				$list = $query->one();
+			}else if($post->from == 'buyerform'){
+				$query = \common\models\UserModel::find()->where(['or',
+					['=', 'userid', $post->keyword],
+					['like', 'username', $post->keyword],
+					['like', 'nickname', $post->keyword],
+					['like', 'real_name', $post->keyword]
+				]);
+				//var_dump($query->createCommand()->getRawSql());die;
+				$list = $query->all();
 			}else{
 				//$query = OrderExtmModel::find()->select('address')->where(['like', 'consignee', $post->keyword])->orderBy(['order_id' => SORT_DESC]);
 				$query = \common\models\AddressServModel::find()->select('address')->where(['like', 'consignee', $post->keyword])->orderBy(['sid' => SORT_DESC]);

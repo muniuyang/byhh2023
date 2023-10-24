@@ -128,7 +128,10 @@
 	}}
 	, { field: 'signature', title: '签名落款', width: 140 ,align: 'center',style:'color: #FF8800;'}
 	, { field: 'real_name', title: '买货人(*订花人*)', width: 140 ,align: 'center',style:'color: #00AA00;',templet:function(res){
-		return res.real_name;//+'('+res.buyer_name+')' ;
+		return '<a href="JavaScript:;" dialog_width="550"   dialog_title="修改订花人信息" ectype="dialog" '
+		 +"uri={url route='orderbyhh/editbuyer' redirect=$redirect }?order_id="+res.order_id
+		 +" dialog_id='my_address_extro' name='order_id'>"
+		 +"<i class='layui-icon layui-icon-edit'  style='cursor: pointer;color:#ff0000;'></i></a>"+ res.real_name;		
 	}}
 	, { field: 'goods_amount', title: '售价', width: 100, sort: true, align: 'center' ,templet:function(res){
 		return "<span style=' text-decoration: line-through;color:red;'>"+res.goods_amount+"</span>"
