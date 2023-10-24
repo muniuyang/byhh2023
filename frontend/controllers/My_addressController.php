@@ -80,9 +80,19 @@ class My_addressController extends \common\controllers\BaseUserController
 				$this->params['address'] = ['defaddr'=>1,'region_id'=>'284','region_name'=>'湖北省 武汉'];
 				$defaultUsers = UserModel::find()->select('userid,username,real_name')
 				//->where(['userid'=>5])->one();
-				->where(['in','userid',[4,5]])->asArray()->all();
+				->where(['in','userid',[81,4,5,78]])->orderBy('userid desc')->asArray()->all();
 				$this->params['defaultUsers'] = $defaultUsers;
-				
+				$this->params['defaultsignature'] =[
+					['userid'=>'81','real_name'=>'匿名'],
+					['userid'=>'80','real_name'=>'补发'],
+					['userid'=>'79','real_name'=>'程进'],
+					['userid'=>'78','real_name'=>'郭惠']
+				] ;
+				$this->params['contents'] =[
+					['content'=>'开业大吉,生意兴隆'],
+					['content'=>'开业大吉,财源广进'],
+					['content'=>'开业大吉,爆款连连']
+				] ;
 				$addressBooks = \common\models\AddressBookModel::find()->asArray()->all();
 				foreach($addressBooks as $k=>$v){
 					$this->params['deliveryUsers'][$v['book_id']] = $v['consignee'];
@@ -178,6 +188,17 @@ class My_addressController extends \common\controllers\BaseUserController
 				//->where(['userid'=>5])->one();
 				->where(['in','userid',[4,5]])->asArray()->all();
 				$this->params['defaultUsers'] = $defaultUsers;
+				$this->params['defaultsignature'] =[
+					['userid'=>'81','real_name'=>'匿名'],
+					['userid'=>'80','real_name'=>'补发'],
+					['userid'=>'79','real_name'=>'程进'],
+					['userid'=>'78','real_name'=>'郭惠']
+				] ;
+				$this->params['contents'] =[
+					['content'=>'开业大吉,生意兴隆'],
+					['content'=>'开业大吉,财源广进'],
+					['content'=>'开业大吉,爆款连连']
+				] ;
 				$addressBooks = \common\models\AddressBookModel::find()->asArray()->all();
 				foreach($addressBooks as $k=>$v){
 					$this->params['deliveryUsers'][$v['book_id']] = $v['consignee'];

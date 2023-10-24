@@ -6,9 +6,20 @@
         <li class="B_Consignee">
           <h3>收货人(祝?): </h3>
           <p>
-            <input type="text" class="text width_normal I_Consignee" name="consignee" value="{$address.consignee|escape}"/>
-            <label class="field_message"><span class="field_notice">{$lang.consignee_desc}</span></label>
+            <input type="text" class="text width_normal I_Consignee consignee" name="consignee" value="{$address.consignee|escape}"/>
+            <label class="field_message"><span class="field_notice">{$lang.consignee_desc}，没有就从下面选择</span></label>
           </p>
+		  <p style="line-height: 24px;">
+			  &nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;
+			  &nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;
+			  &nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;
+			  &nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;
+			<!--{foreach from=$defaultsignature item=record key=key}-->
+			<label style="color:#b4b4b4;">
+			<input type="radio" class="default-consi"  style="color:#b4b4b4;margin-right:5px;margin-left:10px;" name="defaultconsignee" value="{$record['real_name']|escape}" />
+			{$record.real_name|escape}</label>
+			<!--{/foreach}-->
+		  </p>
 		  <div class="I_Consignee_list"></div>
         </li>
         <li>
@@ -45,26 +56,39 @@
 		<li>
 		  <h3>落款(赠送人): </h3>
 		  <p>
-		    <input type="text" class="text width_normal" name="signature" value="{$address.signature|escape}"/>
-		    <label class="field_message"><span class="field_notice">签名落款，代表谁送的，多个用“逗号”隔开。</span></label>
+		    <input type="text" class="text width_normal signature" name="signature" value="{$address.signature|escape}"/>
+			<label class="field_message" ><span class="field_notice">签名落款，多个用“逗号”隔开。没有就从下面选择</span></label>
+		  </p>
+		  <p style="line-height: 24px;">
+			  &nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;
+			  &nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;
+			  &nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;
+			  &nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;
+			<!--{foreach from=$defaultsignature item=record key=key}-->
+			<label style="color:#b4b4b4;">
+			<input type="radio" class="default-sign"  style="color:#b4b4b4;margin-right:5px;margin-left:10px;" name="defaultsign" value="{$record['real_name']|escape}" />
+			{$record.real_name|escape}</label>
+			<!--{/foreach}-->
+			
 		  </p>
 		</li>
 		<li>
 		  <h3>订货人(结款): </h3>
 		  <p>
 		    <input type="text" class="text width_normal subscriber" name="subscriber" value="{$address.subscriber|escape}"/>
+			<label class="field_message" ><span class="field_notice">订单付款人，没有就从下面选择</span></label>
 		  </p>
-      <p style="line-height: 24px;">
-              <!--{foreach from=$defaultUsers item=record key=key}-->
-
-        <label style="color:#b4b4b4;">
-          <input type="radio" class="default-user"  style="color:#b4b4b4;margin-right:5px;margin-left:10px;" name="defaultUser" value="{$record['real_name']|escape}" />
-         {$record.real_name|escape}</label>
-            <!--{/foreach}-->
-
-      
-                  <label class="field_message" ><span class="field_notice">{$lang.subscriber_desc}</span></label>
-      </p>
+		  <p style="line-height: 24px;">
+			  &nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;
+			  &nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;
+			  &nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;
+			  &nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;
+			<!--{foreach from=$defaultUsers item=record key=key}-->
+			<label style="color:#b4b4b4;">
+			<input type="radio" class="default-user"  style="color:#b4b4b4;margin-right:5px;margin-left:10px;" name="defaultUser" value="{$record['real_name']|escape}" />
+			{$record.real_name|escape}</label>
+			<!--{/foreach}-->
+		  </p>
 		</li>
         <li style="display: none;">
           <h3>{$lang.zipcode}: </h3>
@@ -90,10 +114,20 @@
         <li>
           <h3>祝福语:</h3>
           <p>
-            <textarea id="remark_input" class="text width_normal"  class="text" name="content" 
+            <textarea id="remark_input" class="text width_normal content"  class="text" name="content" 
             value="{$address.content|escape}"   style="width:270px;height:90px;" placeholder="如：”开业大吉，生意兴隆“">{$address.content|escape}</textarea>
-            <label class="field_message"><span class="field_notice">如：”开业大吉，生意兴隆“</span></label>
+            <label class="field_message">
+				<span class="field_notice">无，就从下面选择</span>
+			</label>
           </p>
+		  <p style="line-height: 24px;">
+			  &nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;
+			<!--{foreach from=$contents item=record key=key}-->
+			<label style="color:#b4b4b4;">
+			<input type="radio" class="default-content"  style="color:#b4b4b4;margin-right:5px;margin-left:10px;" name="defaultcontent" value="{$record['content']|escape}" />
+			{$record.content|escape}</label>
+			<!--{/foreach}-->
+		  </p>
         </li>     
 		<li>
           <h3>配送人:</h3>
@@ -138,6 +172,15 @@ $(function(){
     $('.default-user').click(function(){
         $('.subscriber').val($(this).val())
     })
+	$('.default-sign').click(function(){
+	    $('.signature').val($(this).val())
+	})
+	$('.default-consi').click(function(){
+	    $('.consignee').val($(this).val())
+	})
+	$('.default-content').click(function(){
+	    $('.content').val($(this).val())
+	})
 	$('.B_Consignee .I_Consignee').change(function(){
  
 		$.getJSON("{url route='my_address/search'}", { 'keyword' : $('.I_Consignee').val()}, function(data) {

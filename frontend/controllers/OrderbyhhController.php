@@ -347,6 +347,15 @@ class OrderbyhhController extends \common\controllers\BaseUserController
 					return Message::popWarning($order->errors);
 				}
 			}
+			//修改order扩展信息
+			$orderExt = \common\models\OrderExtmModel::find()->where(['order_id' => $order->order_id])->one();
+			//var_dump($orderExt->order_sn);die;
+			if(!empty($orderExt)){
+				$orderExt->subscriber= $order->buyer_name;
+				if(!$orderExt->save()) {
+					return Message::popWarning($orderExt->errors);
+				}
+			}
 			//修改trade购买者
 			$trade = \common\models\DepositTradeModel::find()->where(['bizOrderId' => $order->order_sn])->one();
 			//var_dump($trade);die;
