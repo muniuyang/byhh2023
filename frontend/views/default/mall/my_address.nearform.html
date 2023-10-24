@@ -11,10 +11,7 @@
           </p>
 		  <p style="line-height: 24px;">
 			  &nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;
-			  &nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;
-			  &nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;
-			  &nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;
-			<!--{foreach from=$defaultsignature item=record key=key}-->
+			<!--{foreach from=$defaultconsignee item=record key=key}-->
 			<label style="color:#b4b4b4;">
 			<input type="radio" class="default-consi"  style="color:#b4b4b4;margin-right:5px;margin-left:10px;" name="defaultconsignee" value="{$record['real_name']|escape}" />
 			{$record.real_name|escape}</label>
@@ -61,9 +58,6 @@
 		  </p>
 		  <p style="line-height: 24px;">
 			  &nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;
-			  &nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;
-			  &nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;
-			  &nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;
 			<!--{foreach from=$defaultsignature item=record key=key}-->
 			<label style="color:#b4b4b4;">
 			<input type="radio" class="default-sign"  style="color:#b4b4b4;margin-right:5px;margin-left:10px;" name="defaultsign" value="{$record['real_name']|escape}" />
@@ -80,9 +74,6 @@
 		  </p>
 		  <p style="line-height: 24px;">
 			  &nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;
-			  &nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;
-			  &nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;
-			  &nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;
 			<!--{foreach from=$defaultUsers item=record key=key}-->
 			<label style="color:#b4b4b4;">
 			<input type="radio" class="default-user"  style="color:#b4b4b4;margin-right:5px;margin-left:10px;" name="defaultUser" value="{$record['real_name']|escape}" />
