@@ -4,7 +4,7 @@ data/config.php
 data/initdata.lock
 data/install.lock
 data/setting.php
-data/files/store_*/
+#data/files/store_*/
 data/sales/
 data/.DS_Store
 assets/
