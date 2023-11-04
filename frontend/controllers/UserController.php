@@ -178,7 +178,6 @@ class UserController extends \common\controllers\BaseUserController
 			if(empty($post->username) || empty($post->password)) {
 				return Message::warning(Language::get('username_password_error'), ['user/login']);
 			}
-			
 			$identity = UserModel::find()->where(['username' => $post->username])->one();
 			if(!$identity) {
 				return Message::warning(Language::get('username_password_error'), ['user/login']);
@@ -190,11 +189,16 @@ class UserController extends \common\controllers\BaseUserController
 				return Message::warning(Language::get('userlocked'));
 			}
 			
+
 			// 登录用户
 			if(!Yii::$app->user->login($identity, $rememberMe)) {
 				return Message::warning(Language::get('login_fail'));
 			}
 			UserModel::afterLogin($identity);
+			if($post->username == '开业零售'){
+				//$post->redirect = Url::toRoute(['orderbyhh/index', 'from' => 'login']);  
+				$post->redirect = Url::toRoute(['/index', 'from' => 'login']);  
+			}
 			return Message::display(Language::get('login_successed'), $post->redirect);
 		}
     }

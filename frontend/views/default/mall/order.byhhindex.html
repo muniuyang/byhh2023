@@ -153,7 +153,11 @@
 			res.status = '<font color=green>'+res.status+'</font>';
 		}
 		else if(res.status == '交易关闭'){
-			res.status = '<font color=gray>'+res.status+'</font>';
+			return "<i uri='{url route='orderbyhh/editstatus' }?order_id="+res.order_id+"' id='order"+res.order_id+"_action_delivery' "
+			+"class='layui-icon layui-icon-play'  dialog_id='seller_order_open'  ectype='dialog' dialog_width='550' dialog_title='开启已关闭订单'"
+					+" style='cursor: pointer; color:#ffaaff;'></i>"+res.status;
+				
+			//res.status = '<font color=gray>'+res.status+'</font>';
 		}
 		else if(res.status == '等待买家付款'){
 			res.status =  "<a href='javascript:;' lay-event='goodsPay' class='layui-btn layui-bg-red layui-btn-sm' style='color:red'><i class='layui-icon layui-icon-rmb'></i>付款</a>"  ;

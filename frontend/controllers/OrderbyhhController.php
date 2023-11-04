@@ -310,6 +310,75 @@ class OrderbyhhController extends \common\controllers\BaseUserController
 		}
 	}
 	/**
+	 * 修改订单支付状态
+	 */
+	public function actionEditstatus()
+	{
+		/**********************[END]JchengCustom with local**********************/
+		if(!Yii::$app->request->isPost)
+		{
+			$post = Basewind::trimAll(Yii::$app->request->get(), true);
+			$this->params['action'] = Url::toRoute(['orderbyhh/editstatus', 'order_id' => $post->order_id, 'from' => 'class']);
+			$redirect = Url::toRoute(['orderbyhh/index']);
+			$this->params['orderExt'] = \common\models\OrderGoodsModel::find()->where(['order_id' => $post->order_id])->one();
+			//var_dump($this->params['orderExt']);die;
+			$this->params['orderStatus'] =[
+					'11'=>'待支付',
+					'0'=>'已关闭'
+			];
+			$this->params = array_merge($this->params, ['redirect' => $redirect,'order_id' => $post->order_id]);
+			return $this->render('../order.byhheditstatusform.html', $this->params);	 	 
+		}
+		else
+		{
+			$post = Basewind::trimAll(Yii::$app->request->post(), true, ['order_id']);
+			//var_dump($post);
+			//die('eee');
+			if(!$post->field){
+				return Message::popWarning("请选择状态信息!");
+			}
+
+			//修改order
+	        $order = \common\models\OrderModel::find()->where(['order_id' => $post->order_id])->one();
+			//var_dump($order);die;
+			 
+			if(!empty($order)){
+				$order->status   = 11;
+				$order->payment_name = 'NULL';
+				if(!$order->save()) {
+					return Message::popWarning($order->errors);
+				}
+			}
+			 
+ 
+			//修改trade购买者
+			$trade = \common\models\DepositTradeModel::find()->where(['bizOrderId' => $order->order_sn])->one();
+			//var_dump($trade);die;
+			 
+			if(!empty($trade)){
+				$trade->status = 'PENDING';//待支付
+				$trade->payment_code='NULL';
+				$trade->payType='SHIELD';
+				$trade->fundchannel = '';
+				if(!$trade->save()) {
+					return Message::popWarning($trade->errors);
+				}
+			}
+		 
+		   //修改trade购买者
+		   $record = \common\models\DepositRecordModel::find()->where(['tradeNo' => $trade->tradeNo])->one();
+		  // var_dump($record);die;
+		   if(!empty($record)){
+			   $record->userid = $trade->buyer_id;
+			   if(!$record->save()) {
+				return Message::popWarning($record->errors);
+			   }
+		   }
+		    
+			return Message::popSuccess("编辑成功", urldecode(Yii::$app->request->post('redirect', Url::toRoute('orderbyhh/index'))));
+		}
+	}
+	/**
 	 * 修改订花人信息
 	 */
 	public function actionEditbuyer()

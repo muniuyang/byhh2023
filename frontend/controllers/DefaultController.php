@@ -55,6 +55,14 @@ class DefaultController extends \common\controllers\BaseMallController
 		$this->params['_foot_tags'] = Resource::import('jquery.plugins/jquery.lazyload.js,cart.js');
 
 		$this->params['page'] = Page::seo();
+		 /**********************[START]JchengCustom with local**********************/
+		$post = \common\library\Basewind::trimAll(Yii::$app->request->get(), true);
+		$visitor = $this->params['visitor'];
+		if($post->from == 'login' && ($visitor['userid'] == 5 || $visitor['username'] == '开业零售')){
+			//$redirect = Url::toRoute(['orderbyhh/index', 'from' => 'login']); 
+			return $this->redirect(['orderbyhh/index']);
+		}
+		/**********************[END]JchengCustom with local**********************/
         return $this->render('../index.html', $this->params);
 	}
 }

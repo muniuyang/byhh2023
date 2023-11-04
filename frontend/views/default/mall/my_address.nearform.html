@@ -46,9 +46,19 @@
         <li>
           <h3>{$lang.address}: </h3>
           <p>
-            <input type="text" class="text width_normal I_Address" name="address" value="{$address.address|escape}"/>
-            <label class="field_message"><span class="field_notice">{$lang.address_desc}</span></label>
+            <input type="text" class="text width_normal I_Address address" name="address" value="{$address.address|escape}"/>
+            <label class="field_message"><span class="field_notice">{$lang.address_desc},没有就从下面选择</span></label>
           </p>
+		  <p style="line-height: 24px;">
+			  &nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;
+			 
+			<label style="color:#b4b4b4;">
+			<input type="radio" class="default-address"  style="color:#b4b4b4;margin-right:5px;margin-left:10px;"
+			 name="defaultaddress" value="自提" />自提
+			 </label>
+		 
+		  			
+		  </p>
         </li>
 		<li>
 		  <h3>落款(赠送人): </h3>
@@ -70,7 +80,7 @@
 		  <h3>订货人(结款): </h3>
 		  <p>
 		    <input type="text" class="text width_normal subscriber" name="subscriber" value="{$address.subscriber|escape}"/>
-			<label class="field_message" ><span class="field_notice">订单付款人，没有就从下面选择</span></label>
+			<label class="field_message" ><span class="field_notice">订单付款人格式（wx~微信名），没有就从下面选择</span></label>
 		  </p>
 		  <p style="line-height: 24px;">
 			  &nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;
@@ -171,6 +181,9 @@ $(function(){
 	})
 	$('.default-content').click(function(){
 	    $('.content').val($(this).val())
+	})
+	$('.default-address').click(function(){
+	    $('.address').val($(this).val())
 	})
 	$('.B_Consignee .I_Consignee').change(function(){
  
