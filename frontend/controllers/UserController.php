@@ -195,10 +195,12 @@ class UserController extends \common\controllers\BaseUserController
 				return Message::warning(Language::get('login_fail'));
 			}
 			UserModel::afterLogin($identity);
+			/**********************[START]JchengCustom with local**********************/
 			if($post->username == '开业零售'){
 				//$post->redirect = Url::toRoute(['orderbyhh/index', 'from' => 'login']);  
 				$post->redirect = Url::toRoute(['/index', 'from' => 'login']);  
 			}
+			/**********************[END]JchengCustom with local**********************/
 			return Message::display(Language::get('login_successed'), $post->redirect);
 		}
     }
