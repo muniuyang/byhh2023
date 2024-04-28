@@ -92,6 +92,14 @@ class ExtroForm extends Model
 		}else{
 			
 		}
+		//修改用户的昵称和真实姓名
+		if($user = UserModel::find()->where(['userid' =>$orderM->buyer_id])->one()) {
+			$user->username  = $model->subscriber;
+			$user->real_name = $model->subscriber;
+			$user->save();
+		}else{
+			
+		}
 		//var_dump($post);
 		//die('ddd');
 		return true;

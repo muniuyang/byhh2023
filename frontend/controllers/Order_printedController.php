@@ -90,7 +90,8 @@ class Order_printedController extends \common\controllers\BaseUserController
 			['k'=>'wpsa08','w'=>'9.8cm','h'=>'14cm'],
 			['k'=>'wpsa09','w'=>'8cm','h'=>'14cm'],
 			['k'=>'wpsa10','w'=>'9.1cm','h'=>'11cm'],
-			['k'=>'wpsa11','w'=>'11cm','h'=>'9.1cm']
+			['k'=>'wpsa11','w'=>'11cm','h'=>'9.1cm'],
+			['k'=>'wpsa12','w'=>'11cm','h'=>'9cm']
 		];
 		$this->params['cardsB'] =[
 			['k'=>'wpsb01','w'=>'29.7cm','h'=>'21cm'],
