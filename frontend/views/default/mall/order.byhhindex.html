@@ -115,7 +115,7 @@
 			return "<i uri='{url route='orderbyhh/class' }?order_id="+res.order_id+"' id='order"+res.order_id+"_action_whatday' dialog_id='seller_order_whatday'  ectype='dialog' dialog_width='400' dialog_title='纪念日' class='layui-icon layui-icon-help' style='cursor: pointer;color:#00aaff;' lay-event='goodsClass'></i> <a href='javascript:;' lay-event='goodsView'>"+res.goods_name+"("+res.quantity+")</a>"
 		}
 	}}
-	, { field: 'store_name', title: '店名', width: 90 }
+	
 	, { field: 'consignee', title: '收货人(*收花人*)', width: 110 ,align: 'left',style:'color: #FF8800;',templet:function(res){
 		return "<em class='layui-icon layui-icon-dialogue consignee' lay-event='viewContent'    style='color:#00aaff;'></em>"+res.consignee;//+'('+res.buyer_name+')' ;
 	}}
@@ -175,11 +175,13 @@
 	}}	  
 	, { field: 'payment_name', title: '方式', width: 90, sort: true, align: 'center' }
 	, { field: 'pay_time', title: '付款时间', width: 170, sort: true, align: 'center' }
-	, { field: 'finished_time', title: '完成时间', width: 170, sort: true, align: 'center' }
+	, { field: 'finished_time', title: '完成时间', width: 170, sort: true, align: 'center' },
+	, { field: 'store_name', title: '店名', width: 90 }
 	/* , { fixed: 'right', title: '支付方式', width: 90, sort: false, align: 'center',templet:function(res){
 	 		return res.payment_name  ;
 	  }}*/
-	, { fixed: 'right', title: '操作', toolbar: '#colBar', width: 155, align: 'center'}
+	, { fixed: 'right', title: '操作', toolbar: '#colBar', width: 155, align: 'center'},
+	
 	
       ]]
       , page: {

@@ -4,69 +4,72 @@
    
     <div class="list" style="width:1200px;margin:0 auto;">
       <ul class="clearfix">
-		  <!--{foreach from=$cardsA item=record key=key}-->
+		<!--{if $cate_id == 21}-->
+		<!--{foreach from=$tempList item=record key=key}-->
         <li class="clearfix float-left">
           <div class="lp float-left"> 
-            <a href="javascript:;" 
+            <a  href="javascript:;" 
               uri="{url route='order_printed/iview'}" 
               dialog_width="700" 
               dialog_title="卡片模版预览" 
               dialog_data="iddd" 
               ectype="dialog"
-              dialog_id="a{$key+1}" 
+              dialog_id="a{$record.temp_sort}" 
               id="iview-dailog"
-              data-img="/data/template/img/a{$key+1}-1.png">
-		          <img src="/data/template/img/a{$key+1}-1.png" /></a>
+              data-img="/data/template/img/a{$record.temp_sort}-1.png">
+		          <img   src="/data/template/img/a{$record.temp_sort}.png" /></a>
          </div>
           <div class="mp float-left">
-            <div class="value1"><span style="font-size:18px;color:#f23030;">花束WPS（A{$key+1}）</span></div>
+            <div class="value1 viewBig"><span style="font-size:18px;color:#f23030;">花束模版（A{$record.temp_sort}）</span></div>
             <br/>
-            <div class="type can"><em class="red" style="padding:0;">模版尺寸：{$record.w} * {$record.h}</em></div>
+            <div class="type can"><em class="red" style="padding:0;">模版尺寸：{$record.temp_w}cm* {$record.temp_h}cm</em></div>
 			      <div class="can" style="font-weight: bold;">亲爱的，惠惠!</div>
             <div class="type mt10">&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;祝：生日快乐，天天开心</div>
             <div class="type mt10" style="float:right;">程进  <b>赠</b></div>
           </div>
           <div class="rp float-right">
-            <div class="wp"><a href="{url route='/order_printed/view' ptf={$key+1} order_id=$order_id}" > <span class="line"></span> <em class="text">立即打印</em> </a> </div>
+            <div class="wp"><a href="{url route='/order_printed/view' ptf={$record.temp_sort} order_id=$order_id}" > <span class="line"></span> <em class="text">立即打印</em> </a> </div>
           </div>
           <div class="ins float-right"> <i class="i1"></i> <i class="i2"></i> </div>
         </li>
 		<!--{/foreach}-->
-		
-          <!--{foreach from=$cardsB item=record key=key}-->
+		<!--{/if} -->
+		<!--{if $cate_id == 22}-->
+        <!--{foreach from=$tempList item=record key=key}-->
 
         <li class="clearfix float-left">
           <div class="lp float-left"> 
 
- <a href="javascript:;" 
+			<a href="javascript:;" 
               uri="{url route='order_printed/iview'}" 
               dialog_width="700" 
               dialog_title="卡片模版预览" 
               ectype="dialog"
-              dialog_id="b{$key+1}" 
+              dialog_id="b{$record.temp_sort}" 
               id="iview-dailog"
-              data-img="/data/template/img/b{$key+1}.png">
-              <img src="/data/template/img/b{$key+1}.png" /></a>
+              data-img="/data/template/img/b{$record.temp_sort}.png">
+              <img src="/data/template/img/b{$record.temp_sort}.png" /></a>
           </div>
           <div class="mp float-left">
-            <div class="value1"><span style="font-size:18px;color:#05d7a8;">开业WPS（B{$key+1}）</span></div>
+            <div class="value1 viewBig"><span style="font-size:18px;color:#05d7a8;">开业模版（B{$record.temp_sort}）</span></div>
             <br/>
-            <div class="type can"><em class="red" style="padding:0;">模版尺寸：{$record.w} * {$record.h}</em></div>
+            <div class="type can"><em class="red" style="padding:0;">模版尺寸：{$record.temp_w}cm* {$record.temp_h}cm</em></div>
           
             <div class="type mt10"><b>祝:</b>菲莉泓媛服饰</div>
             <div class="type mt10" >&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;开业大吉，财源广进</div>
-            <div class="type mt10" style="float:right;">衣铭服饰  <b>恭贺</b></div>
+            <div class="type mt10" style="float:right;">博艺花卉  <b>恭贺</b></div>
           </div>
           <div class="rp float-right">
             <div class="wp" style=" background-image: -moz-linear-gradient(top, #05d7a8, #05d7a8);
     background-image: -webkit-gradient(linear, left top, left bottom, color-stop(0, #05d7a8), color-stop(1, #f02353));
     filter: progid: DXImageTransform.Microsoft.gradient(startColorstr='#05d7a8', endColorstr='#05d7a8', GradientType='0');
     -ms-filter: progid: DXImageTransform.Microsoft.gradient(startColorstr='#05d7a8', endColorstr='#05d7a8');
-    background-image: linear-gradient(to bottom, #05d7a8 0, #05d7a8 100%);"><a href="{url route='/order_printed/view' ptf=(20+$key+1) order_id=$order_id}" > <span class="line"></span> <em class="text" >立即打印</em> </a> </div>
+    background-image: linear-gradient(to bottom, #05d7a8 0, #05d7a8 100%);"><a href="{url route='/order_printed/view' ptf=($record.temp_sort) order_id=$order_id}" > <span class="line"></span> <em class="text" >立即打印</em> </a> </div>
           </div>
           <div class="ins float-right"> <i class="i1"></i> <i class="i2"></i> </div>
         </li>
-    <!--{/foreach}-->
+    <!--{/foreach} -->
+	<!--{/if} -->
 
       </ul>
       <div class="clearfix pb10 center">{include file="page.bottom.html"}</div>
@@ -74,10 +77,24 @@
   </div>
 </div> 
 <div id="showDetail"><img src="" /></div>
-
+	  {literal}
+	  <style type="text/css">
+	  .layui-table-tips-main{
+		max-height:600px;
+		/*min-height:400px;*/
+		}
+	  </style>
+	  {/literal} 
 <script>
 $(function () {
-
+	$('.viewBig').click(function(){
+		var _im = $(this).parents('li').find('a').html();
+		$('.layui-table-tips-main').html(_im);
+		$('#p_content').show();
+	})
+	$('.layui-icon-close').click(function(){
+		$('#p_content').hide();
+	})
   $('.show-detail-dailog').click(function(){
     $("#showDetail img").attr('src',$(this).data('img'))
   $("#showDetail").dialog({
@@ -96,5 +113,18 @@ $(function () {
 
 })
 </script>
+
+<div class="layui-layer layui-layer-tips layui-table-tips" id="p_content" type="tips" times="1" showtime="-1" 
+contype="object" style="z-index: 19891015; position: absolute; left: 650px;width:auto; top: 260px;display:none;">
+	<div id="" class="layui-layer-content">
+		<div class="layui-table-tips-main" style="margin-top: -48px;padding: 30px;">
+			<p class="content-box"></p>
+		</div>
+		<i class="layui-icon layui-table-tips-c layui-icon-close"></i>
+	</div>
+	<span class="layui-layer-setwin"></span>
+</div>
+
+
 <iframe id="iframe" name="iframe" src="about:blank" frameborder="0" width="0" height="0" style="display:none"></iframe>
 {include file="footer.html"}

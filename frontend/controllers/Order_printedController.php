@@ -20,6 +20,7 @@ use PhpOffice\PhpWord\Settings;
 use yii\helpers\ArrayHelper;
 use yii\helpers\Url;
 use common\library\Resource;
+use common\models\NavigationModel;
 
 use common\library\Basewind;
 use common\library\Message;
@@ -42,7 +43,17 @@ class Order_printedController extends \common\controllers\BaseUserController
 	{
 		parent::init();
 		$this->view  = Page::setView('mall');
-		$this->params = ArrayHelper::merge($this->params, Page::getAssign('user'));
+		$get = Basewind::trimAll(Yii::$app->request->get(), true, ['order_id','ptf','cate_id']);
+		
+		//$this->params = ArrayHelper::merge($this->params, Page::getAssign('user'));
+		$this->params = ArrayHelper::merge($this->params, Page::getAssign('user'), [
+			'navs'	=>['middle'=>
+					[
+						['nav_id'=>'v01','title'=>'花束卡片','link'=>'order_printed/lists.html?cate_id=21&order_id='.$get->order_id],
+						['nav_id'=>'v012','title'=>'绿植卡片','link'=>'order_printed/lists.html?cate_id=22&order_id='.$get->order_id],
+					]
+			] 
+		]);
 		Taskqueue::run();
 	}
 
@@ -61,9 +72,9 @@ class Order_printedController extends \common\controllers\BaseUserController
 		$orderInfo['postscript'] = $orderInfo['orderExtm']['signature'];
 		$orderInfo['content'] = $orderInfo['orderExtm']['content'];
 
-		if($post->ptf >=1 && $post->ptf<=20){
+		if($post->ptf >=1 && $post->ptf<=100){
 			$this->actionExcute($orderInfo);
-		}else if($post->ptf >=21 && $post->ptf<=30){
+		}else if($post->ptf >=101 && $post->ptf<=201){
 			$this->actionPrinted($orderInfo);
 		}else{
 			return Message::warning("没找到模版，模版不存在！");
@@ -76,22 +87,40 @@ class Order_printedController extends \common\controllers\BaseUserController
 	public function actionLists()
     {
 		
-		$post = Basewind::trimAll(Yii::$app->request->get(), true, ['order_id','ptf']);
+		$post = Basewind::trimAll(Yii::$app->request->get(), true, ['order_id','ptf','cate_id']);
 		//var_dump($post);
+		if($post->cate_id == '22'){
+			$tempType = 2;
+		}else{
+			$post->cate_id = 21;
+			$tempType = 1;
+		}
+		
+		$tempList = \common\models\OrderPrintTempModel::find()->select('temp_sort,temp_w,temp_h,temp_t')
+		->where(['and',['=', 'temp_t', $tempType],['=', 'status', 1]])->orderBy(['temp_sort' => SORT_DESC])->asArray()->all();
+		
+		//var_dump($tempList);die;
+		$this->params['cate_id'] = $post->cate_id;
 		$this->params['order_id'] = $post->order_id;
+		
+
+		$this->params['tempList']=$tempList;
+		 
+		/*
 		$this->params['cardsA'] =[
-			['k'=>'wpsa01','w'=>'10.8cm','h'=>'7.5cm'],
-			['k'=>'wpsa02','w'=>'24cm','h'=>'12cm'],
-			['k'=>'wpsa03','w'=>'12.5cm','h'=>'19cm'],
-			['k'=>'wpsa04','w'=>'18.8cm','h'=>'14cm'],
-			['k'=>'wpsa05','w'=>'9cm','h'=>'9cm'],
-			['k'=>'wpsa06','w'=>'18.8cm','h'=>'14cm'],
-			['k'=>'wpsa07','w'=>'12cm','h'=>'9cm'],
-			['k'=>'wpsa08','w'=>'9.8cm','h'=>'14cm'],
-			['k'=>'wpsa09','w'=>'8cm','h'=>'14cm'],
-			['k'=>'wpsa10','w'=>'9.1cm','h'=>'11cm'],
-			['k'=>'wpsa11','w'=>'11cm','h'=>'9.1cm'],
-			['k'=>'wpsa12','w'=>'11cm','h'=>'9cm']
+			['k'=>'wpsa01','temp_w'=>'10.8cm','temp_h'=>'7.5cm'],
+			['k'=>'wpsa02','temp_w'=>'24cm','temp_h'=>'12cm'],
+			['k'=>'wpsa03','temp_w'=>'12.5cm','temp_h'=>'19cm'],
+			['k'=>'wpsa04','temp_w'=>'18.8cm','temp_h'=>'14cm'],
+			['k'=>'wpsa05','temp_w'=>'9cm','temp_h'=>'9cm'],
+			['k'=>'wpsa06','temp_w'=>'18.8cm','temp_h'=>'14cm'],
+			['k'=>'wpsa07','temp_w'=>'12cm','temp_h'=>'9cm'],
+			['k'=>'wpsa08','temp_w'=>'9.8cm','temp_h'=>'14cm'],
+			['k'=>'wpsa09','temp_w'=>'8cm','temp_h'=>'14cm'],
+			['k'=>'wpsa10','temp_w'=>'9.1cm','temp_h'=>'11cm'],
+			['k'=>'wpsa11','temp_w'=>'11cm','temp_h'=>'9.1cm'],
+			['k'=>'wpsa12','temp_w'=>'11cm','temp_h'=>'9cm'],
+			['k'=>'wpsa13','temp_w'=>'11cm','temp_h'=>'8cm']
 		];
 		$this->params['cardsB'] =[
 			['k'=>'wpsb01','w'=>'29.7cm','h'=>'21cm'],
@@ -104,6 +133,7 @@ class Order_printedController extends \common\controllers\BaseUserController
 			['k'=>'wpsb08','w'=>'29.7cm','h'=>'21cm'],
 			['k'=>'wpsb09','w'=>'29.7cm','h'=>'21cm']
 		];
+		*/
 		$this->params['_foot_tags'] = Resource::import([
 			'script' => 'jquery.ui/jquery.ui.js,jquery.ui/i18n/' . Yii::$app->language . '.js, dialog/dialog.js',
             'style' =>  'jquery.ui/themes/smoothness/jquery.ui.css,dialog/dialog.css'
@@ -118,9 +148,14 @@ class Order_printedController extends \common\controllers\BaseUserController
 			//$ns = str_split($this->params['dialog_id']);
 			preg_match('/\d+/',$this->params['dialog_id'],$matchs);
 			//var_dump($matchs);die;
-			$this->params['cardsA'] =[['id'=>'a'.$matchs[0]],['id'=>'a'.$matchs[0].'-1']];
+			$this->params['cardsA'] =[['id'=>'a'.$matchs[0].'-1'],['id'=>'a'.$matchs[0].'-2'],['id'=>'a'.$matchs[0].'-3']];
 		}else if(stripos("find-".$post->dialog_id,'b')){
 			$this->params['dialog_show'] = 'b-action';
+			if($post->dialog_id == 'b110'){
+			preg_match('/\d+/',$this->params['dialog_id'],$matchs);
+			 $this->params['cardsB'] =[['id'=>'b'.$matchs[0].'-1'],['id'=>'b'.$matchs[0].'-2'],['id'=>'b'.$matchs[0].'-3']];	
+			}
+
 		}else{
 			return Message::warning("没找到模版，模版不存在！");
 		}
