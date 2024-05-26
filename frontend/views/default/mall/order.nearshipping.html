@@ -5,7 +5,9 @@
 	var integralMaxPoints 		= {$goods_info.integralExchange.maxPoints|default:0};
 	var allowIntegral			= {$goods_info.allow_integral|default:false};
 	$(function(){
-		
+	/* 订单配送时间 */
+	 $('#send_date').datepicker({ dateFormat: 'yy-mm-dd' });
+	 
 		/* 订单总额初始化 */
 		fill_order_amount();
 					
@@ -173,7 +175,16 @@
 		$('.J_OrderAmount').html(number_format((order_amount-integral_value).toFixed(2), 2));
 	}
 </script>
-
+	  {literal}
+	  <style type="text/css">
+	   .layui-btn-cj{border-radius: 3px;
+		border: 1px #7F9DB9 solid;
+		height: 30px;
+		line-height: 30px;
+		padding: 0 5px;
+		margin: 0;}
+	  </style>
+	  {/literal} 
 <div id="select-address" class="w mt20">
 	<div class="title w mb10">
 		<b class="fs14">{$lang.consignee_address}</b> <a href="{url route='my_address/index'}" target="_blank">[{$lang.manage_address}]</a> 
@@ -203,4 +214,9 @@
 		<!--{/foreach}-->
 	</div>
 	<!--{/if}-->
+	<a href="javascript:;" ectype="dialog" dialog_title="{$lang.add_address}" dialog_id="my_address_add"
+	dialog_width="600" class="ml5 mr5  pointer layui-btn layui-bg-blue layui-btn-sm"> 
+	配送时间</a>
+	<input class="layui-btn-cj" type="text" value="{$lang.send_time}" id="send_date"
+	  name="send_date"  />
 </div>

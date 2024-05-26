@@ -87,6 +87,16 @@
 				{html_options  values=$whatdays output=$whatdays selected=$extro_info.what_day}
 			  </select>
 		  </p>
+		  <p>
+		  
+		  	<a href="javascript:;" ectype="dialog" dialog_title="{$lang.add_address}" dialog_id="my_address_add" 
+		  			dialog_width="600" class="btn-new-addr"> &nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp; &nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;
+		  			配送时间</a>
+		  	<input class="queryInput" type="text" value="{$extro_info.send_date}" id="send_date"
+		  	  name="send_date" class="pick_date" />
+		  
+		   
+		  </p>
 		</li>
       </ul>
       <div class="submit">
@@ -100,5 +110,8 @@
 <script type="text/javascript">
 $(function(){
     regionInit("region");
+	/* 订单配送时间 */
+	 $('#send_date').datepicker({ dateFormat: 'yy-mm-dd' });
+	 
 });
 </script>

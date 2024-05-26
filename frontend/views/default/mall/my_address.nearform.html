@@ -27,7 +27,7 @@
             <input type="hidden" name="region_name" value="{$address.region_name|escape}" class="mls_names" />
             <!-- {if $address.region_id} --> 
             <span>{$address.region_name|escape}</span>
-            <input type="button" value="{$lang.edit}" class="edit_region" />
+            <input type="button" value="{$lang.edit}" class="edit_region layui-btn layui-btn-primary layui-btn-sm box-align-center" />
             <select style="display:none" onchange="hide_error();">
               <option>{$lang.select_pls}</option>
 				{html_options options=$regions}      
@@ -138,25 +138,34 @@
 				{html_options options=$deliveryUsers selected=$address.book_id}
            </select>
           </p>
-		  <h3>&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;配送费:</h3>
-		  <p>
-		    <input type="text" class="text width_normal" name="book_amount" value="{$address.book_amount}"/>
-		    <label class="field_message"><span class="field_notice">默认10元</span></label>
-		  </p>
+		 <p style="display: none;">
+		 
+		 	<a href="javascript:;" > &nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp; &nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;
+			配送时间</a>
+		 	<input class="queryInput" type="text" value="{$lang.send_time}" id="send_date2"
+		 	  name="send_date2" class="pick_date" />
+		 
+		  
+		 </p>
 		</li>  
-		     
-
         <li>
-          <h3>设为默认:</h3>
-          <p style="line-height: 24px;">
-            <label>
-              <input type="radio"  style="margin-right:5px;" name="defaddr" value="0" {if $address.defaddr eq 0}checked="checked"{/if} />
-              {$lang.no} </label>
-            <label>
-              <input type="radio" name="defaddr" value="1" {if $address.defaddr eq 1}checked="checked"{/if} />
-              {$lang.yes} </label>
-          </p>
+			<h3>配送费:</h3>
+			<p>
+			  <input type="text" class="text width_normal" name="book_amount" value="{$address.book_amount}"/>
+			  <label class="field_message"><span class="field_notice">默认10元</span></label>
+			</p>
         </li>
+		<li>
+		  <h3>设为默认:</h3>
+		  <p style="line-height: 24px;">
+		    <label>
+		      <input type="radio"  style="margin-right:5px;" name="defaddr" value="0" {if $address.defaddr eq 0}checked="checked"{/if} />
+		      {$lang.no} </label>
+		    <label>
+		      <input type="radio" name="defaddr" value="1" {if $address.defaddr eq 1}checked="checked"{/if} />
+		      {$lang.yes} </label>
+		  </p>
+		</li>
       </ul>
       <div class="submit">
       	<input type="hidden" name="redirect" value="{$redirect}" />
@@ -170,6 +179,9 @@
   var defaultUser = "{$defaultUser['real_name']}";
 $(function(){
     regionInit("region");
+	/* 订单配送时间 */
+	 $('#send_date2').datepicker({ dateFormat: 'yy-mm-dd' });
+	 
     $('.default-user').click(function(){
         $('.subscriber').val($(this).val())
     })

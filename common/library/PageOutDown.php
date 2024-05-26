@@ -164,7 +164,7 @@ class PageOutDown
 					else if(in_array($k,['goods_name'])){$w = 24;}
 					else if(in_array($k,['add_time'])){$w = 22;}
 					else if(in_array($k,['order_sn','consignee','store_name','signature','real_name','phone_mob'])){$w = 14;}
-					else if(in_array($k,['status','payment_name'])){$w = 13;}
+					else if(in_array($k,['status','payment_name','send_date'])){$w = 13;}
 					else if(in_array($k,['goods_amount','shipping_fee','order_amount'])){$w = 7;}
 					//else if('goods_image' == $k ){$w = 10;}
 					else if('ID' == $k ){$w = 2;}

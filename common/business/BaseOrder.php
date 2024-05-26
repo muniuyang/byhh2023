@@ -128,7 +128,7 @@ class BaseOrder
 	 */
 	public function insertOrderExtm($order_id = 0, $consignee_info  = array())
 	{
-		
+		//var_dump($this->post);
 		if(in_array(Yii::$app->user->id,Yii::$app->params['createRights'])){//权限判断[START]JchengCustom
 			$addressBook = \common\models\AddressBookModel::find()->where(['book_id'=>$consignee_info['book_id']]);
 			$addressDelivery = new \common\models\AddressDeliveryModel(); 
@@ -136,6 +136,7 @@ class BaseOrder
 			$addressDelivery->amount   = $consignee_info['book_amount'];
 			$addressDelivery->book_id  = $consignee_info['book_id'];
 			$addressDelivery->save();
+			$consignee_info['send_date'] = $this->post->send_date ? $this->post->send_date :date('Y-m-d');//添加的订单配送时间
 			unset($consignee_info['book_id']);
 			unset($consignee_info['book_amount']);
 		}
@@ -145,6 +146,7 @@ class BaseOrder
 		foreach($consignee_info as $key => $value) {
 			$model->$key = $value;
 		}
+		
 		return $model->save();
 	}
 
@@ -311,6 +313,7 @@ class BaseOrder
         // 计算配送费用
 		$shipping_method = $this->getOrderShippings($goods_info);
 		$post = ArrayHelper::toArray($this->post);
+		//var_dump($post);
 		//祝贺语
 		$congra = \common\models\CongratulationsModel::find()->where(['addr_id' =>$post['addr_id']])->one();
 		foreach($shipping_method as $store_id => $shipping)

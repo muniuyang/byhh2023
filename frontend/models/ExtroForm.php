@@ -76,6 +76,7 @@ class ExtroForm extends Model
 		$model->subscriber 	= $post->subscriber;//订花人
 		$model->content 	= $post->content;//祝贺语
 		$model->what_day 	= $post->what_day;//祝贺语
+		$model->send_date 	= $post->send_date;//送货时间
 		/**********************[START]JchengCustom with local**********************/
 		if(!$model->save()) {
 			$this->errors = $model->errors;

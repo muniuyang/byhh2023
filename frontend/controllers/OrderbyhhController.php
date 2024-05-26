@@ -75,12 +75,13 @@ class OrderbyhhController extends \common\controllers\BaseUserController
 				}
 			}
 			$this->params['userBill'] = $temps;
+			//var_dump($this->params);die;
 			return $this->render('../order.byhhindex.html', $this->params);
 		}
 		else
 		{
 			$query = OrderModel::find()->alias('o')->select('o.order_id,o.order_sn,o.buyer_name,o.seller_name as store_name,o.goods_amount,o.order_amount,o.payment_name,o.status,o.add_time,o.pay_time,o.finished_time,
-			oe.consignee,oe.signature,oe.address,oe.shipping_fee,oe.what_day,oe.content,obi.real_name,og.goods_name,og.goods_image,og.goods_id,og.quantity');
+			oe.consignee,oe.signature,oe.address,oe.shipping_fee,oe.what_day,oe.send_date,oe.content,obi.real_name,og.goods_name,og.goods_image,og.goods_id,og.quantity');
 			//var_dump($post);die;
 			$query = $this->getConditions($post, $query);
 
@@ -146,7 +147,11 @@ class OrderbyhhController extends \common\controllers\BaseUserController
 			$this->params['whatdays'] =['生日','七夕','情人节','三八妇女节','结婚','结婚纪念日','开业'];
 			//var_dump($extroInfo);die('33');
 			$this->params = array_merge($this->params, ['extro_info' => $extroInfo['orderExtm'], 'redirect' => $redirect]);
-			return $this->render('../my_extro.nearextroform.html', $this->params);
+			if($post->from == 'send_date'){
+				return $this->render('../my_extro.nearextroformdate.html', $this->params);
+			}else{
+				return $this->render('../my_extro.nearextroform.html', $this->params);
+			}
 		}else{
 			if(in_array(Yii::$app->user->id,Yii::$app->params['createRights'])){//权限判断[START]JchengCustom
 				$valid = false;
@@ -798,7 +803,7 @@ class OrderbyhhController extends \common\controllers\BaseUserController
  
 		$query = OrderModel::find()->alias('o')->select('o.order_id,o.order_sn,o.buyer_name,o.seller_name as store_name,o.goods_amount,
 		o.order_amount,o.payment_name,o.status,o.add_time,o.pay_time,o.finished_time,
-		oe.consignee,oe.signature,oe.address,oe.region_name,oe.shipping_fee,obi.real_name,og.goods_name,og.goods_image');//oe.signature as real_name,'og.goods_name','og.goods_image'
+		oe.consignee,oe.signature,oe.address,oe.region_name,oe.shipping_fee,oe.send_date,obi.real_name,og.goods_name,og.goods_image');//oe.signature as real_name,'og.goods_name','og.goods_image'
 		$query = $this->getConditions($post, $query)
 		->joinWith('orderExtm oe', false)
 		->joinWith('orderBuyerInfo obi', false)

@@ -84,7 +84,7 @@ class GoodsController extends \common\controllers\BaseAdminController
 		{
 			$this->params['gcategories'] = GcategoryModel::find()->select('cate_name')->where(['parent_id' => 0, 'store_id' => 0])->indexBy('cate_id')->orderBy(['sort_order' => SORT_ASC, 'cate_id' => SORT_ASC])->column();
 			$this->params['brandList'] = BrandModel::find()->where(['if_show' => 1])->asArray()->all();
-			
+			var_dump($this->params['gcategories']);
 			$this->params['_foot_tags'] = Resource::import('mlselection.js');
 			
 			$this->params['page'] = Page::seo(['title' => Language::get('goods_edit')]);

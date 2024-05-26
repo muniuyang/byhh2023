@@ -1,0 +1,57 @@
+<link href="{res file='css/user.css'}" rel="stylesheet" type="text/css" />
+
+<div class="eject_con">
+  <form  method="post" target="iframe" action="{url route='order_printed/creats'}">
+    <div class="content_line add" style="width:560px;">
+      <div id="warning"></div>
+	</div>
+	<div class="content_line add" style="width:560px;">
+      <ul>
+        <li>
+          <h3>内容分类: </h3>
+          <p>
+			  
+			  <div id="gcategory">
+			    <input type="hidden" name="cate_id" value="0" class="mls_id" />
+			    <input type="hidden" name="cate_name" value="" class="mls_names" />
+			    <select name="pid">
+			  	<option value="">{$lang.select_pls}</option>
+					{html_options options=$SeleOne}
+			    </select>
+				<!--{if $selec }-->
+				<input type="hidden" name="id" value="{$oInfo.id}" />
+				<input type="hidden" name="opid" value="{$oInfo.pid|escape}"  class="uinfo" />
+				<input type="hidden" name="ocid" value="{$oInfo.cid|escape}"  class="uinfo" />
+				<a class="layui-btn layui-btn-primary layui-border-blue layui-btn-sm"  >
+					{$selec.p_name|escape}->{$selec.mls_name|escape}
+				</a>
+				<!--{/if}-->
+			    <span class="field_notice">{$lang.note_for_batedit}</span>
+			  </div>  
+          </p>
+        </li>
+        <li>
+          <h3>内容: </h3>
+          <p>
+			<textarea type="text" class="text width_normal I_Address" 
+			style="height: 100px; width: 400px;" name="content" value="{$oInfo.content}" >{$oInfo.content}</textarea>
+            <label class="field_message"><span class="field_notice"></span></label>
+          </p>
+        </li>
+      </ul>
+	</div>
+    <div class="submit" style="padding-left:80px;padding-right:60px;">
+      <input type="submit" id="confirm_button" class="btn1" value="{$lang.confirm}" />
+      <input type="button" id="cancel_button" class="btn2" value="{$lang.cancel}" />
+    </div>
+  </form>
+</div>
+
+<script type="text/javascript">
+		$(function(){
+			gcategoryInit("gcategory");
+			$('#cancel_button').click(function(){
+				DialogManager.close('create_printed_content');
+			});
+		});
+</script>

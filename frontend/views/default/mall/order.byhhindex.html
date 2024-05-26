@@ -2,7 +2,7 @@
 <div id="main">
   <div id="rightCon" class="clearfix layui-body" style="left:0;top:70px;">
     <div class="scroller" style="padding:0;">
-      <div class="search-form clearfix" style="padding:10;margin:0;margin-top:10px;">
+      <div class="search-form clearfix" style=" position: absolute;z-index: 999999;padding:10;margin:0;margin-top:0px;width:100%;">
         <form method="get" id="formSearch">
         <div class="webkit-box box-align-center">
           <input type="hidden" name="r" value="orderbyhh/index" />
@@ -50,10 +50,47 @@
 		max-height:450px;
 		/*min-height:400px;*/
 		}
+		.layui-table-main img{width:40px;height:40px}
+.layui-table-view .layui-form {
+  margin-bottom: 0; /* 移除默认的底部距离 */
+}
+ 
+.layui-table-box .layui-table-body table {
+  margin-top: 42px; /* 为表格顶部留出足够空间放置分页 */
+}
+ 
+/* 调整分页样式 */
+.layui-table-page {
+/*background-color: #ffffff;*/
+  margin: 0 ;
+  position: absolute;
+  top: 15px;
+  left: 77%;
+  width:35%;
+  z-index: 999999;
+  transform: translateX(-25%); /* 水平居中分页 */
+}
+.layui-table-box .layui-table-body table {
+    margin-top: 0px;
+}
+.layui-table-tool .layui-btn-container {
+    margin-bottom: -20px;
+}
+.layui-table,.layui-table-view {
+    margin: 120px 0;
+}
+.layui-table-tool {padding-left:5px;}
+.layui-table-page>div {
+    transform: translateX(2%); /* 水平居中分页 */
+}
 	  </style>
 	  {/literal} 
+	  
+	  
       <div class="tablegrid1">
-        <table class="layui-hide" id="tablegrid" lay-filter="tablegrid"></table>
+		 
+          <table class="layui-hide" id="tablegrid" lay-filter="tablegrid"></table>
+		   
       </div>
     </div>
   </div>
@@ -80,21 +117,48 @@
     var table = layui.table;
 
     table.render({
-	elem: '#tablegrid'
+	elem: '#tablegrid',
+	title:'订单表'
 	//,skin: 'line'
+	,page: true // 开启分页
 	, url: url(['orderbyhh/index', $("#formSearch").serializeJson()])
 	, toolbar: '#toolbar'
 	,limit:14
 	, defaultToolbar: ['filter', /*'exports',*/ 'print']
 	, title: '订单列表'
 	//, size: 'lg'
+	,done: function(res, curr, count){
+	      // 将分页的元素移动到指定位置
+	      //document.getElementById('tablegrid-page').innerHTML = '';
+	     // document.getElementById('tablegrid').parentNode.insertBefore(document.getElementById('tablegrid-page'), document.getElementById('tablegrid').nextSibling);
+		console.log('To:',res, curr, count)
+	
+			// 自定义页码布局
+	    var laypage = table.render({
+	        elem: 'tablegrid-page' //注意，这里的 elem 是一个模拟的id，不存在于实际的html中，仅用于指引laypage
+	        ,count: count //数据总数
+	        ,limit: res.limit //每页显示的数量
+	        ,curr: curr //当前页
+	        ,layout: ['count', 'prev', 'page', 'next', 'limit', 'skip'] //自定义布局
+	        ,jump: function(obj, first){
+	          //obj包含了分页的所有参数，比如：
+	          //console.log(obj.curr); //当前页码
+	          //console.log(obj.limit); //每页显示条数
+	          //首次不执行
+	          if(!first){
+	            //do something
+	          }
+	        }
+		})
+	
+	}
 	, cols: [[
 	{ type: 'checkbox', fixed: 'left', width: 30,}
     , { field: 'order_id', title: 'ID', width: 60, fixed: 'left', unresize: true, sort: true ,templet:function(res){
           return "<i uri='{url route='orderbyhh/editgood' }?order_id="+res.order_id+"' id='order"+res.order_id+"_action_upgood' dialog_id='seller_order_upgood'  ectype='dialog' dialog_width='450' dialog_title='变更订单商品'  style='cursor: pointer;color:#FF8800;' lay-event='goodsUpdate'>"+res.order_id+"</i>";
         }}
     , { field: 'goods_image', title: '图片', width: 60,templet:function(res){
-				return '<img src='+res.goods_image+' style="with:60px;"/>' ;
+				return '<img src='+res.goods_image+' />' ;
 			}}
 	, { field: 'goods_name', title: '标题(*款式*)', width: 250 ,templet:function(res){
 		if(res.what_day == '生日'){
@@ -116,7 +180,7 @@
 		}
 	}}
 	
-	, { field: 'consignee', title: '收货人(*收花人*)', width: 110 ,align: 'left',style:'color: #FF8800;',templet:function(res){
+	, { field: 'consignee', title: '收货人', width: 110 ,align: 'left',style:'color: #FF8800;',templet:function(res){
 		return "<em class='layui-icon layui-icon-dialogue consignee' lay-event='viewContent'    style='color:#00aaff;'></em>"+res.consignee;//+'('+res.buyer_name+')' ;
 	}}
 	, { field: 'address', title: '收货地址', width: 170 ,align: 'center',style:'color: #FF8800;',templet:function(res){
@@ -133,6 +197,7 @@
 		 +" dialog_id='my_address_extro' name='order_id'>"
 		 +"<i class='layui-icon layui-icon-edit'  style='cursor: pointer;color:#ff0000;'></i></a>"+ res.real_name;		
 	}}
+	
 	, { field: 'goods_amount', title: '售价', width: 100, sort: true, align: 'center' ,templet:function(res){
 		return "<span style=' text-decoration: line-through;color:red;'>"+res.goods_amount+"</span>"
 	} }
@@ -146,6 +211,12 @@
 	, { field: 'order_amount', title: '金额', width: 100, sort: true, align: 'center',templet:function(res){
 		return "<span style='color:#00AA00;' controller='orderbyhh' fieldid='"+res.order_id+"' fieldname='order_amount'  ectype='inline_edit' >"+res.order_amount+"</span>"
 	} }
+	, { field: 'real_name', title: '配送时间(预订)', width: 140 ,align: 'center',style:'color: #00ff00;',templet:function(res){
+		return '<a href="JavaScript:;"  dialog_width="450"   dialog_title="修改配送时间" ectype="dialog" '
+		 +"uri={url route='orderbyhh/extro' redirect=$redirect }?from=send_date&order_id="+res.order_id
+		 +" dialog_id='my_address_extro' name='order_id'>"
+		 +"<i class='layui-icon layui-icon-edit'  style='cursor: pointer;color:#ff0000;'></i></a>"+ res.send_date;		
+	}}
 	, { field: 'add_time', title: '下单时间', width: 170, sort: true, align: 'center' }
 	, { field: 'status', title: '支付状态', width: 100, sort: false, align: 'center',templet:function(res){
 		//console.log(res);

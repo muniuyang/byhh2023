@@ -1,0 +1,41 @@
+	<link href="{res file='css/user.css'}" rel="stylesheet" type="text/css" />
+
+<div class="eject_con">
+  <div class="add">
+    <div id="warning"></div>
+    <form method="post" action="{$action}" id="address_form" target="iframe">
+      <ul>
+		<li>
+		<input type="hidden"  name="consignee" value="{$extro_info.consignee|escape}"/>
+		<input type="hidden" name="region_id" value="{$extro_info.region_id}" id="region_id" class="mls_id" />
+		<input type="hidden" name="region_name" value="{$extro_info.region_name|escape}" class="mls_names" />
+		<input type="hidden"  name="address" value="{$extro_info.address|escape}"/>
+		<input type="hidden"  name="signature" value="{$extro_info.signature|escape}"/>
+		<input type="hidden"  name="subscriber" value="{$extro_info.subscriber|escape}"/>
+		<input type="hidden"  name="phone_mob" value="{$extro_info.phone_mob}"/>
+		
+		  <p>
+		<a href="javascript:;" ectype="dialog" dialog_title="{$lang.add_address}" dialog_id="my_address_add" 
+		  			dialog_width="600" class="btn-new-addr"> &nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp; &nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;
+		  			配送时间</a>
+		  	<input class="queryInput" type="text" value="{$extro_info.send_date}" id="send_date"
+		  	  name="send_date" class="pick_date" />
+		  </p>
+		</li>
+      </ul>
+      <div class="submit">
+		  <input type="hidden" name="order_id" value="{$extro_info.order_id}" />
+      	<input type="hidden" name="redirect" value="{$redirect}" />
+        <input type="submit" class="btn" value="{$lang.submit}" />
+      </div>
+    </form>
+  </div>
+</div>
+<script type="text/javascript">
+$(function(){
+  
+	/* 订单配送时间 */
+	 $('#send_date').datepicker({ dateFormat: 'yy-mm-dd' });
+	 
+});
+</script>

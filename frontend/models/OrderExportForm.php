@@ -43,6 +43,7 @@ class OrderExportForm extends Model
     		'order_amount' 	=> '金额',
     		'payment_name' 	=> '付款方式',
 			'status'		=> '订单状态',
+			'send_date'		=> '配送时间',
 			'add_time' 		=> '下单时间',
     		'address' 		=> '收货人地址',
 			'phone_mob' 	=> '收货人电话',
