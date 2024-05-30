@@ -81,7 +81,7 @@ class OrderbyhhController extends \common\controllers\BaseUserController
 		else
 		{
 			$query = OrderModel::find()->alias('o')->select('o.order_id,o.order_sn,o.buyer_name,o.seller_name as store_name,o.goods_amount,o.order_amount,o.payment_name,o.status,o.add_time,o.pay_time,o.finished_time,
-			oe.consignee,oe.signature,oe.address,oe.shipping_fee,oe.what_day,oe.send_date,oe.content,obi.real_name,og.goods_name,og.goods_image,og.goods_id,og.quantity');
+			oe.consignee,oe.signature,oe.address,oe.shipping_fee,oe.what_day,oe.send_date,oe.is_printed,oe.content,obi.real_name,og.goods_name,og.goods_image,og.goods_id,og.quantity');
 			//var_dump($post);die;
 			$query = $this->getConditions($post, $query);
 
@@ -93,10 +93,10 @@ class OrderbyhhController extends \common\controllers\BaseUserController
 			//var_dump($query->createCommand()->getRawSql());die;
 
 
-			$page = Page::getPage($query->count(), $post->limit ? $post->limit : 14);
+			$page = Page::getPage($query->count(), $post->limit ? $post->limit : 15);
 			$list = $query->offset($page->offset)->limit($page->limit)->asArray()->all();
 
-			//var_dump($list);die;
+			
 			foreach ($list as $key => $value)
 			{
 				$list[$key]['tradeNo'] = DepositTradeModel::find()->select('tradeNo')->where(['bizOrderId' => $value['order_sn']])->scalar();// 是否申请过退款
@@ -111,8 +111,14 @@ class OrderbyhhController extends \common\controllers\BaseUserController
 					$list[$key]['refund_status'] = '';
 					$list[$key]['refund_id'] = '';
 				}
+				if($list[$key]['send_date'] > date('Y-m-d')){
+					$list[$key]['msg'] = "预订订单";
+				}else{
+					$list[$key]['msg'] = "实时订单";
+				}
 				
 			}
+			//var_dump($list);die;
 			return Json::encode(['code' => 0, 'msg' => '', 'count' => $query->count(), 'data' => $list]);
 		}
 	}
@@ -566,29 +572,41 @@ class OrderbyhhController extends \common\controllers\BaseUserController
 			return Message::popSuccess("编辑成功", urldecode(Yii::$app->request->post('redirect', Url::toRoute('orderbyhh/index'))));
 		}
 	}	
+	
+	
 	/**
 	 * 修改订单价格
 	 */
 	public function actionEditcol()
 	{
 		$get = Basewind::trimAll(Yii::$app->request->get(), true);
-	 
-		if(in_array(Yii::$app->user->id,Yii::$app->params['createRights'])){//权限判断[START]JchengCustom
-			if(in_array($get->column, ['order_amount'])) {
-				$params = (object) array();
-				$params->order_id = $get->id;
- 				$params->{$get->column} = $get->value;
-				$model = new \frontend\models\Seller_orderAdjustfeeForm(['store_id' => $this->visitor['store_id']]);
-				if(!($orderInfo = $model->formData($params))) {		
-					return Message::warning($model->errors);
-				}
-			}
-			if(!$model->submit($params, $orderInfo)) {
-				return Message::popWarning($model->errors);
-			}
-			return Message::display(Language::get('edit_ok'));
+		$post = Basewind::trimAll(Yii::$app->request->get(), true, ['id', 'is_printed']);
+		if(in_array($post->column, ['is_printed','recommended'])) 
+		{
+		  	$query = \common\models\OrderExtmModel::find()->where(['order_id'=>$post->id])->one();
+		  	$query->{$post->column} = $post->value;
+		  	if(!($status = $query->save())) {
+		  		return Message::warning($query->errors);
+		  	}
+		  	return Message::display(Language::get('edit_ok'));
 		}else{
-			return Message::popWarning("权限不够");
+			if(in_array(Yii::$app->user->id,Yii::$app->params['createRights'])){//权限判断[START]JchengCustom
+				if(in_array($get->column, ['order_amount'])) {
+					$params = (object) array();
+					$params->order_id = $get->id;
+					$params->{$get->column} = $get->value;
+					$model = new \frontend\models\Seller_orderAdjustfeeForm(['store_id' => $this->visitor['store_id']]);
+					if(!($orderInfo = $model->formData($params))) {		
+						return Message::warning($model->errors);
+					}
+				}
+				if(!$model->submit($params, $orderInfo)) {
+					return Message::popWarning($model->errors);
+				}
+				return Message::display(Language::get('edit_ok'));
+			}else{
+				return Message::popWarning("权限不够");
+			}
 		}
 	}
 	/**
