@@ -5,8 +5,7 @@
 	var integralMaxPoints 		= {$goods_info.integralExchange.maxPoints|default:0};
 	var allowIntegral			= {$goods_info.allow_integral|default:false};
 	$(function(){
-	/* 订单配送时间 */
-	 $('#send_date').datepicker({ dateFormat: 'yy-mm-dd' });
+	
 	 
 		/* 订单总额初始化 */
 		fill_order_amount();
@@ -199,14 +198,14 @@
 		<dl class="f66 clearfix {if $smarty.foreach.fe_address.first} selected_address{/if} J_AddressEach" {if $smarty.foreach.fe_address.iteration % 4 eq 0} style="margin-right:0;"{/if}>
 			<dt>
 				<input type="checkbox" name="addr_id" value="{$address.addr_id}" {if $smarty.foreach.fe_address.first} checked="checked" {/if}/>
-				<b>{$address.region_name} ( {$address.consignee|escape} {$lang.shou} )</b> <ins class="deftip" {if $address.defaddr} style="display:block"{/if}>{$lang.default_addr}</ins>
+				<b><span style="color:#1BBC9D">{$address.consignee|escape} </span> {$lang.shou}({$address.region_name})</b> <ins class="deftip" {if $address.defaddr} style="display:block"{/if}>{$lang.default_addr}</ins>
 			</dt>
-			<dd class="addr-bd"> {$address.address|escape}  <br/>落款:<span style="font-weight: bold;">{$address.signature|escape}</span>
+			<dd class="addr-bd"> {$address.address|escape}  <br/>落款:<span style="font-weight: bold;color:#1E9FFF">{$address.signature|escape}</span>
 			&nbsp;&nbsp;{$address.phone_mob|default:$address.phone_tel} 
 			</dd>
 			<dd class="addr-toolbar">
 				<i class="curmarker"></i>
-				订花人:<span style="font-weight: bold;">{$address.subscriber|escape}</span>
+				订花人:<span style="font-weight: bold;color:#FFB800">{$address.subscriber|escape}</span>
 				&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;<a href="javascript:;" class="btn-modify"  ectype="dialog" dialog_id="my_address_edit" dialog_width="600" dialog_title="{$lang.edit_address}" uri="{url route='my_address/edit' redirect=$redirect addr_id=$address.addr_id}">{$lang.modify}</a>
 				 
 			</dd>
@@ -214,9 +213,60 @@
 		<!--{/foreach}-->
 	</div>
 	<!--{/if}-->
-	<a href="javascript:;" ectype="dialog" dialog_title="{$lang.add_address}" dialog_id="my_address_add"
-	dialog_width="600" class="ml5 mr5  pointer layui-btn layui-bg-blue layui-btn-sm"> 
-	配送时间</a>
-	<input class="layui-btn-cj" type="text" value="{$lang.send_time}" id="send_date"
-	  name="send_date"  />
+
+	  <div class="mb10 mt10 clearfix">
+<span class="ml5 mr5  pointer layui-btn layui-bg-blue layui-btn-sm"> 
+	   配送时间</span>
+		  <input class="layui-btn-cj" type="text" value="{$lang.send_time}" id="send_date"
+		    name="send_date"  />
+		<a class="layui-btn layui-bg-red layui-btn-sm pick_date" id="pick_date" style="color:red;cursor:none;">
+		  <i class="layui-icon layui-icon-date"></i>
+		  <input type="text" class="layui-btn layui-bg-red layui-btn-sm pick_date" style="cursor: pointer;width:58px;height:30px;border:0;padding:10px 0;margin-top:-6px;" value="选择日期"/>
+		</a>
+			
+		&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;	
+	   <span class="ml5 mr5  pointer layui-btn layui-bg-blue layui-btn-sm"> 
+	   年结单客户</span>&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;
+		  <label>
+		  <input type="radio" name="is_year" value="1"  />
+		  年结客户</label>&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;
+			 <label>
+			<input type="radio"  style="margin-right:5px;" name="is_year" value="0" checked="checked" />
+			  非年结客户</label>
+	  </div>
 </div>
+<script type="text/javascript">
+$(function(){
+  
+	/* 订单配送时间 */
+	// $('#send_date').datepicker({ dateFormat: 'yy-mm-dd' });
+	$('.pick_date').datetimepicker({
+	  timeText: '时间',
+	  hourText: '小时',
+	  minuteText: '分钟',
+	  secondText: '秒',
+	  currentText: '现在',
+	  closeText: '完成',
+	  showSecond: true, //显示秒  
+	  timeFormat: 'HH:mm:ss' ,//格式化时间
+		onChange(res){
+		consol.log('change');
+		},
+		onselect:function(){
+		console.log('onselect');
+		},
+		beforeShow:function(){
+		console.log('beforeShow');
+		},
+		onClose:function(res){
+		$(this).val('选择日期');
+		if(res == '选择日期'){
+		 return false;
+		}
+		let time = new Date();
+
+		$('#send_date').val(res);  
+		}
+	});
+});
+</script>

@@ -64,8 +64,8 @@
   margin: 0 ;
   position: absolute;
   top: 68px;
-  left: 79%;
-  width:28%;
+  left: 82%;
+  width:24%;
   padding:0;
   z-index: 999999;
   transform: translateX(-25%); /* 水平居中分页 */
@@ -76,14 +76,24 @@
  .layui-table-tool-self {
      top: 0px;
  }
+ .layui-table-box .layui-table-header{
  
+  position: fixed;
+  top: 194px;
+   z-index: 100;
+
+ }
+ .layui-table-body{
+	 margin-top:52px;
+ }
 /* 调整分页样式 */
 .layui-table-page {
 /*background-color: #ffffff;*/
   margin: 0 ;
+  padding:0;
   position: absolute;
-  top: 68px;
-  left: 48%;
+  top: 74px;
+  left: 50%;
   width:32%;
   z-index: 999999;
   transform: translateX(-25%); /* 水平居中分页 */
@@ -106,6 +116,9 @@
 
     padding: 0 ; 
 
+}
+.layui-table-tool-temp {
+    padding-right: 0px;
 }
 	  </style>
 	  {/literal} 
@@ -133,7 +146,8 @@
  
 <script type="text/html" id="colBar">
   <a class="ml5 mr5 blue pointer layui-btn layui-bg-blue layui-btn-sm"  lay-event="open_printed">开业打印</a>
-   <a class="ml5 mr5 yellow pointer layui-btn layui-bg-orange layui-btn-sm" lay-event="other_printed">其他打印</a>
+  <a class="ml5 mr5 yellow pointer layui-btn layui-bg-orange layui-btn-sm" lay-event="other_printed">小卡打印</a>
+  
   <a class="ml5 mr5 blue pointer layui-btn layui-bg-green layui-btn-sm" lay-event="view">查看</a>
 </script>
 <script>
@@ -182,75 +196,110 @@
 	, cols: [[
 	{ type: 'checkbox', fixed: 'left', width: 30,}
     , { field: 'order_id', title: 'ID', width: 40, fixed: 'left', unresize: true, sort: true ,templet:function(res){
-          return "<i uri='{url route='orderbyhh/editgood' }?order_id="+res.order_id+"' id='order"+res.order_id+"_action_upgood' dialog_id='seller_order_upgood'  ectype='dialog' dialog_width='450' dialog_title='变更订单商品'  style='cursor: pointer;color:#FF8800;' lay-event='goodsUpdate'>"+res.order_id+"</i>";
+          return "<i title='修改商品ID' uri='{url route='orderbyhh/editgood' }?order_id="+res.order_id+"' id='order"+res.order_id+"_action_upgood' dialog_id='seller_order_upgood'  ectype='dialog' dialog_width='450' dialog_title='变更订单商品'  style='cursor: pointer;color:#FF8800;' lay-event='goodsUpdate'>"+res.order_id+"</i>";
         }}
     , { field: 'goods_image', title: '图片', width: 35,templet:function(res){
 				return '<img src='+res.goods_image+' />' ;
 			}}
-	, { field: 'goods_name', title: '标题', width: 190 ,templet:function(res){
+	, { field: 'goods_name', title: '标题', width: 220 ,templet:function(res){
 		//return res.goods_name+"("+res.quantity+")";
 		if(res.what_day == '生日'){
-			return "<i uri='{url route='orderbyhh/class' }?order_id="+res.order_id+"' id='order"+res.order_id+"_action_whatday' dialog_id='seller_order_whatday'  ectype='dialog' dialog_width='400' dialog_title='纪念日' class='layui-icon layui-icon-gift' style='cursor: pointer;color:#FF8800;' lay-event='goodsClass'></i> <a href='javascript:;' lay-event='goodsView'>"+res.goods_name+"("+res.quantity+")</a>";
+			return "<i title='修改订单属性' uri='{url route='orderbyhh/class' }?order_id="+res.order_id+"' id='order"+res.order_id+"_action_whatday' dialog_id='seller_order_whatday'  ectype='dialog' dialog_width='400' dialog_title='纪念日' class='layui-icon layui-icon-gift' style='cursor: pointer;color:#FF8800;' lay-event='goodsClass'></i> <a href='javascript:;' lay-event='goodsView'>"+res.goods_name+"("+res.quantity+")</a>";
 		}else if(res.what_day == '开业'){
-			return "<i uri='{url route='orderbyhh/class' }?order_id="+res.order_id+"' id='order"+res.order_id+"_action_whatday' dialog_id='seller_order_whatday'  ectype='dialog' dialog_width='400' dialog_title='纪念日' class='layui-icon layui-icon-tree' style='cursor: pointer;color:#00AA00;' lay-event='goodsClass'></i> <a href='javascript:;' lay-event='goodsView'>"+res.goods_name+"("+res.quantity+")</a>"
+			return "<i title='修改订单属性' uri='{url route='orderbyhh/class' }?order_id="+res.order_id+"' id='order"+res.order_id+"_action_whatday' dialog_id='seller_order_whatday'  ectype='dialog' dialog_width='400' dialog_title='纪念日' class='layui-icon layui-icon-tree' style='cursor: pointer;color:#00AA00;' lay-event='goodsClass'></i> <a href='javascript:;' lay-event='goodsView'>"+res.goods_name+"("+res.quantity+")</a>"
 		}else if(res.what_day == '七夕'){
-			return  "<a href='javascript:;' lay-event='goodsView'>"+res.goods_name+"("+res.quantity+")</a>"
+			return  "<a title='修改订单属性' href='javascript:;' lay-event='goodsView'>"+res.goods_name+"("+res.quantity+")</a>"
 		}else if(res.what_day == '情人节'){
-			return  "<a href='javascript:;' lay-event='goodsView'>"+res.goods_name+"("+res.quantity+")</a>"
+			return  "<a title='修改订单属性' href='javascript:;' lay-event='goodsView'>"+res.goods_name+"("+res.quantity+")</a>"
 		}else if(res.what_day == '结婚'){
-			return  "<a href='javascript:;' lay-event='goodsView'>"+res.goods_name+"("+res.quantity+")</a>"
+			return  "<a title='修改订单属性' href='javascript:;' lay-event='goodsView'>"+res.goods_name+"("+res.quantity+")</a>"
 		}else if(res.what_day == '结婚纪念日'){
-			return  "<a href='javascript:;' lay-event='goodsView'>"+res.goods_name+"("+res.quantity+")</a>"
+			return  "<a title='修改订单属性' href='javascript:;' lay-event='goodsView'>"+res.goods_name+"("+res.quantity+")</a>"
 		}else if(res.what_day == '三八妇女节'){
-			return  "<a href='javascript:;' lay-event='goodsView'>"+res.goods_name+"("+res.quantity+")</a>"
+			return  "<a title='修改订单属性' href='javascript:;' lay-event='goodsView'>"+res.goods_name+"("+res.quantity+")</a>"
 		}else{
-			return "<i uri='{url route='orderbyhh/class' }?order_id="+res.order_id+"' id='order"+res.order_id+"_action_whatday' dialog_id='seller_order_whatday'  ectype='dialog' dialog_width='400' dialog_title='纪念日' class='layui-icon layui-icon-help' style='cursor: pointer;color:#00aaff;' lay-event='goodsClass'></i> <a href='javascript:;' lay-event='goodsView'>"+res.goods_name+"("+res.quantity+")</a>"
+			return "<i title='修改订单属性' uri='{url route='orderbyhh/class' }?order_id="+res.order_id+"' id='order"+res.order_id+"_action_whatday' dialog_id='seller_order_whatday'  ectype='dialog' dialog_width='400' dialog_title='纪念日' class='layui-icon layui-icon-help' style='cursor: pointer;color:#00aaff;' lay-event='goodsClass'></i> <a href='javascript:;' lay-event='goodsView'>"+res.goods_name+"("+res.quantity+")</a>"
 		}
 	}}
-	
-	, { field: 'consignee', title: '收货人', width: 110 ,align: 'center',style:'color: #FF8800;',templet:function(res){
+	, { field: 'isPrinted', title: '错单', width: 50,  align: 'center',templet:function(res){
+		return '<em class="'+(res.is_error==0 ? 'no':'yes')+'" ectype="inline_edit" controller="orderbyhh" fieldname="is_error" fieldid="'+res.order_id
+		+'" fieldvalue="'+res.is_error+'" title="可编辑"><i class="fa '
+		+(res.is_error==0 ? 'fa-ban':'fa-check-circle')+'"></i>'+(res.is_error==0 ? '否':'是')+'</em>';
+	  }}
+	, { field: 'consignee', title: '收货人', width: 100 ,align: 'left',style:'color: #FF8800;',templet:function(res){
 		return "<em class='layui-icon layui-icon-dialogue consignee' lay-event='viewContent'    style='color:#00aaff;'></em>"+res.consignee;//+'('+res.buyer_name+')' ;
 	}}
-	, { field: 'address', title: '收货地址', width: 120 ,align: 'center',style:'color: #202120;',templet:function(res){
+	, { field: 'address', title: '收货地址', width: 140 ,align: 'left',style:'color: #202120;',templet:function(res){
 		
 		return '<a href="JavaScript:;"   dialog_title="修改收货人信息" ectype="dialog" '
 		 +"uri={url route='orderbyhh/extro' redirect=$redirect }?order_id="+res.order_id
 		 +" dialog_id='my_address_extro' name='order_id'>"
 		 +"<i class='layui-icon layui-icon-edit'  style='cursor: pointer;color:#ff0000;'></i></a>"+ res.address;
 	}}
-	, { field: 'signature', title: '签名落款', width: 110 ,align: 'center',style:'color: #FF8800;'}
-	, { field: 'real_name', title: '买货人(*订花人*)', width: 120 ,align: 'center',style:'color: #00AA00;',templet:function(res){
-		return '<a href="JavaScript:;" dialog_width="550"   dialog_title="修改订花人信息" ectype="dialog" '
-		 +"uri={url route='orderbyhh/editbuyer' redirect=$redirect }?order_id="+res.order_id
-		 +" dialog_id='my_address_extro' name='order_id'>"
-		 +"<i class='layui-icon layui-icon-edit'  style='cursor: pointer;color:#ff0000;'></i></a>"+ res.real_name;		
-	}}
+	, { field: 'signature', title: '签名落款', width: 95 ,align: 'left',style:'color: #FF8800;'}
 	
-	, { field: 'goods_amount', title: '售价', width: 80, sort: true, align: 'center' ,templet:function(res){
+	
+	, { field: 'goods_amount', title: '售价', width: 70, align: 'center' ,templet:function(res){
 		return "<span style=' text-decoration: line-through;color:red;'>"+res.goods_amount+"</span>"
 	} }
-	, { field: 'shipping_fee', title: '运费', width: 80, sort: true, align: 'center' ,templet:function(res){
+	, { field: 'shipping_fee', title: '运费', width: 70, align: 'center' ,templet:function(res){
 		
 		return "<i uri='{url route='orderbyhh/cdelivery' }?order_id="+res.order_id+"' id='order"+res.order_id+"_action_delivery'"
 		+" dialog_id='seller_order_delivery'  ectype='dialog' dialog_width='450' dialog_title='配送人'"
 				+" class='layui-icon layui-icon-release' style='cursor: pointer;color:#ff0000;' lay-event='goodsDelivery'></i>"
 				+"<span style=' text-decoration: line-through;color:red;'>"+res.shipping_fee+"</span>"
 	} }
-	, { field: 'order_amount', title: '金额', width: 80, sort: true, align: 'center',templet:function(res){
+	, { field: 'real_name', title: '订花人', width: 110 ,align: 'left',style:'color: #00AA00;',templet:function(res){
+		return '<a href="JavaScript:;" dialog_width="550"  title="修改订花人"  dialog_title="修改订花人信息" ectype="dialog" '
+		 +"uri={url route='orderbyhh/editbuyer' redirect=$redirect }?order_id="+res.order_id
+		 +" dialog_id='my_address_extro' name='order_id'>"
+		 +"<i class='layui-icon layui-icon-edit'  style='cursor: pointer;color:#ff0000;'></i></a>"+ res.real_name;		
+	}}
+	, { field: 'order_amount', title: '金额', width: 70,  align: 'center',templet:function(res){
 		return "<span style='color:#00AA00;' controller='orderbyhh' fieldid='"+res.order_id+"' fieldname='order_amount'  ectype='inline_edit' >"+res.order_amount+"</span>"
 	} }
-	, { field: 'real_name', title: '配送时间', width: 120 ,align: 'center',style:'color: #666;',templet:function(res){
+	, { field: 'real_name', title: '配送时间', width: 210 ,align: 'left',style:'color: #666;',templet:function(res){
 		var _conent =  res.send_date;
-		if(res.msg == '预订订单'){
-			_conent = "<span style='cursor: pointer;color:#00aaff;'>["+res.msg+"]"+ res.send_date+"号配送</span>";
+		if(res.msg == '预订'){
+			_conent = '<a href="JavaScript:;"  dialog_width="450"   title="修改配送时间" dialog_title="修改配送时间" ectype="dialog" '
+			+"uri={url route='orderbyhh/extro' redirect=$redirect }?from=send_date&order_id="+res.order_id
+			+" dialog_id='my_address_extro' name='order_id'>"
+			+"<i class='layui-icon layui-icon-edit'  style='cursor: pointer;color:#ff0000;'></i></a>"
+			+"<span style='cursor: pointer;color:#00aaff;'>["+res.msg+"]</span>"+ res.send_date+"送";
+		}else if(res.msg == '今天'){
+			_conent = '<a href="JavaScript:;"  dialog_width="450" title="修改配送时间"  dialog_title="修改配送时间" ectype="dialog" '
+			+"uri={url route='orderbyhh/extro' redirect=$redirect }?from=send_date&order_id="+res.order_id
+			+" dialog_id='my_address_extro' name='order_id'>"
+			+"<i class='layui-icon layui-icon-edit'  style='cursor: pointer;color:#ff0000;'></i></a>"
+			+"<span style='cursor: pointer;color:#ff5500;'>["+res.msg+"]</span>"+ res.send_date+"送";
+		}else{
+			_conent = '<a href="JavaScript:;"  dialog_width="450" title="修改配送时间"  dialog_title="修改配送时间" ectype="dialog" '
+			+"uri={url route='orderbyhh/extro' redirect=$redirect }?from=send_date&order_id="+res.order_id
+			+" dialog_id='my_address_extro' name='order_id'>"
+			+"<i class='layui-icon layui-icon-edit'  style='cursor: pointer;color:#ff0000;'></i></a>"
+			+"<span style='cursor: pointer;color:#55ff00;'>["+res.msg+"]</span>"+ res.send_date+"送";
 		}
-		return '<a href="JavaScript:;"  dialog_width="450"   dialog_title="修改配送时间" ectype="dialog" '
-		 +"uri={url route='orderbyhh/extro' redirect=$redirect }?from=send_date&order_id="+res.order_id
-		 +" dialog_id='my_address_extro' name='order_id'>"
-		 +"<i class='layui-icon layui-icon-edit'  style='cursor: pointer;color:#ff0000;'></i></a>"+ _conent;		
+		return  _conent;		
 	}}
-	, { field: 'add_time', title: '下单时间', width: 170, sort: true, align: 'center' }
-	, { field: 'status', title: '支付状态', width: 100, sort: false, align: 'center',templet:function(res){
+	, { field: 'isPrinted', title: '已打印', width: 50, sort: false, align: 'center',templet:function(res){
+		return '<em class="'+(res.is_printed==0 ? 'no':'yes')+'" ectype="inline_edit" controller="orderbyhh" fieldname="is_printed" fieldid="'+res.order_id
+		+'" fieldvalue="'+res.is_printed+'" title="可编辑"><i class="fa '
+		+(res.is_printed==0 ? 'fa-ban':'fa-check-circle')+'"></i>'+(res.is_printed==0 ? '否':'是')+'</em>';
+	  }}
+	, { field: 'isSend', title: '已配送', width: 50, sort: false, align: 'center',templet:function(res){
+		return '<em class="'+(res.is_send==0 ? 'no':'yes')+'" ectype="inline_edit" controller="orderbyhh" fieldname="is_send" fieldid="'+res.order_id
+		+'" fieldvalue="'+res.is_send+'" title="可编辑"><i class="fa '
+		+(res.is_send==0 ? 'fa-ban':'fa-check-circle')+'"></i>'+(res.is_send==0 ? '否':'是')+'</em>';
+	  }}
+	
+	, { field: 'isYear', title: '年结', width: 50, sort: false, align: 'center',templet:function(res){
+		return '<em class="'+(res.is_year==0 ? 'no':'yes')+'" ectype="inline_edit" controller="orderbyhh" fieldname="is_year" fieldid="'+res.order_id
+		+'" fieldvalue="'+res.is_year+'" title="可编辑"><i class="fa '
+		+(res.is_year==0 ? 'fa-ban':'fa-check-circle')+'"></i>'+(res.is_year==0 ? '否':'是')+'</em>';
+	  }}
+
+	, { field: 'status', title: '已支付', width: 80, sort: false, align: 'center',templet:function(res){
+
 		//console.log(res);
 		if(res.status == '交易完成'){
 			res.status = '<font color=green>'+res.status+'</font>';
@@ -264,6 +313,13 @@
 		}
 		else if(res.status == '等待买家付款'){
 			res.status =  "<a href='javascript:;' lay-event='goodsPay' class='layui-btn layui-bg-red layui-btn-sm' style='color:red'><i class='layui-icon layui-icon-rmb'></i>付款</a>"  ;
+		
+		
+		    if(res.is_year == 1){
+			    return '<a href="javascript:;" lay-event="goodsPay"  class="layui-btn  layui-btn-sm"><i class="layui-icon layui-icon-rmb" style="cursor: pointer;"></i>年结</a>' ;
+		    }
+		
+		
 		}
 		else if(res.status == '等待卖家发货'){
 			res.status =  "<a href='javascript:;' uri='{url route='seller_order/shipped' }?order_id="+res.order_id+"' id='order"+res.order_id+"_action_shipped' ectype='dialog' dialog_width='400' dialog_title='待发货' dialog_id='seller_order_shipped' class='layui-btn layui-bg-cyan layui-btn-sm' style='color:blue'>待发货</a>"  ;
@@ -276,20 +332,9 @@
 		}
 		return res.status  ;
 	}}	
-	, { field: 'isPrinted', title: '打印状态', width: 100, sort: false, align: 'center',templet:function(res){
-	  	//console.log(res);
-	  	if(res.status == '交易完成'){
-			return "<i class='layui-icon layui-icon-print'  dialog_id='is_printed'  ectype='dialog' dialog_width='550' dialog_title='打印状态'"
-					+" style='cursor: pointer; color:#000000;'></i>"+res.status;
-	  	}else if(res.status == '交易关闭'){
-	  		return "<i class='layui-icon layui-icon-print'  dialog_id='is_printed'  ectype='dialog' dialog_width='550' dialog_title='打印状态'"
-	  				+" style='cursor: pointer; color:#c2c2c2;'></i>"+res.status;
-	  	}else{
-	  		return '<em class="'+(res.is_printed==0 ? 'no':'yes')+'" ectype="inline_edit" controller="orderbyhh" fieldname="is_printed" fieldid="'+res.order_id
-			+'" fieldvalue="'+res.is_printed+'" title="可编辑"><i class="fa '
-			+(res.is_printed==0 ? 'fa-ban':'fa-check-circle')+'"></i>'+(res.is_printed==0 ? '否':'是')+'</em>';
-	  	}
-	  }}
+
+
+	  , { field: 'add_time', title: '下单时间', width: 160, sort: true, align: 'center' }
 	, { field: 'payment_name', title: '方式', width: 90, sort: true, align: 'center' }
 	, { field: 'pay_time', title: '付款时间', width: 170, sort: true, align: 'center' }
 	, { field: 'finished_time', title: '完成时间', width: 170, sort: true, align: 'center' },
@@ -309,15 +354,15 @@
     //监听头工具栏事件
     table.on('toolbar(tablegrid)', function (obj) {
       var checkStatus = table.checkStatus(obj.config.id);
-      if (checkStatus.data.length <= 0) {
-        return alert("请选择要导出的数据^_^");
-      }
       var items = new Array();
       $.each(checkStatus.data, function (i, item) {
         items.push(item.order_id);
       });
 
       if (obj.event === 'export') {
+		  if (checkStatus.data.length <= 0) {
+		    return alert("请选择要导出的数据^_^");
+		  }
         window.location.href = url(['orderbyhh/export', $.extend($("#formSearch").serializeJson(), { id: items.join(',') })]);
       }
     });
@@ -362,7 +407,7 @@
 		$(".classSelect option[value='real_name']").attr("selected", true);    //设置Select的Text值为"买家实名"的项选中 
 		$('.infoTableInput').val($(this).find("option:selected").text());
 	});
-	
+	// $("table thead tr").eq(0).css('background-color', 'rgb(239, 181, 181)');
  
   });
 </script>

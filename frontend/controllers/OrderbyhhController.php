@@ -58,8 +58,9 @@ class OrderbyhhController extends \common\controllers\BaseUserController
 			$this->params['search_options'] = $this->getSearchOption();
 			$this->params['status_list'] = $this->getStatus();
 			$this->params['_foot_tags'] = Resource::import([
-				'script' => 'jquery.ui/jquery.ui.js,jquery.ui/i18n/' . Yii::$app->language . '.js,jquery.plugins/jquery.validate.js,dialog/dialog.js,mlselection.js,user.js,jquery.plugins/jquery.form.js,inline_edit.js',
-				'style' =>  'jquery.ui/themes/smoothness/jquery.ui.css,dialog/dialog.css'
+				'script' => 'jquery.ui/jquery.ui.js,jquery.ui/i18n/' . Yii::$app->language . '.js,jquery.plugins/jquery.validate.js,dialog/dialog.js,mlselection.js,user.js
+				,jquery.plugins/jquery.form.js,inline_edit.js,jquery.plugins/timepicker/jquery-ui-timepicker-addon.js',
+				'style' =>  'jquery.ui/themes/smoothness/jquery.ui.css,dialog/dialog.css,jquery.plugins/timepicker/jquery-ui-timepicker-addon.css'
 			]);
 			
 			
@@ -81,14 +82,14 @@ class OrderbyhhController extends \common\controllers\BaseUserController
 		else
 		{
 			$query = OrderModel::find()->alias('o')->select('o.order_id,o.order_sn,o.buyer_name,o.seller_name as store_name,o.goods_amount,o.order_amount,o.payment_name,o.status,o.add_time,o.pay_time,o.finished_time,
-			oe.consignee,oe.signature,oe.address,oe.shipping_fee,oe.what_day,oe.send_date,oe.is_printed,oe.content,obi.real_name,og.goods_name,og.goods_image,og.goods_id,og.quantity');
+			oe.consignee,oe.signature,oe.address,oe.shipping_fee,oe.what_day,oe.send_date,oe.is_printed,oe.is_year,oe.is_send,oe.is_error,oe.content,obi.real_name,og.goods_name,og.goods_image,og.goods_id,og.quantity');
 			//var_dump($post);die;
 			$query = $this->getConditions($post, $query);
 
 			$query = $query->joinWith('orderExtm oe', false)
 			->joinWith('orderBuyerInfo obi', false)
 			->joinWith('orderGoods og', false)
-			->orderBy(['o.order_id' => SORT_DESC]);
+			->orderBy(['oe.send_date' => SORT_DESC]);
 			
 			//var_dump($query->createCommand()->getRawSql());die;
 
@@ -111,10 +112,14 @@ class OrderbyhhController extends \common\controllers\BaseUserController
 					$list[$key]['refund_status'] = '';
 					$list[$key]['refund_id'] = '';
 				}
-				if($list[$key]['send_date'] > date('Y-m-d')){
-					$list[$key]['msg'] = "预订订单";
+				//$list[$key]['msg1'] = date('Y-m-d H:i:s',time());
+				if(strtotime($list[$key]['send_date']) > time()){
+					$list[$key]['msg'] = "预订";
+					
+				}else if(date('Y-m-d',strtotime($list[$key]['send_date'])) == date('Y-m-d')){
+					$list[$key]['msg'] = "今天";
 				}else{
-					$list[$key]['msg'] = "实时订单";
+					$list[$key]['msg'] = "历史";
 				}
 				
 			}
@@ -156,6 +161,10 @@ class OrderbyhhController extends \common\controllers\BaseUserController
 			if($post->from == 'send_date'){
 				return $this->render('../my_extro.nearextroformdate.html', $this->params);
 			}else{
+				$defaultAddress = \common\models\AddressCustomerModel::find()->select('id,consignee,address')->orderBy(['up_time' => SORT_DESC])->offset(0)->limit(30)->asArray()->all();
+				foreach($defaultAddress as $k=>$v){
+					$this->params['defaultAddress'][$v['id']] = $v['consignee'];
+				}
 				return $this->render('../my_extro.nearextroform.html', $this->params);
 			}
 		}else{
@@ -495,9 +504,24 @@ class OrderbyhhController extends \common\controllers\BaseUserController
 					$addressServ->zipcode = $post->zipcode;
 					$addressServ->phone_mob = $post->phone_mob;
 					$addressServ->save();
-				 }else{
-					 
-				 }
+				}
+				$customerModel = \common\models\AddressCustomerModel::find()
+				->where(['like','consignee',$post->consignee])->one();
+				if(!$customerModel){
+					$customerModel = new \common\models\AddressCustomerModel();
+				}
+				$customerModel->consignee = $post->consignee;
+				$customerModel->region_id = $post->region_id;
+				$customerModel->region_name = $post->region_name;
+				$customerModel->address = $post->address;
+				$customerModel->zipcode = $post->zipcode;
+				$customerModel->phone_mob = $post->phone_mob;
+				$customerModel->up_time = time();
+				if(!$customerModel->save()){
+					return Message::popWarning($customerModel->errors);
+				}
+				//var_dump($customerModel->attributes);die;
+				//var_dump($customerModel->validate());die;
 			}else{
 				return Message::popWarning("权限不够");
 			}
@@ -535,6 +559,7 @@ class OrderbyhhController extends \common\controllers\BaseUserController
 			}else{
 				//$query = OrderExtmModel::find()->select('address')->where(['like', 'consignee', $post->keyword])->orderBy(['order_id' => SORT_DESC]);
 				$query = \common\models\AddressServModel::find()->select('address')->where(['like', 'consignee', $post->keyword])->orderBy(['sid' => SORT_DESC]);
+				//var_dump($query->createCommand()->getRawSql());die;
 				$list = $query->asArray()->all();	
 			}
 
@@ -581,7 +606,7 @@ class OrderbyhhController extends \common\controllers\BaseUserController
 	{
 		$get = Basewind::trimAll(Yii::$app->request->get(), true);
 		$post = Basewind::trimAll(Yii::$app->request->get(), true, ['id', 'is_printed']);
-		if(in_array($post->column, ['is_printed','recommended'])) 
+		if(in_array($post->column, ['is_printed','is_year','is_send','is_error','recommended'])) 
 		{
 		  	$query = \common\models\OrderExtmModel::find()->where(['order_id'=>$post->id])->one();
 		  	$query->{$post->column} = $post->value;

@@ -77,22 +77,34 @@ class ExtroForm extends Model
 		$model->content 	= $post->content;//祝贺语
 		$model->what_day 	= $post->what_day;//祝贺语
 		$model->send_date 	= $post->send_date;//送货时间
+		$model->is_year 	= $post->is_year;//年结单
+		$model->is_send 	= $post->is_send;//配送状态
 		/**********************[START]JchengCustom with local**********************/
 		if(!$model->save()) {
 			$this->errors = $model->errors;
 			return false;
 		}
+		
 		//修改订单的下单用户JchengCustom
 		$orderM = OrderModel::find()->where(['order_id'=>$model->order_id])->one();
-		if($user = UserModel::find()->where(['username' =>$model->subscriber])->one()) {
-			if($orderM->buyer_id != $user->userid){
-				$orderM->buyer_id = $user->userid;
-				$orderM->buyer_name = $model->subscriber;
-				$orderM->save();
-			}
-		}else{
-			
+		$user = UserModel::find()->where(['username' =>$model->subscriber])->one();
+		if(!$user) {
+			$umodel = new \frontend\models\UserRegisterForm();
+			$username = $post->subscriber ;
+			$umodel->username  = $username;
+			$umodel->phone_mob = '';
+			$umodel->password  = '12345678';
+			$umodel->confirmPassword = '12345678';
+			$umodel->agree =1;
+			$user = $umodel->register(['real_name'=>$username]);
 		}
+		if($orderM->buyer_id != $user->userid){
+			$orderM->buyer_id = $user->userid;
+			$orderM->buyer_name = $model->subscriber;
+			$orderM->save();
+		}
+		
+		/*
 		//修改用户的昵称和真实姓名
 		if($user = UserModel::find()->where(['userid' =>$orderM->buyer_id])->one()) {
 			$user->username  = $model->subscriber;
@@ -101,8 +113,7 @@ class ExtroForm extends Model
 		}else{
 			
 		}
-		//var_dump($post);
-		//die('ddd');
+		*/
 		return true;
 	}
 }

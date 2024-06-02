@@ -6,9 +6,16 @@
         <li class="B_Consignee">
           <h3>收货人(祝?): </h3>
           <p>
+			   <!-- {if $defaultAddress} -->
+		  <select class="querySelect chooseUser" name="choose_user">
+			<option value="">--选择收货人--</option>
+			{html_options options=$defaultAddress}
+		   </select>
+		    <!-- {/if} --> 
             <input type="text" class="text width_normal I_Consignee consignee" name="consignee" value="{$address.consignee|escape}"/>
-            <label class="field_message"><span class="field_notice">{$lang.consignee_desc}，没有就从下面选择</span></label>
-          </p>
+            <label class="field_message"><span class="field_notice">选择中没有就填写</span></label>
+			
+			</p>
 		  <p style="line-height: 24px;">
 			  &nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;
 			<!--{foreach from=$defaultconsignee item=record key=key}-->
@@ -64,7 +71,7 @@
 		  <h3>落款(赠送人): </h3>
 		  <p>
 		    <input type="text" class="text width_normal signature" name="signature" value="{$address.signature|escape}"/>
-			<label class="field_message" ><span class="field_notice">签名落款，多个用“逗号”隔开。没有就从下面选择</span></label>
+			<label class="field_message" ><span class="field_notice">签名落款，多个用“逗号”隔开</span></label>
 		  </p>
 		  <p style="line-height: 24px;">
 			  &nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;
@@ -80,10 +87,11 @@
 		  <h3>订货人(结款): </h3>
 		  <p>
 		    <input type="text" class="text width_normal subscriber" name="subscriber" value="{$address.subscriber|escape}"/>
-			<label class="field_message" ><span class="field_notice">订单付款人格式（wx~微信名），没有就从下面选择</span></label>
+			<label class="field_message" ><span class="field_notice"></span></label>
 		  </p>
+		  
 		  <p style="line-height: 24px;">
-			  &nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;
+			 
 			<!--{foreach from=$defaultUsers item=record key=key}-->
 			<label style="color:#b4b4b4;">
 			<input type="radio" class="default-user"  style="color:#b4b4b4;margin-right:5px;margin-left:10px;" name="defaultUser" value="{$record['real_name']|escape}" />
@@ -197,6 +205,22 @@ $(function(){
 	$('.default-address').click(function(){
 	    $('.address').val($(this).val())
 	})
+	$('.chooseUser').change(function(){
+	 $('.I_Consignee ').val($(this).find("option:selected").text());
+		$.getJSON("{url route='my_address/search'}", { 'keyword' : $(this).find("option:selected").text()}, function(data) {
+			html = '';
+			if(data.code == 0 && data.count>0) {
+				$('.I_Address').val(data.data[0].address);
+				
+				$.each(data.data,function(i, item){	
+					html += '<li style="padding: 10px 0 0;color:#FF8800;">[地址]('+(i+1)+'): <span>'+item.address+'</span></li>';
+				});
+				$('.I_Consignee_list').html("<ul>"+html+"</ul>");
+			}else{
+				$('.I_Consignee_list').html("");
+			}
+		});
+	}); 
 	$('.B_Consignee .I_Consignee').change(function(){
  
 		$.getJSON("{url route='my_address/search'}", { 'keyword' : $('.I_Consignee').val()}, function(data) {

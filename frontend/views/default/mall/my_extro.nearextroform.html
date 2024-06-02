@@ -4,13 +4,22 @@
   <div class="add">
     <div id="warning"></div>
     <form method="post" action="{$action}" id="address_form" target="iframe">
+		<input type="hidden"  name="is_send" value="{$extro_info.is_send}"/>
+		<input type="hidden"  name="is_error" value="{$extro_info.is_error}"/>
       <ul>
         <li>
           <h3>收货人(祝?): </h3>
           <p>
-            <input type="text" class="text width_normal" name="consignee" value="{$extro_info.consignee|escape}"/>
+			  <!-- {if $defaultAddress} -->
+			  <select class="querySelect chooseUser" name="choose_user">
+			  			<option value="">--选择收货人--</option>
+			  			{html_options options=$defaultAddress}
+			   </select>
+			    <!-- {/if} --> 
+            <input type="text" class="text I_Consignee consignee" name="consignee" value="{$extro_info.consignee|escape}"/>
             <label class="field_message"><span class="field_notice">{$lang.consignee_desc}</span></label>
           </p>
+		  <div class="I_Consignee_list"></div>
         </li>
         <li>
           <h3>{$lang.region}: </h3>
@@ -43,7 +52,7 @@
         <li>
           <h3>{$lang.address}: </h3>
           <p>
-            <input type="text" class="text width_normal" name="address" value="{$extro_info.address|escape}"/>
+            <input type="text" class="text width_normal I_Address" name="address" value="{$extro_info.address|escape}"/>
             <label class="field_message"><span class="field_notice">{$lang.address_desc}</span></label>
           </p>
         </li>
@@ -59,6 +68,15 @@
 		  <p>
 		    <input type="text" class="text width_normal" name="subscriber" value="{$extro_info.subscriber|escape}"/>
 		    <label class="field_message"><span class="field_notice">{$lang.subscriber_desc}</span></label>
+		  </p>
+		  <h3 style="color: #00aaff;">年结单客户: </h3>
+		  <p style="line-height: 24px;">
+		  	<label>
+		  	  <input type="radio"  style="margin-right:5px;" name="is_year" value="0" {if $extro_info.is_year eq 0}checked="checked"{/if} />
+		  	  {$lang.no} </label>
+		  	<label>
+		  	<input type="radio" name="is_year" value="1" {if $extro_info.is_year eq 1}checked="checked"{/if} />
+		  	{$lang.yes} </label>
 		  </p>
 		</li>
   
@@ -97,6 +115,10 @@
 		  
 		   
 		  </p>
+		  
+		  
+		  
+		  
 		</li>
       </ul>
       <div class="submit">
@@ -111,7 +133,47 @@
 $(function(){
     regionInit("region");
 	/* 订单配送时间 */
-	 $('#send_date').datepicker({ dateFormat: 'yy-mm-dd' });
-	 
+	// $('#send_date').datepicker({ dateFormat: 'yy-mm-dd' });
+	 $('#send_date').datetimepicker({
+	   timeText: '时间',
+	   hourText: '小时',
+	   minuteText: '分钟',
+	   secondText: '秒',
+	   currentText: '现在',
+	   closeText: '完成',
+	   showSecond: true, //显示秒  
+	   timeFormat: 'HH:mm:ss' ,//格式化时间
+	 });
+	 $('.chooseUser').change(function(){
+	  $('.I_Consignee ').val($(this).find("option:selected").text());
+	 	$.getJSON("{url route='my_address/search'}", { 'keyword' : $(this).find("option:selected").text()}, function(data) {
+	 		html = '';
+	 		if(data.code == 0 && data.count>0) {
+	 			$('.I_Address').val(data.data[0].address);
+	 			
+	 			$.each(data.data,function(i, item){	
+	 				html += '<li style="padding: 10px 0 0;color:#FF8800;">[地址]('+(i+1)+'): <span>'+item.address+'</span></li>';
+	 			});
+	 			$('.I_Consignee_list').html("<ul>"+html+"</ul>");
+	 		}else{
+	 			$('.I_Consignee_list').html("");
+	 		}
+	 	});
+	 }); 
+	 $('.I_Consignee').change(function(){
+	  
+	 	$.getJSON("{url route='my_address/search'}", { 'keyword' : $('.I_Consignee').val()}, function(data) {
+	 		html = '';
+	 		if(data.code == 0 && data.count>0) {
+	 			$('.I_Address').val(data.data[0].address);
+	 			$.each(data.data,function(i, item){	
+	 				html += '<li style="padding: 10px 0 0;color:#FF8800;">[地址]('+(i+1)+'): <span>'+item.address+'</span></li>';
+	 			});
+	 			$('.I_Consignee_list').html("<ul>"+html+"</ul>");
+	 		}else{
+	 			$('.I_Consignee_list').html("");
+	 		}
+	 	});
+	 }); 
 });
 </script>

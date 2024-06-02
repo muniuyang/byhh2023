@@ -82,6 +82,11 @@ class My_addressController extends \common\controllers\BaseUserController
 				//->where(['userid'=>5])->one();
 				->where(['in','userid',[80,81,4,5,78]])->orderBy('userid desc')->asArray()->all();
 				$this->params['defaultUsers'] = $defaultUsers;
+				$defaultAddress = \common\models\AddressCustomerModel::find()->select('id,consignee,address')->orderBy(['up_time' => SORT_DESC])->offset(0)->limit(30)->asArray()->all();
+				foreach($defaultAddress as $k=>$v){
+					$this->params['defaultAddress'][$v['id']] = $v['consignee'];
+				}
+				//var_dump($this->params['defaultAddress']);die;
 				$this->params['defaultconsignee'] =[
 					['userid'=>'81','real_name'=>'匿名']
 				] ;
@@ -191,6 +196,11 @@ class My_addressController extends \common\controllers\BaseUserController
 				//->where(['userid'=>5])->one();
 				->where(['in','userid',[80,81,4,5,78]])->orderBy('userid desc')->asArray()->all();
 				$this->params['defaultUsers'] = $defaultUsers;
+				$defaultAddress = \common\models\AddressCustomerModel::find()->select('id,consignee,address')->orderBy(['up_time' => SORT_DESC])->offset(0)->limit(30)->asArray()->all();
+				foreach($defaultAddress as $k=>$v){
+					$this->params['defaultAddress'][$v['id']] = $v['consignee'];
+				}
+				
 				$this->params['defaultconsignee'] =[
 					['userid'=>'81','real_name'=>'匿名']
 				] ;

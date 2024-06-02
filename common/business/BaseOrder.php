@@ -136,7 +136,8 @@ class BaseOrder
 			$addressDelivery->amount   = $consignee_info['book_amount'];
 			$addressDelivery->book_id  = $consignee_info['book_id'];
 			$addressDelivery->save();
-			$consignee_info['send_date'] = $this->post->send_date ? $this->post->send_date :date('Y-m-d');//添加的订单配送时间
+			$consignee_info['send_date'] = $this->post->send_date ? $this->post->send_date :date('Y-m-d H:i:s');//添加的订单配送时间
+			$consignee_info['is_year']   = $this->post->is_year ? $this->post->is_year :0;//年结单
 			unset($consignee_info['book_id']);
 			unset($consignee_info['book_amount']);
 		}

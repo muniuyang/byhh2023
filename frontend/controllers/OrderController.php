@@ -102,8 +102,9 @@ class OrderController extends \common\controllers\BaseUserController
 			//var_dump($this->params);die;
 			
 			$this->params['_foot_tags'] = Resource::import([
-				'script' => 'jquery.ui/jquery.ui.js,jquery.ui/i18n/' . Yii::$app->language . '.js,jquery.plugins/jquery.validate.js,dialog/dialog.js,mlselection.js,user.js,jquery.plugins/jquery.form.js',
-            	'style' =>  'jquery.ui/themes/smoothness/jquery.ui.css,dialog/dialog.css'
+				'script' => 'jquery.ui/jquery.ui.js,jquery.ui/i18n/' . Yii::$app->language . '.js,jquery.plugins/jquery.validate.js,dialog/dialog.js,mlselection.js,user.js,jquery.plugins/jquery.form.js
+				,jquery.plugins/jquery.form.js,inline_edit.js,jquery.plugins/timepicker/jquery-ui-timepicker-addon.js',
+            	'style' =>  'jquery.ui/themes/smoothness/jquery.ui.css,dialog/dialog.css,jquery.plugins/timepicker/jquery-ui-timepicker-addon.css'
 			]);
 			
 		
@@ -111,7 +112,7 @@ class OrderController extends \common\controllers\BaseUserController
 			$this->params['page'] = Page::seo(['title' => Language::get('confirm_order')]);
 			/**********************[START]JchengCustom with local**********************/
 			if(in_array(Yii::$app->user->id,Yii::$app->params['createRights'])){//权限判断[START]JchengCustom	
-				$this->params['my_address'] = array_slice($this->params['my_address'],0,8);
+				$this->params['my_address'] = array_slice($this->params['my_address'],0,12);
 				return $this->render('../order.nearform.html', $this->params);
 			}
 			/**********************[END]JchengCustom with local**********************/
