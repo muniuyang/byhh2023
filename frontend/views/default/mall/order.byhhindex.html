@@ -36,7 +36,7 @@
           {$lang.add_time_to}
           <input class="queryInput" type="text" value="{$smarty.get.add_time_to}" id="add_time_to" name="add_time_to"
             class="pick_date" />
-          <input type="submit" class="layui-btn layui-bg-blue layui-btn-sm block width7" value="{$lang.query}" />
+          <input type="submit" class="layui-btn layui-bg-blue layui-btn-sm block width7 " value="{$lang.query}" />
           <!--{if $filtered}-->
           <a class="layui-btn layui-btn-primary layui-btn-sm box-align-center" href="{url route='orderbyhh/index'}">{$lang.cancel_query}</a>
           <!--{/if}-->
@@ -291,13 +291,6 @@
 		+'" fieldvalue="'+res.is_send+'" title="可编辑"><i class="fa '
 		+(res.is_send==0 ? 'fa-ban':'fa-check-circle')+'"></i>'+(res.is_send==0 ? '否':'是')+'</em>';
 	  }}
-	
-	, { field: 'isYear', title: '年结', width: 50, sort: false, align: 'center',templet:function(res){
-		return '<em class="'+(res.is_year==0 ? 'no':'yes')+'" ectype="inline_edit" controller="orderbyhh" fieldname="is_year" fieldid="'+res.order_id
-		+'" fieldvalue="'+res.is_year+'" title="可编辑"><i class="fa '
-		+(res.is_year==0 ? 'fa-ban':'fa-check-circle')+'"></i>'+(res.is_year==0 ? '否':'是')+'</em>';
-	  }}
-
 	, { field: 'status', title: '已支付', width: 80, sort: false, align: 'center',templet:function(res){
 
 		//console.log(res);
@@ -332,7 +325,11 @@
 		}
 		return res.status  ;
 	}}	
-
+, { field: 'isYear', title: '年结', width: 50, sort: false, align: 'center',templet:function(res){
+		return '<em class="'+(res.is_year==0 ? 'no':'yes')+'" ectype="inline_edit" controller="orderbyhh" fieldname="is_year" fieldid="'+res.order_id
+		+'" fieldvalue="'+res.is_year+'" title="可编辑"><i class="fa '
+		+(res.is_year==0 ? 'fa-ban':'fa-check-circle')+'"></i>'+(res.is_year==0 ? '否':'是')+'</em>';
+	  }}
 
 	  , { field: 'add_time', title: '下单时间', width: 160, sort: true, align: 'center' }
 	, { field: 'payment_name', title: '方式', width: 90, sort: true, align: 'center' }

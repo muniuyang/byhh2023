@@ -62,8 +62,6 @@ class OrderbyhhController extends \common\controllers\BaseUserController
 				,jquery.plugins/jquery.form.js,inline_edit.js,jquery.plugins/timepicker/jquery-ui-timepicker-addon.js',
 				'style' =>  'jquery.ui/themes/smoothness/jquery.ui.css,dialog/dialog.css,jquery.plugins/timepicker/jquery-ui-timepicker-addon.css'
 			]);
-			
-			
 			$this->params['page'] = Page::seo(['title' => Language::get('order_list')]);
 			$userBills =  UserBillModel::find()->alias('b')->select('u.real_name')
 			->joinWith('user u', false)
@@ -76,7 +74,6 @@ class OrderbyhhController extends \common\controllers\BaseUserController
 				}
 			}
 			$this->params['userBill'] = $temps;
-			//var_dump($this->params);die;
 			return $this->render('../order.byhhindex.html', $this->params);
 		}
 		else
@@ -85,19 +82,13 @@ class OrderbyhhController extends \common\controllers\BaseUserController
 			oe.consignee,oe.signature,oe.address,oe.shipping_fee,oe.what_day,oe.send_date,oe.is_printed,oe.is_year,oe.is_send,oe.is_error,oe.content,obi.real_name,og.goods_name,og.goods_image,og.goods_id,og.quantity');
 			//var_dump($post);die;
 			$query = $this->getConditions($post, $query);
-
 			$query = $query->joinWith('orderExtm oe', false)
 			->joinWith('orderBuyerInfo obi', false)
 			->joinWith('orderGoods og', false)
-			->orderBy(['oe.send_date' => SORT_DESC]);
-			
+			->orderBy(['oe.send_date' => SORT_DESC,'oe.order_id' => SORT_DESC]);
 			//var_dump($query->createCommand()->getRawSql());die;
-
-
 			$page = Page::getPage($query->count(), $post->limit ? $post->limit : 15);
 			$list = $query->offset($page->offset)->limit($page->limit)->asArray()->all();
-
-			
 			foreach ($list as $key => $value)
 			{
 				$list[$key]['tradeNo'] = DepositTradeModel::find()->select('tradeNo')->where(['bizOrderId' => $value['order_sn']])->scalar();// 是否申请过退款
@@ -121,9 +112,7 @@ class OrderbyhhController extends \common\controllers\BaseUserController
 				}else{
 					$list[$key]['msg'] = "历史";
 				}
-				
 			}
-			//var_dump($list);die;
 			return Json::encode(['code' => 0, 'msg' => '', 'count' => $query->count(), 'data' => $list]);
 		}
 	}
@@ -139,10 +128,8 @@ class OrderbyhhController extends \common\controllers\BaseUserController
 	 */
 	public function actionExtro(){
 		$post = Basewind::trimAll(Yii::$app->request->get(), true, ['order_id']);
-		//var_dump($post);  
 		if(!Yii::$app->request->isPost)
 		{
-	
 			$this->params['action'] = Url::toRoute(['orderbyhh/extro', 'order_id' => $post->order_id]);
 			$redirect = Url::toRoute(['orderbyhh/index', 'order_id' => $post->order_id]);
 			$this->params['regions'] = \common\models\RegionModel::find()->select('region_name')->where(['parent_id' => 0, 'if_show' => 1])->indexBy('region_id')->column();
@@ -152,11 +139,9 @@ class OrderbyhhController extends \common\controllers\BaseUserController
 			// 获取订单模型
 			$model = new \frontend\models\Buyer_orderViewForm();
 			if(!($extroInfo = $model->formData($post))) {
-				//die('33');
 				return Message::warning($model->errors);
 			}
 			$this->params['whatdays'] =['生日','七夕','情人节','三八妇女节','结婚','结婚纪念日','开业'];
-			//var_dump($extroInfo);die('33');
 			$this->params = array_merge($this->params, ['extro_info' => $extroInfo['orderExtm'], 'redirect' => $redirect]);
 			if($post->from == 'send_date'){
 				return $this->render('../my_extro.nearextroformdate.html', $this->params);
@@ -174,11 +159,7 @@ class OrderbyhhController extends \common\controllers\BaseUserController
 				$valid = true;
 			}
 			$post = Basewind::trimAll(Yii::$app->request->post(), true, ['order_id']);
-			//var_dump($post);die;
 			$model = new \frontend\models\ExtroForm(['order_id' => $post->order_id]);
-	
-			//$consignee = OrderExtmModel::find()->select('region_id')->where(['order_id' => $order_info['order_id']])->one();
-			
 			if(!($extroInfo = $model->save($post, $valid))) {
 				return Message::popWarning($model->errors);
 			}
@@ -520,8 +501,6 @@ class OrderbyhhController extends \common\controllers\BaseUserController
 				if(!$customerModel->save()){
 					return Message::popWarning($customerModel->errors);
 				}
-				//var_dump($customerModel->attributes);die;
-				//var_dump($customerModel->validate());die;
 			}else{
 				return Message::popWarning("权限不够");
 			}

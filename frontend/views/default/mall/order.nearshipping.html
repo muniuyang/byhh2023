@@ -182,23 +182,32 @@
 		line-height: 30px;
 		padding: 0 5px;
 		margin: 0;}
+		/* 隐藏原生的圆点 */
+		.is_year_choose [type="radio"]:not(:checked),
+		.is_year_choose [type="radio"]:checked {
+		  position: absolute;
+		  left: -9999px;
+		}
 	  </style>
 	  {/literal} 
 <div id="select-address" class="w mt20">
 	<div class="title w mb10">
-		<b class="fs14">{$lang.consignee_address}</b> <a href="{url route='my_address/index'}" target="_blank">[{$lang.manage_address}]</a> 
+		<!--<b class="fs14">{$lang.consignee_address}</b> -->
+		
+		<a href="javascript:;" ectype="dialog" dialog_title="{$lang.add_address}" dialog_id="my_address_add" 
+		dialog_width="600" uri="{url route='my_address/add' redirect=$redirect}" 
+		class="ml5 mr5  pointer layui-btn layui-bg-blue layui-btn-sm layui-icon layui-icon-addition">{$lang.use_new_address}</a>
+		<a href="{url route='my_address/index'}" class="ml5 mr5  pointer layui-btn layui-bg-green layui-btn-sm layui-icon layui-icon-spread-left" target="_blank">[{$lang.manage_address}]</a> 
 	</div>
-	
-	<div class="mb10 mt10 clearfix">
-		<a href="javascript:;" ectype="dialog" dialog_title="{$lang.add_address}" dialog_id="my_address_add" dialog_width="600" uri="{url route='my_address/add' redirect=$redirect}" class="btn-new-addr">{$lang.use_new_address}</a>
-	</div>
+
 	<!--{if $my_address}-->
 	<div class="oldaddress w clearfix"> 
 		<!--{foreach from=$my_address item=address name=fe_address}-->
 		<dl class="f66 clearfix {if $smarty.foreach.fe_address.first} selected_address{/if} J_AddressEach" {if $smarty.foreach.fe_address.iteration % 4 eq 0} style="margin-right:0;"{/if}>
 			<dt>
 				<input type="checkbox" name="addr_id" value="{$address.addr_id}" {if $smarty.foreach.fe_address.first} checked="checked" {/if}/>
-				<b><span style="color:#1BBC9D">{$address.consignee|escape} </span> {$lang.shou}({$address.region_name})</b> <ins class="deftip" {if $address.defaddr} style="display:block"{/if}>{$lang.default_addr}</ins>
+				<b><span style="color:#1BBC9D">{$address.consignee|escape} </span> {$lang.shou}({$address.region_name})</b> 
+				<ins class="deftip" {if $address.defaddr} style="display:block"{/if}>{$lang.default_addr}</ins>
 			</dt>
 			<dd class="addr-bd"> {$address.address|escape}  <br/>落款:<span style="font-weight: bold;color:#1E9FFF">{$address.signature|escape}</span>
 			&nbsp;&nbsp;{$address.phone_mob|default:$address.phone_tel} 
@@ -214,59 +223,5 @@
 	</div>
 	<!--{/if}-->
 
-	  <div class="mb10 mt10 clearfix">
-<span class="ml5 mr5  pointer layui-btn layui-bg-blue layui-btn-sm"> 
-	   配送时间</span>
-		  <input class="layui-btn-cj" type="text" value="{$lang.send_time}" id="send_date"
-		    name="send_date"  />
-		<a class="layui-btn layui-bg-red layui-btn-sm pick_date" id="pick_date" style="color:red;cursor:none;">
-		  <i class="layui-icon layui-icon-date"></i>
-		  <input type="text" class="layui-btn layui-bg-red layui-btn-sm pick_date" style="cursor: pointer;width:58px;height:30px;border:0;padding:10px 0;margin-top:-6px;" value="选择日期"/>
-		</a>
-			
-		&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;	
-	   <span class="ml5 mr5  pointer layui-btn layui-bg-blue layui-btn-sm"> 
-	   年结单客户</span>&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;
-		  <label>
-		  <input type="radio" name="is_year" value="1"  />
-		  年结客户</label>&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;
-			 <label>
-			<input type="radio"  style="margin-right:5px;" name="is_year" value="0" checked="checked" />
-			  非年结客户</label>
-	  </div>
-</div>
-<script type="text/javascript">
-$(function(){
-  
-	/* 订单配送时间 */
-	// $('#send_date').datepicker({ dateFormat: 'yy-mm-dd' });
-	$('.pick_date').datetimepicker({
-	  timeText: '时间',
-	  hourText: '小时',
-	  minuteText: '分钟',
-	  secondText: '秒',
-	  currentText: '现在',
-	  closeText: '完成',
-	  showSecond: true, //显示秒  
-	  timeFormat: 'HH:mm:ss' ,//格式化时间
-		onChange(res){
-		consol.log('change');
-		},
-		onselect:function(){
-		console.log('onselect');
-		},
-		beforeShow:function(){
-		console.log('beforeShow');
-		},
-		onClose:function(res){
-		$(this).val('选择日期');
-		if(res == '选择日期'){
-		 return false;
-		}
-		let time = new Date();
 
-		$('#send_date').val(res);  
-		}
-	});
-});
-</script>
+</div>

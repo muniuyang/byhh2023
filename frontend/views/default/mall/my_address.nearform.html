@@ -6,13 +6,14 @@
         <li class="B_Consignee">
           <h3>收货人(祝?): </h3>
           <p>
-			   <!-- {if $defaultAddress} -->
-		  <select class="querySelect chooseUser" name="choose_user">
-			<option value="">--选择收货人--</option>
-			{html_options options=$defaultAddress}
-		   </select>
-		    <!-- {/if} --> 
+			
             <input type="text" class="text width_normal I_Consignee consignee" name="consignee" value="{$address.consignee|escape}"/>
+			<!-- {if $defaultAddress} -->
+			<select class="querySelect chooseUser" name="choose_user">
+						<option value="">--选择收货人--</option>
+						{html_options options=$defaultAddress}
+			</select>
+			 <!-- {/if} --> 
             <label class="field_message"><span class="field_notice">选择中没有就填写</span></label>
 			
 			</p>
@@ -54,28 +55,41 @@
           <h3>{$lang.address}: </h3>
           <p>
             <input type="text" class="text width_normal I_Address address" name="address" value="{$address.address|escape}"/>
-            <label class="field_message"><span class="field_notice">{$lang.address_desc},没有就从下面选择</span></label>
+            <!--<label class="field_message"><span class="field_notice">{$lang.address_desc},没有就从下面选择</span></label> -->
           </p>
 		  <p style="line-height: 24px;">
 			  &nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;
-			 
 			<label style="color:#b4b4b4;">
-			<input type="radio" class="default-address"  style="color:#b4b4b4;margin-right:5px;margin-left:10px;"
-			 name="defaultaddress" value="自提" />自提
-			 </label>
-		 
+			<input type="radio" class="default-address"  style="color:#b4b4b4;margin-right:5px;margin-left:10px;" name="defaultaddress" value="无" />无
+			</label>
+			<label style="color:#b4b4b4;">
+			<input type="radio" class="default-address"  style="color:#b4b4b4;margin-right:5px;margin-left:10px;" name="defaultaddress" value="自提" />自提
+			</label>
+			<label style="color:#b4b4b4;">
+			<input type="radio" class="default-address"  style="color:#b4b4b4;margin-right:5px;margin-left:10px;" name="defaultaddress" value="网单" />网单下单
+			</label>
+			<label style="color:#b4b4b4;">
+			<input type="radio" class="default-address"  style="color:#b4b4b4;margin-right:5px;margin-left:10px;" name="defaultaddress" value="现场" />现场现场
+
 		  			
 		  </p>
         </li>
 		<li>
 		  <h3>落款(赠送人): </h3>
 		  <p>
+			 
 		    <input type="text" class="text width_normal signature" name="signature" value="{$address.signature|escape}"/>
-			<label class="field_message" ><span class="field_notice">签名落款，多个用“逗号”隔开</span></label>
+			<!-- {if $defaultSignature} -->
+			<select class="querySelect chooseSignature" name="choose_signature">
+								<option value="">--选择落款--</option>
+								{html_options options=$defaultSignature}
+			</select>
+			 <!-- {/if} --> 
+			<!--<label class="field_message" ><span class="field_notice">落款落款，多个用“逗号”隔开</span></label>-->
 		  </p>
-		  <p style="line-height: 24px;">
+		  <p style="line-height: 24px;"> 
 			  &nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;
-			<!--{foreach from=$defaultsignature item=record key=key}-->
+			<!--{foreach from=$defaultUsers item=record key=key}-->
 			<label style="color:#b4b4b4;">
 			<input type="radio" class="default-sign"  style="color:#b4b4b4;margin-right:5px;margin-left:10px;" name="defaultsign" value="{$record['real_name']|escape}" />
 			{$record.real_name|escape}</label>
@@ -91,7 +105,7 @@
 		  </p>
 		  
 		  <p style="line-height: 24px;">
-			 
+			&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;
 			<!--{foreach from=$defaultUsers item=record key=key}-->
 			<label style="color:#b4b4b4;">
 			<input type="radio" class="default-user"  style="color:#b4b4b4;margin-right:5px;margin-left:10px;" name="defaultUser" value="{$record['real_name']|escape}" />
@@ -116,27 +130,28 @@
           <h3>{$lang.phone_mob}:</h3>
           <p>
             <input type="text" class="text width_normal" name="phone_mob" value="{$address.phone_mob}"/>
-            <label class="field_message"><span class="field_notice">{$lang.phone_mob}</span></label>
+           <!-- <label class="field_message"><span class="field_notice">{$lang.phone_mob}</span></label> -->
           </p>
         </li>
 
         <li>
-          <h3>祝福语:</h3>
+			<h3>祝福语内容:</h3>
           <p>
-            <textarea id="remark_input" class="text width_normal content"  class="text" name="content" 
+            <textarea id="remark_input" class="text width_normal content defaultContents"  name="content" 
             value="{$address.content|escape}"   style="width:270px;height:90px;" placeholder="如：”开业大吉，生意兴隆“">{$address.content|escape}</textarea>
             <label class="field_message">
-				<span class="field_notice">无，就从下面选择</span>
+				<span class="field_notice"></span>
 			</label>
           </p>
-		  <p style="line-height: 24px;">
-			  &nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;
-			<!--{foreach from=$contents item=record key=key}-->
-			<label style="color:#b4b4b4;">
-			<input type="radio" class="default-content"  style="color:#b4b4b4;margin-right:5px;margin-left:10px;" name="defaultcontent" value="{$record['content']|escape}" />
-			{$record.content|escape}</label>
-			<!--{/foreach}-->
-		  </p>
+		 <!-- {if $defaultContents} -->
+          <p>
+		  <select class="querySelect chooseContents" name="choose_contents">
+			<option value="">--选择祝福语--</option>
+			{html_options options=$defaultContents}
+		  </select> 
+          </p>
+         
+		 <!-- {/if} -->
         </li>     
 		<li>
           <h3>配送人:</h3>
@@ -199,12 +214,13 @@ $(function(){
 	$('.default-consi').click(function(){
 	    $('.consignee').val($(this).val())
 	})
-	$('.default-content').click(function(){
-	    $('.content').val($(this).val())
-	})
 	$('.default-address').click(function(){
 	    $('.address').val($(this).val())
 	})
+	$('.chooseContents').change(function(){
+		$('.defaultContents').text($(this).find("option:selected").text());
+		$('.defaultContents').val($(this).find("option:selected").text());
+	}); 
 	$('.chooseUser').change(function(){
 	 $('.I_Consignee ').val($(this).find("option:selected").text());
 		$.getJSON("{url route='my_address/search'}", { 'keyword' : $(this).find("option:selected").text()}, function(data) {
@@ -221,6 +237,9 @@ $(function(){
 			}
 		});
 	}); 
+	$('.chooseSignature').change(function(){
+		$('.signature,.subscriber').val($(this).find("option:selected").text());
+	}); 
 	$('.B_Consignee .I_Consignee').change(function(){
  
 		$.getJSON("{url route='my_address/search'}", { 'keyword' : $('.I_Consignee').val()}, function(data) {
@@ -228,7 +247,7 @@ $(function(){
 			if(data.code == 0 && data.count>0) {
 				$('.I_Address').val(data.data[0].address);
 				$.each(data.data,function(i, item){	
-					html += '<li style="padding: 10px 0 0;color:#FF8800;">[地址]('+(i+1)+'): <span>'+item.address+'</span></li>';
+					html += '<li style="padding: 10px 0 0;color:#FF8800;">[地址]('+(i+1)+')=>['+item.consignee+']=><span>'+item.address+'</span></li>';
 				});
 				$('.I_Consignee_list').html("<ul>"+html+"</ul>");
 			}else{

@@ -71,6 +71,7 @@ class AddressForm extends Model
 		}else{
 			$userid = $model->userid;
 		}
+		
 		$model->userid 		= $userid;
 		$model->consignee 	= $post->consignee;
 		$model->region_id 	= $post->region_id;
@@ -90,6 +91,7 @@ class AddressForm extends Model
 			$this->errors = $model->errors;
 			return false;
 		}
+		
 		/*************添加祝贺语*********[START]JchengCustom with local**********************/
 		if($post->content){
 			$congra = \common\models\CongratulationsModel::find()->where(['addr_id' =>$model->addr_id])->one();
@@ -105,6 +107,7 @@ class AddressForm extends Model
 		if($post->defaddr) {
 			AddressModel::updateAll(['defaddr' => 0], ['and', ['userid' => $userid], ['!=', 'addr_id', $model->addr_id]]);
 		}
+
 		AddressModel::setIndexAddress();
 		return true;
 		

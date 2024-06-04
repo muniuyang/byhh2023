@@ -80,27 +80,25 @@ class My_addressController extends \common\controllers\BaseUserController
 				$this->params['address'] = ['defaddr'=>1,'region_id'=>'284','region_name'=>'湖北省 武汉'];
 				$defaultUsers = UserModel::find()->select('userid,username,real_name')
 				//->where(['userid'=>5])->one();
-				->where(['in','userid',[80,81,4,5,78]])->orderBy('userid desc')->asArray()->all();
+				->where(['in','userid',[305,4,5,78]])->orderBy('userid desc')->asArray()->all();
 				$this->params['defaultUsers'] = $defaultUsers;
 				$defaultAddress = \common\models\AddressCustomerModel::find()->select('id,consignee,address')->orderBy(['up_time' => SORT_DESC])->offset(0)->limit(30)->asArray()->all();
-				foreach($defaultAddress as $k=>$v){
-					$this->params['defaultAddress'][$v['id']] = $v['consignee'];
+				if(!empty($defaultAddress)){
+					foreach($defaultAddress as $k=>$v){
+						$this->params['defaultAddress'][$v['id']] = $v['consignee'];
+					}
 				}
-				//var_dump($this->params['defaultAddress']);die;
+				$defaultSignature = \common\models\AddressSignatureModel::find()->select('userid,signature')->orderBy(['up_time' => SORT_DESC])->offset(0)->limit(30)->asArray()->all();
+				if(!empty($defaultSignature)){
+					foreach($defaultSignature as $k=>$v){
+						$this->params['defaultSignature'][$v['userid']] = $v['signature'];
+					}
+				}
+				$this->params['defaultContents'] = ['开业大吉,生意兴隆','开业大吉,财源广进','开业大吉,爆款连连','订货会圆满成功'];
 				$this->params['defaultconsignee'] =[
 					['userid'=>'81','real_name'=>'匿名']
 				] ;
-				$this->params['defaultsignature'] =[
-					['userid'=>'81','real_name'=>'匿名'],
-					['userid'=>'79','real_name'=>'程进'],
-					['userid'=>'78','real_name'=>'郭惠'],
-					['userid'=>'2','real_name'=>'博艺花卉']
-				] ;
-				$this->params['contents'] =[
-					['content'=>'开业大吉,生意兴隆'],
-					['content'=>'开业大吉,财源广进'],
-					['content'=>'开业大吉,爆款连连']
-				] ;
+ 
 				$addressBooks = \common\models\AddressBookModel::find()->asArray()->all();
 				foreach($addressBooks as $k=>$v){
 					$this->params['deliveryUsers'][$v['book_id']] = $v['consignee'];
@@ -131,12 +129,10 @@ class My_addressController extends \common\controllers\BaseUserController
 				$post->book_amount  = $post->book_amount ? $post->book_amount:10;
 				$valid = false;
 			}
-			
 			$model = new \frontend\models\AddressForm();
 			if(!($address = $model->save($post, $valid))){
 				return Message::popWarning($model->errors);
 			}
-			
 			$addressServ = \common\models\AddressServModel::find()->select('consignee,address')
 			->where(['and',['=', 'consignee', $post->consignee],['=', 'address', $post->address]]);
 			//var_dump($addressServ->createCommand()->getRawSql());
@@ -150,15 +146,50 @@ class My_addressController extends \common\controllers\BaseUserController
 				$addressServ->phone_tel = $post->phone_tel;
 				$addressServ->zipcode = $post->zipcode;
 				$addressServ->phone_mob = $post->phone_mob;
-				//$addressServ->content = $post->content;
 				$addressServ->defaddr = $post->defaddr;
 				$addressServ->save();
-			 }else{
-				 
-			 }
- 			
-			
-			
+			}
+			if(preg_match_all("/(蓝宝石)|(红宝石)|(银座)|(金座)|(云尚)/",$post->address,$matches)){
+				/*客户表入库*/
+				$customerModel = \common\models\AddressCustomerModel::find()
+				->where(['like','consignee',$post->consignee])->one();	
+				if(!$customerModel){
+					$customerModel = new \common\models\AddressCustomerModel();
+				}
+				$customerModel->consignee = $post->consignee;
+				$customerModel->region_id = $post->region_id;
+				$customerModel->region_name = $post->region_name;
+				$customerModel->address = $post->address;
+				$customerModel->zipcode = $post->zipcode;
+				$customerModel->phone_mob = $post->phone_mob;
+				$customerModel->up_time = time();
+				if(!$customerModel->save()){
+					return Message::popWarning($customerModel->errors);
+				}
+				/*签名表入库*/
+				$user = UserModel::find()->select('userid,username,real_name')->where(['username'=>$post->signature])->one();
+				if(empty($user)){
+					$umodel = new \frontend\models\UserRegisterForm();
+					$username = $post->signature ;
+					$umodel->username  = $username;
+					$umodel->phone_mob = '';
+					$umodel->password  =  '12345678';
+					$umodel->confirmPassword = '12345678';
+					$umodel->agree =1;
+					$user = $umodel->register(['real_name'=>$username]);
+				}
+				if($user){
+					$signatureModel = \common\models\AddressSignatureModel::find()
+					->where(['like','signature',$post->signature])->one();	
+					if(!$signatureModel){
+						$signatureModel = new \common\models\AddressSignatureModel();
+					}
+					$signatureModel->userid = $user->userid;
+					$signatureModel->signature = $post->signature;
+					$signatureModel->up_time = time();
+					$signatureModel->save();
+				}
+			}
 			/**********************[END]JchengCustom with local**********************/
 			return Message::popSuccess(Language::get('address_add_successed'), urldecode(Yii::$app->request->post('redirect', Url::toRoute('my_address/index'))));
 		}
@@ -183,32 +214,31 @@ class My_addressController extends \common\controllers\BaseUserController
 			$this->params['regions'] = RegionModel::find()->select('region_name')->where(['parent_id' => 0, 'if_show' => 1])->indexBy('region_id')->column();
 			$congra = \common\models\CongratulationsModel::find()->where(['addr_id' =>$addr_id])->one();
  			$address['content'] = $congra->content;	
-			
-			//var_dump($address);die;
 			$this->params['address'] = $address;
 			$this->params['action'] = Url::toRoute(['my_address/edit', 'addr_id' => $addr_id]);
 			$this->params['redirect'] = Yii::$app->request->get('redirect', Url::toRoute('my_address/index'));
 			$this->params['page'] = Page::seo(['title' => Language::get('address_edit')]);
 			/*********************[START]JchengCustom with local**********************/
-			//var_dump($address);die;
 			if(in_array(Yii::$app->user->id,Yii::$app->params['createRights'])){//权限判断[START]JchengCustom
 				$defaultUsers = UserModel::find()->select('userid,username,real_name')
 				//->where(['userid'=>5])->one();
-				->where(['in','userid',[80,81,4,5,78]])->orderBy('userid desc')->asArray()->all();
+				->where(['in','userid',[305,4,5,78]])->orderBy('userid desc')->asArray()->all();
 				$this->params['defaultUsers'] = $defaultUsers;
 				$defaultAddress = \common\models\AddressCustomerModel::find()->select('id,consignee,address')->orderBy(['up_time' => SORT_DESC])->offset(0)->limit(30)->asArray()->all();
-				foreach($defaultAddress as $k=>$v){
-					$this->params['defaultAddress'][$v['id']] = $v['consignee'];
+				if(!empty($defaultAddress)){
+					foreach($defaultAddress as $k=>$v){
+						$this->params['defaultAddress'][$v['id']] = $v['consignee'];
+					}
 				}
-				
+				$defaultSignature = \common\models\AddressSignatureModel::find()->select('userid,signature')->orderBy(['up_time' => SORT_DESC])->offset(0)->limit(30)->asArray()->all();
+				if(!empty($defaultSignature)){
+					foreach($defaultSignature as $k=>$v){
+						$this->params['defaultSignature'][$v['userid']] = $v['signature'];
+					}
+				}
+				$this->params['defaultContents'] = ['开业大吉,生意兴隆','开业大吉,财源广进','开业大吉,爆款连连','订货会圆满成功'];
 				$this->params['defaultconsignee'] =[
 					['userid'=>'81','real_name'=>'匿名']
-				] ;
-				$this->params['defaultsignature'] =[
-					['userid'=>'81','real_name'=>'匿名'],
-					['userid'=>'79','real_name'=>'程进'],
-					['userid'=>'78','real_name'=>'郭惠'],
-					['userid'=>'2','real_name'=>'博艺花卉']
 				] ;
 				$this->params['contents'] =[
 					['content'=>'开业大吉,生意兴隆'],
@@ -246,14 +276,58 @@ class My_addressController extends \common\controllers\BaseUserController
 				if(!$subscriber){
 					return Message::popWarning("*请填写订花人名称^_^!");
 				}
+				$model = new \frontend\models\AddressForm(['addr_id' => $addr_id]);
+				if(!($address = $model->save($post, $valid))) {
+					return Message::popWarning($model->errors);
+				}
+				if(preg_match_all("/(蓝宝石)|(红宝石)|(银座)|(金座)|(云尚)/",$post->address,$matches)){
+					/*客户表入库*/
+					$customerModel = \common\models\AddressCustomerModel::find()
+					->where(['like','consignee',$post->consignee])->one();
+					if($customerModel){
+						$customerModel->consignee = $post->consignee;
+						$customerModel->region_id = $post->region_id;
+						$customerModel->region_name = $post->region_name;
+						$customerModel->address = $post->address;
+						$customerModel->phone_mob = $post->phone_mob;
+						$customerModel->up_time = time();
+						if(!$status = $customerModel->save()){
+							return Message::popWarning($customerModel->errors);
+						}
+					}
+					
+					/*签名表入库*/
+					$user = UserModel::find()->select('userid,username,real_name')->where(['username'=>$post->signature])->one();
+					if(empty($user)){
+						$umodel = new \frontend\models\UserRegisterForm();
+						$username = $post->signature ;
+						$umodel->username  = $username;
+						$umodel->phone_mob = '';
+						$umodel->password  = '12345678';
+						$umodel->confirmPassword = '12345678';
+						$umodel->agree =1;
+						$user = $umodel->register(['real_name'=>$username]);
+					}
+					
+					if($user){
+						$signatureModel = \common\models\AddressSignatureModel::find()
+						->where(['like','signature',$post->signature])->one();	
+						if(!$signatureModel){
+							$signatureModel = new \common\models\AddressSignatureModel();
+						}
+						$signatureModel->userid    = $user->userid;
+						$signatureModel->signature = $post->signature;
+						$signatureModel->up_time   = time();
+						//var_dump($signatureModel);die;
+						//$signatureModel->save();
+						if(!$status = $signatureModel->save()){
+							return Message::popWarning($signatureModel->errors);
+						}
+					}
+					
+				}
 			}
-			$address = AddressModel::find()->where(['addr_id' => $addr_id])->asArray()->one();
 			/**********************[END]JchengCustom with local**********************/
-
-			$model = new \frontend\models\AddressForm(['addr_id' => $addr_id]);
-			if(!($address = $model->save($post, $valid))) {
-				return Message::popWarning($model->errors);
-			}
 			return Message::popSuccess(Language::get('address_edit_successed'), urldecode(Yii::$app->request->post('redirect', Url::toRoute('my_address/index'))));
 		}
 	}
@@ -271,7 +345,7 @@ class My_addressController extends \common\controllers\BaseUserController
 		{
 			$post = Basewind::trimAll(Yii::$app->request->get(), true);
 			//$query = OrderExtmModel::find()->select('address')->where(['like', 'consignee', $post->keyword])->orderBy(['order_id' => SORT_DESC]);
-			$query = \common\models\AddressServModel::find()->select('address')->where(['like', 'consignee', $post->keyword])->orderBy(['sid' => SORT_DESC]);
+			$query = \common\models\AddressServModel::find()->select('consignee,address')->where(['like', 'consignee', $post->keyword])->orderBy(['sid' => SORT_DESC]);
 			$list = $query->asArray()->all();
 			return Json::encode(['code' => 0, 'msg' => '', 'count' => $query->count(), 'data' => $list]);
 		}

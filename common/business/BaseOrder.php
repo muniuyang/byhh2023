@@ -130,14 +130,22 @@ class BaseOrder
 	{
 		//var_dump($this->post);
 		if(in_array(Yii::$app->user->id,Yii::$app->params['createRights'])){//权限判断[START]JchengCustom
-			$addressBook = \common\models\AddressBookModel::find()->where(['book_id'=>$consignee_info['book_id']]);
+			//$addressBook = \common\models\AddressBookModel::find()->where(['book_id'=>$consignee_info['book_id']]);
 			$addressDelivery = new \common\models\AddressDeliveryModel(); 
 			$addressDelivery->order_id = $order_id;
 			$addressDelivery->amount   = $consignee_info['book_amount'];
 			$addressDelivery->book_id  = $consignee_info['book_id'];
 			$addressDelivery->save();
 			$consignee_info['send_date'] = $this->post->send_date ? $this->post->send_date :date('Y-m-d H:i:s');//添加的订单配送时间
-			$consignee_info['is_year']   = $this->post->is_year ? $this->post->is_year :0;//年结单
+			/*判断是否是年结单客户*/
+			$order = \common\models\OrderModel::find()->select('buyer_id')->where(['order_id'=>$order_id])->one();
+			$user = \common\models\UserBillModel::find()->select('userid')->where(['userid'=>$order->buyer_id])->one();
+			if(!empty($user)){
+				$consignee_info['is_year'] = 1;
+			}else{
+				$consignee_info['is_year'] = $this->post->is_year ? $this->post->is_year :0;//年结单
+			}
+			
 			unset($consignee_info['book_id']);
 			unset($consignee_info['book_amount']);
 		}
@@ -405,7 +413,9 @@ class BaseOrder
 	public function getMyAddress($addr_id = 0) 
 	{
 		if(in_array(Yii::$app->user->id,Yii::$app->params['createRights'])){//权限判断[START]JchengCustom
-			$query = AddressModel::find()->orderBy(['addr_id' => SORT_DESC])->indexBy('addr_id');//JchengCustom
+			$query = AddressModel::find()->orderBy(['defaddr' => SORT_DESC,'addr_id' => SORT_DESC])->indexBy('addr_id');//JchengCustom
+			//var_dump($query->createCommand()->getRawSql());die;
+			//$query = AddressModel::find()->where(['userid' => Yii::$app->user->id])->orderBy(['defaddr' => SORT_DESC])->indexBy('addr_id');
 		}else{
 			$query = AddressModel::find()->where(['userid' => Yii::$app->user->id])->orderBy(['defaddr' => SORT_DESC])->indexBy('addr_id');
 		}
