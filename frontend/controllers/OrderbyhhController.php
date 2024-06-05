@@ -587,11 +587,28 @@ class OrderbyhhController extends \common\controllers\BaseUserController
 		$post = Basewind::trimAll(Yii::$app->request->get(), true, ['id', 'is_printed']);
 		if(in_array($post->column, ['is_printed','is_year','is_send','is_error','recommended'])) 
 		{
-		  	$query = \common\models\OrderExtmModel::find()->where(['order_id'=>$post->id])->one();
-		  	$query->{$post->column} = $post->value;
-		  	if(!($status = $query->save())) {
-		  		return Message::warning($query->errors);
+		  	$orderExt = \common\models\OrderExtmModel::find()->where(['order_id'=>$post->id])->one();
+			
+		  	$orderExt->{$post->column} = $post->value;
+		  	if(!($status = $orderExt->save())) {
+		  		return Message::warning($orderExt->errors);
 		  	}
+			//创建客户关系
+			if( $post->column == 'is_printed'){
+				$relationsModel = \common\models\CustomerRelationsModel::find()->where(['order_id'=>$post->id])->one();
+				if(!$relationsModel){
+					$relationsModel = new \common\models\CustomerRelationsModel();
+					$relationsModel->add_date  = @date('Y-m-d',strtotime($orderExt->send_date));
+				}
+				$relationsModel->order_id   = $orderExt->order_id;
+				$relationsModel->consignee  = $orderExt->consignee;
+				$relationsModel->address    = $orderExt->address;
+				$relationsModel->signature  = $orderExt->signature;
+				$relationsModel->up_time    = time();
+				if(!$status = $relationsModel->save()){
+					return Message::popWarning($relationsModel->errors);
+				}
+			}
 		  	return Message::display(Language::get('edit_ok'));
 		}else{
 			if(in_array(Yii::$app->user->id,Yii::$app->params['createRights'])){//权限判断[START]JchengCustom

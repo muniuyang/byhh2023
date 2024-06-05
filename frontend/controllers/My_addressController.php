@@ -318,8 +318,6 @@ class My_addressController extends \common\controllers\BaseUserController
 						$signatureModel->userid    = $user->userid;
 						$signatureModel->signature = $post->signature;
 						$signatureModel->up_time   = time();
-						//var_dump($signatureModel);die;
-						//$signatureModel->save();
 						if(!$status = $signatureModel->save()){
 							return Message::popWarning($signatureModel->errors);
 						}
