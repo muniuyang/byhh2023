@@ -40,6 +40,7 @@
           <!--{if $filtered}-->
           <a class="layui-btn layui-btn-primary layui-btn-sm box-align-center" href="{url route='orderbyhh/index'}">{$lang.cancel_query}</a>
           <!--{/if}-->
+		  <input type="hidden" class="downChoose" name='down'  value="all" />
           </div>
         </form>
       </div>
@@ -358,9 +359,13 @@
 
       if (obj.event === 'export') {
 		  if (checkStatus.data.length <= 0) {
-		    return alert("请选择要导出的数据^_^");
+		    //return alert("请选择要导出的数据^_^");
+			$('.downChoose').val('all');
+			window.location.href = url(['orderbyhh/export', $.extend($("#formSearch").serializeJson(), { id: items.join(',') })]);
+		  }else{
+			  $('.downChoose').val('select');
+			 window.location.href = url(['orderbyhh/export', $.extend($("#formSearch").serializeJson(), { id: items.join(',') })]);
 		  }
-        window.location.href = url(['orderbyhh/export', $.extend($("#formSearch").serializeJson(), { id: items.join(',') })]);
       }
     });
 

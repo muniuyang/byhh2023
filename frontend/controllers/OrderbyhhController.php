@@ -830,8 +830,8 @@ class OrderbyhhController extends \common\controllers\BaseUserController
 		->joinWith('orderExtm oe', false)
 		->joinWith('orderBuyerInfo obi', false)
 		->joinWith('orderGoods og', false)
-		->orderBy(['o.order_id' => SORT_DESC]);		
-				
+		->orderBy(['o.order_id' => SORT_DESC]);				
+ 	
 			
 			
 			
@@ -839,11 +839,12 @@ class OrderbyhhController extends \common\controllers\BaseUserController
 			$query->andWhere(['in', 'o.order_id', $post->id]);
 		}
 		else {
-			$query = $this->getConditions($post, $query)->limit(100);
+			$query = $this->getConditions($post, $query)->limit(1000);
 		}
 		if($query->count() == 0) {
 			return Message::warning(Language::get('no_data'));
 		}
+		//var_dump($query->createCommand()->getRawSql());die;
 		$list = $query->asArray()->all();
 		//var_dump($list);die;
 		foreach ($list as $key => $value)
