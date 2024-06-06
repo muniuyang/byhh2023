@@ -595,10 +595,18 @@ class OrderbyhhController extends \common\controllers\BaseUserController
 		  	}
 			//创建客户关系
 			if( $post->column == 'is_printed'){
+				$date = @strtotime($orderExt->send_date);
 				$relationsModel = \common\models\CustomerRelationsModel::find()->where(['order_id'=>$post->id])->one();
 				if(!$relationsModel){
 					$relationsModel = new \common\models\CustomerRelationsModel();
-					$relationsModel->add_date  = @date('Y-m-d',strtotime($orderExt->send_date));
+					$relationsModel->add_date  = @date('Y-m-d',$date);
+				}
+				if($orderExt->consignee == $orderExt->signature){
+					$relationsModel = \common\models\CustomerRelationsModel::find()->where(['add_date'=>@date('Y-m-d',$date)])
+					->andWhere(['and', ['=', 'consignee', $orderExt->consignee], ['=', 'signature', $orderExt->signature]])
+					->one();
+					var_dump($relationsModel->createCommand()->getRawSql());die;
+					
 				}
 				$relationsModel->order_id   = $orderExt->order_id;
 				$relationsModel->consignee  = $orderExt->consignee;

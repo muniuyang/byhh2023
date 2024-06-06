@@ -368,6 +368,9 @@ class Order_printedController extends \common\controllers\BaseUserController
 		$logo = dirname(Yii::$app->BasePath).'/frontend/web/data/system/byhhgzh.png';
 		$templateFile = dirname(Yii::$app->BasePath).'/frontend/web/data/template/printed_card_b'.$order['ptf'].'.docx';
 		$orderExt = $order['orderExtm'];
+		$specialChars = array("$", "#", "@", "!", "^", "&", "*");
+		$orderExt['consignee'] = str_replace($specialChars, '', $orderExt['consignee']);
+		//$orderExt['consignee'] = preg_replace('/[^a-zA-Z0-9\s]/', '', $orderExt['consignee']);
 		$filename = 'F'.$order['ptf'].'['.$order['order_id'].']送['.$orderExt['consignee'].'].docx';
 		$resultFile = dirname(Yii::$app->BasePath).'/frontend/web/data/sales/'.$filename;
 		
