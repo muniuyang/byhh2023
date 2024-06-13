@@ -94,7 +94,11 @@ class GoodsModel extends ActiveRecord
 	{
 		return parent::hasOne(ReportModel::className(), ['goods_id' => 'goods_id']);
 	}
-
+	// 关联表
+	public function getGoodsHots()
+	{
+		return parent::hasOne(GoodsHotsModel::className(), ['goods_id' => 'goods_id']);
+	}
 	/*
      * 取得店铺商品数量
      */

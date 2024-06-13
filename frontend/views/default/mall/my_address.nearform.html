@@ -15,7 +15,6 @@
 			</select>
 			 <!-- {/if} --> 
             <label class="field_message"><span class="field_notice">选择中没有就填写</span></label>
-			
 			</p>
 		  <p style="line-height: 24px;">
 			  &nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;
@@ -229,7 +228,7 @@ $(function(){
 				$('.I_Address').val(data.data[0].address);
 				
 				$.each(data.data,function(i, item){	
-					html += '<li style="padding: 10px 0 0;color:#FF8800;">[地址]('+(i+1)+'): <span>'+item.address+'</span></li>';
+					html += '<li style="padding: 10px 0 0;color:#FF8800;">[地址]('+(i+1)+')=>['+item.add_date+']=>['+item.consignee+']=><span>'+item.address+'</span></li>';
 				});
 				$('.I_Consignee_list').html("<ul>"+html+"</ul>");
 			}else{
@@ -247,7 +246,7 @@ $(function(){
 			if(data.code == 0 && data.count>0) {
 				$('.I_Address').val(data.data[0].address);
 				$.each(data.data,function(i, item){	
-					html += '<li style="padding: 10px 0 0;color:#FF8800;">[地址]('+(i+1)+')=>['+item.consignee+']=><span>'+item.address+'</span></li>';
+					html += '<li style="padding: 10px 0 0;color:#FF8800;">[地址]('+(i+1)+')=>['+item.add_date+']=>['+item.consignee+']=><span>'+item.address+'</span></li>';
 				});
 				$('.I_Consignee_list').html("<ul>"+html+"</ul>");
 			}else{

@@ -1,0 +1,270 @@
+{include file="header.byhh.html"}
+
+<div id="main">
+  <div id="rightCon" class="clearfix layui-body" style="left:0;top:70px;">
+    <div class="scroller" style="padding:0;">
+      <div class="search-form clearfix" style=" position: absolute;z-index: 999999;padding:10;margin:0;margin-top:0px;width:100%;">
+        <form method="get" id="formSearch">
+        <div class="webkit-box box-align-center">
+			<!--{if $defaultMarkets}-->
+						<label class="mr5">地址筛选</label>
+						<select class=" isDefect" name="isDefect">
+						  <option value="">--选择查询--</option>
+						  {html_options options=$defaultisDefects selected=$smarty.get.isDefect}
+						</select>
+						<!--{/if}-->
+			
+			<!--{if $defaultMarkets}-->
+			<label class="mr5">市场</label>
+			<select class=" region_no" name="region_no">
+			  <option value="">--选择查询--</option>
+			  {html_options options=$defaultMarkets selected=$smarty.get.region_no}
+			</select>
+			<!--{/if}-->
+          <input class="infoTableInput mr10" placeholder="输入搜索关键词" type="text" name="search_name" value="{$smarty.get.search_name|escape}" />
+          <label class="mr5">{$lang.search_status}</label>
+  
+          <input type="submit" class="layui-btn layui-bg-blue layui-btn-sm block width7 " value="{$lang.query}" />
+          <!--{if $filtered}-->
+          <a class="layui-btn layui-btn-primary layui-btn-sm box-align-center" href="{url route='order_printed/addresss'}">{$lang.cancel_query}</a>
+          <!--{/if}-->
+		  <input type="hidden" class="downChoose" name='down'  value="all" />
+          </div>
+        </form>
+      </div>
+	  
+	  {literal}
+	  <style type="text/css">
+	  .layui-table-tips-main{
+		max-height:450px;
+		/*min-height:400px;*/
+		}
+		.layui-table-main img{width:40px;height:40px}
+.layui-table-view .layui-form {
+  margin-bottom: 0; /* 移除默认的底部距离 */
+}
+ 
+.layui-table-box .layui-table-body table {
+  margin-top: 42px; /* 为表格顶部留出足够空间放置分页 */
+}
+
+
+ .layui-table-tool {
+  margin: 0 ;
+  position: absolute;
+  top: 22px;
+  left: 82%;
+  width:24%;
+  padding:0;
+  z-index: 999999;
+  transform: translateX(-25%); /* 水平居中分页 */
+  border-color: #ffffff;
+ }
+ 
+
+ .layui-table-tool-self {
+     top: 0px;
+ }
+ .layui-table-box .layui-table-header{
+ 
+  position: fixed;
+  top: 141px;
+   z-index: 100;
+
+ }
+ .layui-table-body{
+	 margin-top:0px;
+ }
+/* 调整分页样式 */
+.layui-table-page {
+/*background-color: #ffffff;*/
+  margin: 0 ;
+  padding:0;
+  position: absolute;
+  top: 30px;
+  left: 50%;
+  width:32%;
+  z-index: 999999;
+  transform: translateX(-25%); /* 水平居中分页 */
+  border-color: #ffffff;
+}
+.layui-table-box .layui-table-body table {
+    margin-top: 0px;
+}
+.layui-table-tool .layui-btn-container {
+    margin-bottom: -20px;
+}
+.layui-table,.layui-table-view {
+    margin: 120px 0;
+}
+.layui-table-tool {padding-left:5px;}
+.layui-table-page>div {
+    transform: translateX(2%); /* 水平居中分页 */
+}
+.layui-table-cell {
+
+    padding: 0 ; 
+
+}
+.layui-table-tool-temp {
+    padding-right: 0px;
+}
+	  </style>
+	  {/literal} 
+	  
+	  
+      <div class="tablegrid1">
+		 
+          <table class="layui-hide" id="tablegrid" lay-filter="tablegrid"></table>
+		   
+      </div>
+    </div>
+  </div>
+</div>
+<script type="text/html" id="toolbar">
+	<div class="layui-btn-container">
+	<a class="layui-btn layui-btn-primary layui-bg-green" href="javascript:;" uri="{url route='order_printed/caddress'}" dialog_width="600" dialog_title="创建地址" ectype="dialog"
+	dialog_id="seller_order_adjust_fee" id="order_action_address" ><i class="layui-icon layui-icon-location"></i>创建地址</a>
+	</div>
+	</div>
+</script>
+
+ 
+<script type="text/html" id="colBar">
+  <a class="ml5 mr5 blue pointer layui-btn layui-bg-blue layui-btn-sm"    lay-event="printed">修改</a>
+  <a class="ml5 mr5 blue pointer layui-btn layui-bg-green layui-btn-sm" lay-event="view">删除</a>
+</script>
+{literal} 
+<script>
+  
+</script>
+{/literal} 
+<script>
+
+  layui.use('table', function () 
+  {
+    var table = layui.table;
+    table.render({
+	elem: '#tablegrid'
+	//,skin: 'line'
+	, url: url(['order_printed/addresss', $("#formSearch").serializeJson()])
+	, toolbar: '#toolbar'
+	,limit:50
+	, defaultToolbar: ['filter', /*'exports',*/ 'print']
+	, title: '订单列表'
+	//, size: 'lg'
+	, cols: [[
+		{ type: 'checkbox', fixed: 'left', width: 50,}
+    , { field: 'id', title: 'ID', width: 40, fixed: 'left', unresize: true, sort: true ,templet:function(res){
+		 
+          return res.id;
+        }}
+		, { field: 'consignee', title: '收货人', width: 200 ,align: 'center',style:'color: #FF8800;',templet:function(res){
+			return "<em class='layui-icon layui-icon-dialogue consignee' lay-event='viewContent'    style='color:#00aaff;'></em>"+res.consignee;
+		}}
+		, { field: 'address', title: '收货地址', width: 260 ,align: 'left',style:'color: #202120;',templet:function(res){
+			
+			return '<a href="JavaScript:;"   dialog_title="修改收货人信息" ectype="dialog" '
+			 +"uri={url route='order_printed/caddress' redirect=$redirect }?id="+res.id
+			 +" dialog_id='my_address_extro' name='id'>"
+			 +"<i class='layui-icon layui-icon-edit'  style='cursor: pointer;color:#ff0000;'></i></a>"+ res.address;
+		}}
+   , { field: 'phone_tel', title: '收货电话', width: 160 ,align: 'center',style:'color: #202120;',templet:function(res){
+   	
+		return  res.phone_tel;
+   }}
+   , { field: 'region_no', title: '市场', width: 90 ,align: 'center',style:'color: #202120;',templet:function(res){
+   	 var region_nos= ['周边','云尚','蓝宝石','红宝石','金座','银座','老三镇','金正茂','金昌','翡翠座','小商品市场','中心商城','品牌'];
+   	
+   		return  region_nos[res.region_no];
+   }}
+   , { field: 'isDefect', title: '完整地址', width: 90, sort: false, align: 'center',templet:function(res){
+   	return '<em class="'+(res.is_defect==0 ? 'no':'yes')+'" ectype="inline_edit" controller="order_printed" fieldname="is_defect" fieldid="'+res.id
+   	+'" fieldvalue="'+res.is_defect+'" title="可编辑"><i class="fa '
+   	+(res.is_defect==0 ? 'fa-ban':'fa-check-circle')+'"></i>'+(res.is_defect==0 ? '否':'是')+'</em>';
+     }}
+	 , { field: 'isDefect', title: '已上线', width: 90, sort: false, align: 'center',templet:function(res){
+	 	return '<em class="'+(res.is_inline==0 ? 'no':'yes')+'" ectype="inline_edit" controller="order_printed" fieldname="is_inline" fieldid="'+res.id
+	 	+'" fieldvalue="'+res.is_inline+'" title="可编辑"><i class="fa '
+	 	+(res.is_inline==0 ? 'fa-ban':'fa-check-circle')+'"></i>'+(res.is_inline==0 ? '否':'是')+'</em>';
+	   }}
+   , { field: 'phone_tel', title: '添加时间', width: 160 ,align: 'center',style:'color: #202120;',templet:function(res){
+   	
+   		return  res.add_date;
+   }}
+   , { field: 'phone_tel', title: '更新时间', width: 300 ,align: 'center',style:'color: #202120;',templet:function(res){
+   	
+   		return  res.up_time;
+   }}/*
+	, { fixed: 'right', title: '操作', toolbar: '#colBar', width: 260, align: 'center'},	*/
+      ]]
+      , page: {
+        theme: 'blue'
+      }
+    });
+ 
+    //监听头工具栏事件
+    table.on('toolbar(tablegrid)', function (obj) {
+      var checkStatus = table.checkStatus(obj.config.id);
+      if (checkStatus.data.length <= 0) {
+        return false;
+      }
+      var items = new Array();
+      $.each(checkStatus.data, function (i, item) {
+        items.push(item.order_id);
+      });
+
+      if (obj.event === 'export') {
+        window.location.href = url(['orderbyhh/export', $.extend($("#formSearch").serializeJson(), { id: items.join(',') })]);
+      }
+    });
+
+    //监听行工具事件
+    table.on('tool(tablegrid)', function (obj) {
+		var data = obj.data;
+		if(obj.event === 'printed'){
+			window.open(url(['order_printed/lists', { order_id: data.order_id }]));
+		}else if(obj.event === 'goodsPay'){
+			location.href = url(['cashier/index', { order_id: data.order_id ,'from':'orderbyhh'}]);
+		}else if(obj.event === 'goodsView'){
+			window.open(url(['goods/index', { id: data.goods_id }]));
+		}else if(obj.event === 'goodsClass'){
+
+		}else if(obj.event === 'view'){
+			window.open(url(['buyer_order/view', { order_id: data.order_id }]));
+		}else if(obj.event === 'viewContent'){
+			$('.content-box').text(data.content);
+			$('#p_content').show();
+		}else if(obj.event === 'edit'){
+			alert("功能暂未开通！")
+		}else if(obj.event === 'del'){
+			alert("功能暂未开通！")
+		}else{
+
+		}
+    });
+  });
+
+  $(function () {
+ 
+ 
+ 
+		
+  });
+ 
+</script>
+
+<iframe id="iframe" name="iframe" src="about:blank" frameborder="0" width="0" height="0" style="display:none"></iframe>
+
+
+<div class="layui-layer layui-layer-tips layui-table-tips" id="p_content" type="tips" times="1" showtime="-1" 
+contype="object" style="z-index: 19891015; position: absolute; left: 650px;width:300px; top: 260px;display:none;">
+	<div id="" class="layui-layer-content">
+		<div class="layui-table-tips-main" style="margin-top: -48px;padding: 30px;">
+			<p class="content-box"></p>
+		</div>
+		<i class="layui-icon layui-table-tips-c layui-icon-close"></i>
+	</div>
+	<span class="layui-layer-setwin"></span>
+</div>
+{include file="footer.byhh.html"}

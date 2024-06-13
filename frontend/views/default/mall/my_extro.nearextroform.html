@@ -10,17 +10,21 @@
         <li>
           <h3>收货人(祝?): </h3>
           <p>
-			  <!-- {if $defaultAddress} -->
-			  <select class="querySelect chooseUser" name="consignee">
-			  			<option value="">--选择收货人--</option>
-			  			{html_options options=$defaultAddress}
-			   </select>
-			    <!-- {/if} --> 
+
             <input type="text" class="text I_Consignee consignee" name="consignee" value="{$extro_info.consignee|escape}"/>
+			<!-- {if $defaultAddress} -->
+			<select class="querySelect chooseUser" name="consignees">
+						<option value="">--选择收货人--</option>
+						{html_options options=$defaultAddress}
+			 </select>
+			  <!-- {/if} --> 
             <label class="field_message"><span class="field_notice">{$lang.consignee_desc}</span></label>
           </p>
-		  <div class="I_Consignee_list"></div>
+		<!--  <div class="I_Consignee_list"></div> -->
         </li>
+		<li>
+		  <div class="I_Consignee_list"></div>
+		</li>
         <li>
           <h3>{$lang.region}: </h3>
           <p>
@@ -53,20 +57,26 @@
           <h3>{$lang.address}: </h3>
           <p>
             <input type="text" class="text width_normal I_Address" name="address" value="{$extro_info.address|escape}"/>
-            <label class="field_message"><span class="field_notice">{$lang.address_desc}</span></label>
+			<!-- {if $defaultSignature} -->
+			<select class="querySelect chooseSignature" name="choose_signature">
+								<option value="">--选择落款--</option>
+								{html_options options=$defaultSignature}
+			</select>
+			 <!-- {/if} --> 
+            <!-- <label class="field_message"><span class="field_notice">{$lang.address_desc}</span></label> -->
           </p>
         </li>
 		<li>
       <h3>落款(赠送人): </h3>
 		  <p>
-		    <input type="text" class="text width_normal" name="signature" value="{$extro_info.signature|escape}"/>
+		    <input type="text" class="text width_normal signature" name="signature" value="{$extro_info.signature|escape}"/>
 		    <label class="field_message"><span class="field_notice">签名落款，代表谁送的，多个用“逗号”隔开。</span></label>
 		  </p>
 		</li>
 		<li>
       <h3>订货人(结款): </h3>
 		  <p>
-		    <input type="text" class="text width_normal" name="subscriber" value="{$extro_info.subscriber|escape}"/>
+		    <input type="text" class="text width_normal subscriber" name="subscriber" value="{$extro_info.subscriber|escape}"/>
 		    <label class="field_message"><span class="field_notice">{$lang.subscriber_desc}</span></label>
 		  </p>
 		  <h3 style="color: #00aaff;">年结单客户: </h3>
@@ -90,12 +100,20 @@
           </p>
         </li>
   <li>
-          <h3>祝福语:</h3>
+          <h3>祝福语内容:</h3>
           <p>
-            <textarea id="remark_input" class="text width_normal"  class="text" name="content" 
+            <textarea id="remark_input" class="text width_normal defaultContents"  class="text" name="content" 
             value="{$extro_info.content|escape}"   style="width:270px;height:90px;" placeholder="如：”开业大吉，生意兴隆“">{$extro_info.content|escape}</textarea>
-            <label class="field_message"><span class="field_notice">如：”开业大吉，生意兴隆“</span></label>
+           <!-- <label class="field_message"><span class="field_notice">如：”开业大吉，生意兴隆“</span></label>-->
           </p>
+		  <!-- {if $defaultContents} -->
+		   <p>
+		   <select class="querySelect chooseContents" name="choose_contents">
+		  			<option value="">--选择祝福语--</option>
+		  			{html_options options=$defaultContents}
+		   </select> 
+		   </p>
+		  <!-- {/if} -->
         </li> 
 		<li>
 		  <h3>&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;纪念日:</h3>
@@ -144,6 +162,7 @@ $(function(){
 	   showSecond: true, //显示秒  
 	   timeFormat: 'HH:mm:ss' ,//格式化时间
 	 });
+	 
 	 $('.chooseUser').change(function(){
 	  $('.I_Consignee ').val($(this).find("option:selected").text());
 	 	$.getJSON("{url route='my_address/search'}", { 'keyword' : $(this).find("option:selected").text()}, function(data) {
@@ -152,13 +171,20 @@ $(function(){
 	 			$('.I_Address').val(data.data[0].address);
 	 			
 	 			$.each(data.data,function(i, item){	
-	 				html += '<li style="padding: 10px 0 0;color:#FF8800;">[地址]('+(i+1)+'): <span>'+item.address+'</span></li>';
+					html += '<li style="padding: 10px 0 0;color:#FF8800;">[地址]('+(i+1)+')=>['+item.add_date+']=>['+item.consignee+']=><span>'+item.address+'</span></li>';
 	 			});
 	 			$('.I_Consignee_list').html("<ul>"+html+"</ul>");
 	 		}else{
 	 			$('.I_Consignee_list').html("");
 	 		}
 	 	});
+	 }); 
+	 $('.chooseSignature').change(function(){
+	 	$('.signature,.subscriber').val($(this).find("option:selected").text());
+	 });
+	 $('.chooseContents').change(function(){
+	 	$('.defaultContents').text($(this).find("option:selected").text());
+	 	$('.defaultContents').val($(this).find("option:selected").text());
 	 }); 
 	 $('.I_Consignee').change(function(){
 	  
@@ -167,7 +193,7 @@ $(function(){
 	 		if(data.code == 0 && data.count>0) {
 	 			$('.I_Address').val(data.data[0].address);
 	 			$.each(data.data,function(i, item){	
-	 				html += '<li style="padding: 10px 0 0;color:#FF8800;">[地址]('+(i+1)+'): <span>'+item.address+'</span></li>';
+					html += '<li style="padding: 10px 0 0;color:#FF8800;">[地址]('+(i+1)+')=>['+item.add_date+']=>['+item.consignee+']=><span>'+item.address+'</span></li>';
 	 			});
 	 			$('.I_Consignee_list').html("<ul>"+html+"</ul>");
 	 		}else{

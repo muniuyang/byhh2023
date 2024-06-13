@@ -24,6 +24,8 @@ use common\library\Resource;
 use common\models\NavigationModel;
 use common\models\OrderPrintContentModel;
 
+use common\library\Language;
+use common\library\Timezone;
 use common\library\Basewind;
 use common\library\Message;
 use common\library\Page;
@@ -54,6 +56,7 @@ class Order_printedController extends \common\controllers\BaseUserController
 						['nav_id'=>'v01','title'=>'花束卡片','link'=>'order_printed/lists.html?cate_id=21&order_id='.$get->order_id],
 						['nav_id'=>'v012','title'=>'绿植卡片','link'=>'order_printed/lists.html?cate_id=22&order_id='.$get->order_id],
 						['nav_id'=>'v013','title'=>'内容','link'=>'order_printed/contents.html?cate_id=23&order_id='.$get->order_id],
+						['nav_id'=>'v014','title'=>'地址','link'=>'order_printed/addresss.html?cate_id=24&order_id='.$get->order_id],
 					]
 			] 
 		]);
@@ -136,8 +139,7 @@ class Order_printedController extends \common\controllers\BaseUserController
 		$post = Basewind::trimAll(Yii::$app->request->get(), true, ['limit', 'page', 'status','s1','s2']);
 		if(!Yii::$app->request->isAjax) 
 		{
-			 
-			 
+			
 			$temps = [''];
 			$this->params['userBill'] = $temps;
 			return $this->render('../order.byhhindex.html', $this->params);
@@ -163,7 +165,166 @@ class Order_printedController extends \common\controllers\BaseUserController
 			}
 			return Json::encode(['code' => 0, 'msg' => '', 'count' =>$count , 'data' => $list]);
 		}
+	}	
+	/**
+	 *  打印卡片地址列表
+	 */
+	public function actionAddresss()
+	{
+		$post = Basewind::trimAll(Yii::$app->request->get(), true, ['limit', 'page', 'status']);
+		if(!Yii::$app->request->isAjax) 
+		{
+			$this->params['_foot_tags'] = Resource::import([
+				'script' => 'jquery.ui/jquery.ui.js,jquery.ui/i18n/' . Yii::$app->language . '.js,jquery.plugins/jquery.validate.js,dialog/dialog.js,mlselection.js,user.js
+				,jquery.plugins/jquery.form.js,inline_edit.js,jquery.plugins/timepicker/jquery-ui-timepicker-addon.js',
+				'style' =>  'jquery.ui/themes/smoothness/jquery.ui.css,dialog/dialog.css,jquery.plugins/timepicker/jquery-ui-timepicker-addon.css'
+			]);
+			$this->params['filtered'] = $this->getConditions($post);
+			$this->params['defaultMarkets']   = ['周边','云尚','蓝宝石','红宝石','金座','银座','老三镇','金正茂','金昌','翡翠座','小商品市场','中心商城','品牌'];
+			$this->params['defaultisDefects'] = ['不完整地址','完整地址'];
+			return $this->render('../printed.address.html', $this->params);
+		}
+		else
+		{
+
+			//$sql = 'SELECT id from(SELECT * FROM swd_address_customer order by up_time desc) customers group by consignee ORDER BY up_time DESC;';
+			//$query =  Yii::$app->db->createCommand($sql, [':id' => 1]);//->queryAll();
+			//var_dump($query->getRawSql());die;
+			$query =\common\models\AddressCustomerModel::find()->alias('o')->select('o.*');
+			if($post->search_name){
+				$query = $query->andWhere(['like','o.consignee' , $post->search_name]);
+			}
+			if($post->region_no){
+				$query = $query->andWhere(['=','o.region_no' , $post->region_no]);
+			}
+			if(isset($post->isDefect) && $post->isDefect!='' && in_array($post->isDefect,[0,1])){
+				$query = $query->andWhere(['=','o.is_defect' , $post->isDefect]);
+			}
+			//$query = $query->groupBy('o.consignee');
+			$query = $query->orderBy(['o.up_time' => SORT_DESC,'o.id' => SORT_DESC]);
+			//var_dump($post,$query->createCommand()->getRawSql());die;
+			$page = Page::getPage($query->count(), $post->limit ? $post->limit : 15);
+			$list = $query->offset($page->offset)->limit($page->limit)->asArray()->all();
+			foreach ($list as $key => $value)
+			{
+				$list[$key]['up_time'] = Timezone::localDate('Y-m-d H:i:s', $value['up_time']);
+			}
+			return Json::encode(['code' => 0, 'msg' => '', 'count' => $query->count(), 'data' => $list]);
+		}
+	
 	}
+	public function actionAlist(){
+		$post = Basewind::trimAll(Yii::$app->request->get(), true, ['limit', 'page', 'status','s1','s2']);
+		if(!Yii::$app->request->isAjax) 
+		{
+			
+			$temps = [''];
+			$this->params['userBill'] = $temps;
+			return $this->render('../order.byhhindex.html', $this->params);
+		}
+		else
+		{
+ 
+			$query = \common\models\AddressCustomerModel::find()->select('*');
+			$query = $query->orderBy(['id' => SORT_DESC]);
+			$count = $query->count();
+			//var_dump($query->createCommand()->getRawSql());die;
+			$page = Page::getPage($count, $post->limit ? $post->limit : 50);
+			$list = $query->offset($page->offset)->limit($page->limit)->asArray()->all();
+			 
+			return Json::encode(['code' => 0, 'msg' => '', 'count' =>$count , 'data' => $list]);
+		}
+	}
+	/**
+	 * 创建更新客户地址
+	 */
+	public function actionCaddress()
+	{
+		if(!Yii::$app->request->isPost)
+		{
+			$post = Basewind::trimAll(Yii::$app->request->get(), true);
+			$this->params['action'] = Url::toRoute(['order_printed/caddress', 'from' => 'address']);
+			$redirect = Url::toRoute(['order_printed/addresss']);
+			$this->params['regions'] = \common\models\RegionModel::find()->select('region_name')
+			->where(['parent_id' => 0, 'if_show' => 1])->indexBy('region_id')->column();
+			$this->params['address'] = ['defaddr'=>1,'region_id'=>'284','region_name'=>'湖北省 武汉'];
+			$orderInfo = \common\models\AddressCustomerModel::find()->alias('o')
+			->select('o.*')
+			->where(['o.id' => $post->id])->asArray()->one();
+			//var_dump($orderInfo);die;
+			$this->params = array_merge($this->params, ['redirect' => $redirect]);
+			$this->params = array_merge($this->params, ['address_info' => $orderInfo, 'redirect' => $redirect]);
+			return $this->render('../order_printed.addressform.html', $this->params);
+		}else{
+			$post = Basewind::trimAll(Yii::$app->request->post(), true);
+			if(!$post->consignee){
+				return Message::popWarning("请输入收货人!");
+			}
+			if(!$post->address){
+				return Message::popWarning("请输入详细地址!");
+			}
+			if($res = preg_match_all("/云尚|蓝宝石|红宝石|金座|银座|老三镇|金正茂|金昌|翡翠座|小商品市场|中心商城|品牌/",$post->address,$matches)){
+				$regions = ['周边','云尚','蓝宝石','红宝石','金座','银座','老三镇','金正茂','金昌','翡翠座','小商品市场','中心商城','品牌'];
+				$region_no = array_search($matches[0][0], $regions);//找数组里指定值的键
+				//var_dump($res,$region_no,$matches);
+			}else{
+				$region_no = 0;
+			}
+			if(in_array(Yii::$app->user->id,Yii::$app->params['createRights'])){//权限判断[START]JchengCustom
+			
+				$customerModel = \common\models\AddressCustomerModel::find()->alias('o');
+				if($post->id){ //更新
+					$customerModel = $customerModel->where(['o.id' => $post->id]);
+				}else{//插入
+					$customerModel = $customerModel->where(['o.consignee' => $post->consignee]);
+					$customerModel = $customerModel->andWhere(['like','o.add_date' , @date('Y')]);
+				}
+				//var_dump($customerModel->createCommand()->getRawSql());die('33');
+				$customerModel = $customerModel->one();
+				if(!$customerModel){
+					$customerModel = new \common\models\AddressCustomerModel();
+				}
+				$customerModel->consignee = $post->consignee;
+				$customerModel->region_id = $post->region_id;
+				$customerModel->region_name = $post->region_name;
+				$customerModel->address = $post->address;
+				$customerModel->zipcode = $post->zipcode;
+				$customerModel->phone_mob = $post->phone_mob;
+				$customerModel->region_no = $region_no;
+				$customerModel->add_date = @date('Y-m-d',time());
+				$customerModel->up_time = time();//-8*3600;
+				if(!$customerModel->save()){
+					return Message::popWarning($customerModel->errors);
+				}
+			}else{
+				return Message::popWarning("权限不够");
+			}
+			return Message::popSuccess("添加成功", urldecode(Yii::$app->request->post('redirect', Url::toRoute('order_printed/addresss'))));
+		}
+	}
+	
+	
+	/**
+	 * 修改订单价格
+	 */
+	public function actionEditcol()
+	{
+		$get = Basewind::trimAll(Yii::$app->request->get(), true);
+		$post = Basewind::trimAll(Yii::$app->request->get(), true, ['id', 'is_defect','is_inline']);
+		if(in_array($post->column, ['is_defect','is_inline'])) 
+		{
+		  	$customerModel = \common\models\AddressCustomerModel::find()->where(['id'=>$post->id])->one();
+			
+		  	$customerModel->{$post->column} = $post->value;
+		  	if(!($status = $customerModel->save())) {
+		  		return Message::warning($customerModel->errors);
+		  	}
+		  	return Message::display(Language::get('edit_ok'));
+		}else{
+			 
+		}
+	}
+	
 	/**
 	 *  添加卡片内容
 	 */
@@ -343,7 +504,7 @@ class Order_printedController extends \common\controllers\BaseUserController
 	
 	
 	/**
-	* 打印开始
+	* 小卡片打印
 	*/
 	public function actionExcute($order){
 
@@ -357,13 +518,24 @@ class Order_printedController extends \common\controllers\BaseUserController
 		$templateProcessor->setValue('title', $orderExt['consignee']);// On footer
 		$templateProcessor->setValue('signer',$order['postscript']); 
 		if(!$order['content']){
-		$order['content'] = "烛光闪闪，快乐幸福，生日快乐，心想事成，幸运之日，吉祥之日，愿愿顺心，事事如意，祝君生日快乐，开心幸福！";
+			$order['content'] = "烛光闪闪，快乐幸福，生日快乐，心想事成，幸运之日，吉祥之日，愿愿顺心，事事如意，祝君生日快乐，开心幸福！";
 		}
 		$templateProcessor->setValue('content',$order['content']); 
 		$templateProcessor->saveAs($resultFile);
+		/**
+		 * 改变打印状态
+		 */
+		if($order['order_id']){
+			$orderExt = \common\models\OrderExtmModel::find()->where(['order_id'=>$order['order_id']])->one();
+			$orderExt->	is_printed = 1;
+			$orderExt->save();
+		}
 		$this->actionDown($resultFile);
 	}
     //http://shopwind.byhh.com/order_printed/printedf1.html
+	/**
+	 * 开业打印
+	 */
 	public function actionPrinted($order){
 		$logo = dirname(Yii::$app->BasePath).'/frontend/web/data/system/byhhgzh.png';
 		$templateFile = dirname(Yii::$app->BasePath).'/frontend/web/data/template/printed_card_b'.$order['ptf'].'.docx';
@@ -400,8 +572,19 @@ class Order_printedController extends \common\controllers\BaseUserController
 		}else{
 			$templateProcessor->setValue('signer',$order['postscript']); // On header
 		}
-
+        //保存文件
 		$templateProcessor->saveAs($resultFile);
+		
+		/**
+		 * 改变打印状态
+		 */
+		//var_dump($order['order_id']);
+		if($order['order_id']){
+			$orderExt = \common\models\OrderExtmModel::find()->where(['order_id'=>$order['order_id']])->one();
+			$orderExt->	is_printed = 1;
+			$orderExt->save();
+		}
+		//下载文件
 		$this->actionDown($resultFile);
 	} 
 	public function actionPrintedf2($order){
@@ -540,5 +723,16 @@ class Order_printedController extends \common\controllers\BaseUserController
 		 header('Pragma: public');
 		 header('Content-Length: ' . filesize($resultFile));
 		 readfile($resultFile);
+	}
+	private function getConditions($post, $query = null)
+	{	
+		if($query === null) {
+			foreach(array_keys(ArrayHelper::toArray($post)) as $field) {
+				if(in_array($field, ['search_name', 'status', 'add_time_from', 'add_time_to', 'order_amount_from', 'order_amount_to'])) {
+					return true;
+				}
+			}
+			return false;
+		}
 	}
 }

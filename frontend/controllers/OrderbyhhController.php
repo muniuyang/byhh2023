@@ -67,6 +67,17 @@ class OrderbyhhController extends \common\controllers\BaseUserController
 			->joinWith('user u', false)
 			->orderBy(['b.userid' => SORT_DESC])
 			->asArray()->all();
+			
+			$defaulthots = \common\models\GoodsHotsModel::find()->alias('o')->select('o.*,g.goods_id,g.goods_name')
+			->joinWith('goods g', false)
+			->orderBy(['up_time' => SORT_DESC])
+			->offset(0)->limit(20)->asArray()->all(); 
+			//var_dump($defaulthots);die;
+			
+			foreach($defaulthots as $k=>$v){
+				$this->params['defaulthots'][$v['goods_id']] = $v['goods_name'];
+			}
+			
 			$temps = [''];
 			if(!empty($userBills)){
 				foreach($userBills  as $k => $v){
@@ -150,6 +161,14 @@ class OrderbyhhController extends \common\controllers\BaseUserController
 				foreach($defaultAddress as $k=>$v){
 					$this->params['defaultAddress'][$v['id']] = $v['consignee'];
 				}
+				$defaultSignature = \common\models\AddressSignatureModel::find()->select('userid,signature')->orderBy(['up_time' => SORT_DESC])->offset(0)->limit(30)->asArray()->all();
+				if(!empty($defaultSignature)){
+					foreach($defaultSignature as $k=>$v){
+						$this->params['defaultSignature'][$v['userid']] = $v['signature'];
+					}
+				}
+				$this->params['defaultContents'] = ['开业大吉,生意兴隆','开业大吉,财源广进','开业大吉,爆款连连','订货会圆满成功'];
+				//die('33');
 				return $this->render('../my_extro.nearextroform.html', $this->params);
 			}
 		}else{
@@ -510,7 +529,7 @@ class OrderbyhhController extends \common\controllers\BaseUserController
 	/**
 	 * 创建年结单用户
 	 */
-	public function actionSearch()
+	public function actionSearchClose()
 	{
 		/**********************[END]JchengCustom with local**********************/
 		if(!Yii::$app->request->isAjax)
@@ -537,7 +556,8 @@ class OrderbyhhController extends \common\controllers\BaseUserController
 				$list = $query->all();
 			}else{
 				//$query = OrderExtmModel::find()->select('address')->where(['like', 'consignee', $post->keyword])->orderBy(['order_id' => SORT_DESC]);
-				$query = \common\models\AddressServModel::find()->select('address')->where(['like', 'consignee', $post->keyword])->orderBy(['sid' => SORT_DESC]);
+				//$query = \common\models\AddressServModel::find()->select('address')->where(['like', 'consignee', $post->keyword])->orderBy(['sid' => SORT_DESC]);
+				$query = \common\models\AddressCustomerModel::find()->select('address')->where(['like', 'consignee', $post->keyword])->orderBy(['up_time' => SORT_DESC]);
 				//var_dump($query->createCommand()->getRawSql());die;
 				$list = $query->asArray()->all();	
 			}
@@ -601,13 +621,12 @@ class OrderbyhhController extends \common\controllers\BaseUserController
 					$relationsModel = new \common\models\CustomerRelationsModel();
 					$relationsModel->add_date  = @date('Y-m-d',$date);
 				}
-				if($orderExt->consignee == $orderExt->signature){
-					$relationsModel = \common\models\CustomerRelationsModel::find()->where(['add_date'=>@date('Y-m-d',$date)])
-					->andWhere(['and', ['=', 'consignee', $orderExt->consignee], ['=', 'signature', $orderExt->signature]])
-					->one();
-					var_dump($relationsModel->createCommand()->getRawSql());die;
-					
-				}
+				//if($orderExt->consignee == $orderExt->signature){
+				//	$relationsModel = \common\models\CustomerRelationsModel::find()->where(['add_date'=>@date('Y-m-d',$date)])
+				//	->andWhere(['and', ['=', 'consignee', $orderExt->consignee], ['=', 'signature', $orderExt->signature]]);
+				//	->one();
+				//	var_dump($relationsModel->createCommand()->getRawSql());die;
+				//}
 				$relationsModel->order_id   = $orderExt->order_id;
 				$relationsModel->consignee  = $orderExt->consignee;
 				$relationsModel->address    = $orderExt->address;
@@ -616,6 +635,32 @@ class OrderbyhhController extends \common\controllers\BaseUserController
 				if(!$status = $relationsModel->save()){
 					return Message::popWarning($relationsModel->errors);
 				}
+				
+				//更新客户地址
+				if($res = preg_match_all("/云尚|蓝宝石|红宝石|金座|银座|老三镇|金正茂|金昌|翡翠座|小商品市场|中心商城|品牌/",$orderExt->address,$matches)){
+					$regions = ['周边','云尚','蓝宝石','红宝石','金座','银座','老三镇','金正茂','金昌','翡翠座','小商品市场','中心商城','品牌'];
+					$region_no = array_search($matches[0][0], $regions);//找数组里指定值的键
+				}else{
+					$region_no = 0;
+				}
+				$customerModel = \common\models\AddressCustomerModel::find()->alias('o')
+				->where(['o.consignee' => $orderExt->consignee])
+				->andWhere(['like','o.add_date' , @date('Y')]);
+				//var_dump($customerModel->createCommand()->getRawSql());die('33');
+				$customerModel = $customerModel->one();
+				if(!$customerModel){
+					$customerModel = new \common\models\AddressCustomerModel();
+					$customerModel->add_date = @date('Y-m-d',time());
+				}
+				$customerModel->consignee = $orderExt->consignee;
+				$customerModel->region_id = $orderExt->region_id;
+				$customerModel->region_name = $orderExt->region_name;
+				$customerModel->address = $orderExt->address;
+				$customerModel->zipcode = $orderExt->zipcode;
+				$customerModel->phone_mob = $orderExt->phone_mob;
+				$customerModel->region_no = $region_no;
+				$customerModel->up_time = time();
+				$customerModel->save();
 			}
 		  	return Message::display(Language::get('edit_ok'));
 		}else{

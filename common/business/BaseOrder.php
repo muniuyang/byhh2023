@@ -148,7 +148,19 @@ class BaseOrder
 			
 			unset($consignee_info['book_id']);
 			unset($consignee_info['book_amount']);
+			//入长下单商品库
+			$orderGoods =  \common\models\OrderGoodsModel::find()->select('goods_id')->where(['order_id'=>$order_id])->one();
+			$hotsModel   =  \common\models\GoodsHotsModel::find()->select('*')->where(['goods_id'=>$orderGoods->goods_id])->one();
+			if(!$hotsModel){
+				$hotsModel = new \common\models\GoodsHotsModel();
+				$hotsModel->goods_id = $orderGoods->goods_id;
+				$hotsModel->up_time  = time();
+			}else{
+				$hotsModel->up_time  = time();
+			}
+			$hotsModel->save();
 		}
+		
 		//var_dump($consignee_info);die;
 		$model = new OrderExtmModel();
 		$model->order_id = $order_id;

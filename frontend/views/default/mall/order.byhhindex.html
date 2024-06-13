@@ -7,41 +7,51 @@
         <div class="webkit-box box-align-center">
           <input type="hidden" name="r" value="orderbyhh/index" />
           <label class="mr5">搜索关键词类型</label>
-          <select class="querySelect classSelect" name="field">
+          <select class=" classSelect" name="field">
             <option value="">--选择关键词类型--</option>
             {html_options options=$search_options selected=$smarty.get.field}
           </select>
-          <input class="infoTableInput mr10" placeholder="输入搜索关键词" type="text" name="search_name" value="{$smarty.get.search_name|escape}" />
-          <label class="mr5">{$lang.search_status}</label>
-          <select class="querySelect" name="status">
+        &nbsp;&nbsp;&nbsp;&nbsp; <input class=" mr10 _buyerSelect" placeholder="输入搜索关键词" type="text" name="search_name" value="{$smarty.get.search_name|escape}" />
+        &nbsp;&nbsp;&nbsp;&nbsp;<label class="mr5">{$lang.search_status}</label>
+          <select class="" name="status">
             <option value="">{$lang.no_limit}</option>
             {html_options options=$status_list selected=$smarty.get.status}
           </select>
-          {$lang.order_amount_from}
-          <input class="queryInput2" type="text" value="{$smarty.get.order_amount_from}" name="order_amount_from" />
-          {$lang.order_amount_to}
-          <input class="queryInput2" type="text" style="width:60px;" value="{$smarty.get.order_amount_to}"
-            name="order_amount_to" class="pick_date" />
-          </div>
-          <div class="webkit-box box-align-center mt20">
-          <label class="mr5">年结客户</label>
-          <select class="querySelect buyerSelect" name="real_name" >
-            <option value="">--选择客户名称--</option>
-            {html_options  values=$userBill output=$userBill selected=$smarty.get.real_name}
-          </select>
-
-          {$lang.add_time_from}
-          <input class="queryInput" type="text" value="{$smarty.get.add_time_from}" id="add_time_from"
-            name="add_time_from" class="pick_date" />
-          {$lang.add_time_to}
-          <input class="queryInput" type="text" value="{$smarty.get.add_time_to}" id="add_time_to" name="add_time_to"
-            class="pick_date" />
-          <input type="submit" class="layui-btn layui-bg-blue layui-btn-sm block width7 " value="{$lang.query}" />
-          <!--{if $filtered}-->
-          <a class="layui-btn layui-btn-primary layui-btn-sm box-align-center" href="{url route='orderbyhh/index'}">{$lang.cancel_query}</a>
-          <!--{/if}-->
-		  <input type="hidden" class="downChoose" name='down'  value="all" />
-          </div>
+         
+		&nbsp;&nbsp;&nbsp;&nbsp;<label class="mr5">年结客户</label>
+		<select class="buyerSelect" name="real_name" >
+		  <option value="">--选择客户名称--</option>
+		  {html_options  values=$userBill output=$userBill selected=$smarty.get.real_name}
+		</select>
+		
+		&nbsp;&nbsp;&nbsp;&nbsp;{$lang.add_time_from}
+		<input class="queryInput" type="text" value="{$smarty.get.add_time_from}" id="add_time_from"
+		  name="add_time_from" class="pick_date" />
+		{$lang.add_time_to}
+		<input class="queryInput" type="text" value="{$smarty.get.add_time_to}" id="add_time_to" name="add_time_to"
+		  class="pick_date" />
+		<input type="submit" class="layui-btn layui-bg-blue layui-btn-sm block width7 " value="{$lang.query}" />
+		<!--{if $filtered}-->
+		<a class="layui-btn layui-btn-primary layui-btn-sm box-align-center" href="{url route='orderbyhh/index'}">{$lang.cancel_query}</a>
+		<!--{/if}-->
+		<input type="hidden" class="downChoose" name='down'  value="all" />
+			
+        </div>
+		<div class="webkit-box box-align-center mt20">
+		{$lang.order_amount_from}
+		<input class="queryInput2" type="text" value="{$smarty.get.order_amount_from}" name="order_amount_from" />
+		{$lang.order_amount_to}
+		<input class="queryInput2" type="text" style="width:60px;" value="{$smarty.get.order_amount_to}"
+		  name="order_amount_to" class="pick_date" />
+		  <!--{if $defaulthots}-->
+		  &nbsp;&nbsp;&nbsp;&nbsp;<label class="mr5">热门款式</label>
+		  <select class="goods_name" name="goods_name">
+		    <option value="">--选择要下单的款式--</option>
+		    {html_options options=$defaulthots selected=$smarty.get.goods_name}
+		  </select>
+		  <!--{/if}-->
+		</div>
+        <!-- <div class="webkit-box box-align-center mt20">  </div> -->
         </form>
       </div>
 	  
@@ -138,7 +148,7 @@
 	  <button class="layui-btn layui-btn-primary layui-bg-blue" lay-event="export"><i class="layui-icon layui-icon-export"></i>导出数据</button>
 	<a class="layui-btn layui-btn-primary layui-bg-orange" href="javascript:;" uri="{url route='orderbyhh/cuser'}" dialog_width="600" dialog_title="创建用户" ectype="dialog"
 	dialog_id="seller_order_adjust_fee" id="order{$order.orderExtm.order_id}_action_adjust_fee" ><i class="layui-icon layui-icon-username"></i>创建用户</a> 
-	<a class="layui-btn layui-btn-primary layui-bg-green" href="javascript:;" uri="{url route='orderbyhh/caddress'}" dialog_width="600" dialog_title="创建地址" ectype="dialog"
+	<a class="layui-btn layui-btn-primary layui-bg-green" href="javascript:;" uri="{url route='order_printed/caddress'}" dialog_width="600" dialog_title="创建地址" ectype="dialog"
 	dialog_id="seller_order_adjust_fee" id="order{$order.orderExtm.order_id}_action_address" ><i class="layui-icon layui-icon-location"></i>创建地址</a>
 	</div>
 	</div>
@@ -250,7 +260,7 @@
 				+" class='layui-icon layui-icon-release' style='cursor: pointer;color:#ff0000;' lay-event='goodsDelivery'></i>"
 				+"<span style=' text-decoration: line-through;color:red;'>"+res.shipping_fee+"</span>"
 	} }
-	, { field: 'real_name', title: '订花人', width: 110 ,align: 'left',style:'color: #00AA00;',templet:function(res){
+	, { field: 'real_name', title: '订花人', width: 120 ,align: 'left',style:'color: #00AA00;',templet:function(res){
 		return '<a href="JavaScript:;" dialog_width="550"  title="修改订花人"  dialog_title="修改订花人信息" ectype="dialog" '
 		 +"uri={url route='orderbyhh/editbuyer' redirect=$redirect }?order_id="+res.order_id
 		 +" dialog_id='my_address_extro' name='order_id'>"
@@ -283,7 +293,9 @@
 		return  _conent;		
 	}}
 	, { field: 'isPrinted', title: '已打印', width: 50, sort: false, align: 'center',templet:function(res){
-		return '<em class="'+(res.is_printed==0 ? 'no':'yes')+'" ectype="inline_edit" controller="orderbyhh" fieldname="is_printed" fieldid="'+res.order_id
+		console.log(res);
+		
+		return res.LAY_INDEX+'<em class="'+(res.is_printed==0 ? 'no':'yes')+'" ectype="inline_edit" controller="orderbyhh" fieldname="is_printed" fieldid="'+res.order_id
 		+'" fieldvalue="'+res.is_printed+'" title="可编辑"><i class="fa '
 		+(res.is_printed==0 ? 'fa-ban':'fa-check-circle')+'"></i>'+(res.is_printed==0 ? '否':'是')+'</em>';
 	  }}
@@ -403,11 +415,17 @@
 	$('.layui-icon-close').click(function(){
 		$('#p_content').hide();
 	})
+	$('.goods_name').change(function(){
+		 
+		$('.infoTableInput').val($(this).find("option:selected").text());
+		window.open(url(['goods', { id:$(this).find("option:selected").val() }]));
+		
+	});
     $('#add_time_from').datepicker({ dateFormat: 'yy-mm-dd' });
     $('#add_time_to').datepicker({ dateFormat: 'yy-mm-dd' });
 	$('.buyerSelect').change(function(){
 		$(".classSelect option[value='real_name']").attr("selected", true);    //设置Select的Text值为"买家实名"的项选中 
-		$('.infoTableInput').val($(this).find("option:selected").text());
+		$('._buyerSelect').val($(this).find("option:selected").text());
 	});
 	// $("table thead tr").eq(0).css('background-color', 'rgb(239, 181, 181)');
  

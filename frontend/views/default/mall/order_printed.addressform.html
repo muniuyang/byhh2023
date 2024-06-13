@@ -8,7 +8,7 @@
         <li class="B_Consignee">
           <h3>收货人(祝?): </h3>
           <p>
-            <input type="text" class="text width_normal I_Consignee" name="consignee" value="{$address.consignee|escape}"/>
+            <input type="text" class="text width_normal I_Consignee" name="consignee" value="{$address_info.consignee|escape}"/>
             <label class="field_message"><span class="field_notice">收花人信息（*必填）</span></label>
           </p>
 		  <div class="I_Consignee_list"></div>
@@ -40,26 +40,27 @@
         <li>
           <h3>{$lang.address}: </h3>
           <p>
-            <input type="text" class="text width_normal I_Address" name="address" value="{$address.address|escape}"/>
+            <input type="text" class="text width_normal I_Address" name="address" value="{$address_info.address|escape}"/>
             <label class="field_message"><span class="field_notice">{$lang.address_desc}</span></label>
           </p>
         </li>
         <li style="display: none;">
           <h3>{$lang.zipcode}: </h3>
           <p>
-            <input  type="text" class="text width_normal" name="zipcode" name="zipcode" value="{$address.zipcode|escape}" />
+            <input  type="text" class="text width_normal" name="zipcode" name="zipcode" value="{$address_info.zipcode|escape}" />
             <label class="field_message"><span class="field_notice"></span></label>
           </p>
         </li>
         <li>
           <h3>{$lang.phone_mob}:</h3>
           <p>
-            <input type="text" class="text width_normal" name="phone_mob" value="{$address.phone_mob}"/>
+            <input type="text" class="text width_normal" name="phone_mob" value="{$address_info.phone_mob}"/>
             <label class="field_message"><span class="field_notice">{$lang.phone_mob}</span></label>
           </p>
         </li>
       </ul>
       <div class="submit">
+		<input type="hidden" name="id" value="{$address_info.id}" />
       	<input type="hidden" name="redirect" value="{$redirect}" />
 		<input type="hidden" name="from" value="{$from}" />
         <input type="submit" class="btn" value="{$lang.submit}" />
@@ -76,7 +77,7 @@ $(function(){
     })
 	$('.B_Consignee .I_Consignee').change(function(){
  
-		$.getJSON("{url route='orderbyhh/search'}", { 'keyword' : $('.I_Consignee').val()}, function(data) {
+		$.getJSON("{url route='my_address/search'}", { 'keyword' : $('.I_Consignee').val()}, function(data) {
 			html = '';
 			if(data.code == 0 && data.count>0) {
 				$('.I_Address').val(data.data[0].address);

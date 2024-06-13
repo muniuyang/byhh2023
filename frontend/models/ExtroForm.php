@@ -62,6 +62,7 @@ class ExtroForm extends Model
 		if(!$this->order_id || !($model = OrderExtmModel::find()->where(['order_id' => $this->order_id])->one())) {
 			$model = new OrderExtmModel();
 		}
+		//var_dump($post);die('33');
 		
 		$model->order_id 	= $post->order_id;
 		$model->consignee 	= $post->consignee;
@@ -104,6 +105,34 @@ class ExtroForm extends Model
 			$orderM->save();
 		}
 		
+		/**
+		 * 修改客户地址
+		 */
+		$customerModel = \common\models\AddressCustomerModel::find()->alias('o');
+		$customerModel = $customerModel->where(['o.consignee' => $model->consignee]);
+		$customerModel = $customerModel->andWhere(['like','o.add_date' , @date('Y')]);
+		//var_dump($customerModel->createCommand()->getRawSql());die('33');
+		$customerModel = $customerModel->one();
+		if(!$customerModel){
+			$customerModel = new \common\models\AddressCustomerModel();
+		}
+		if($res = preg_match_all("/云尚|蓝宝石|红宝石|金座|银座|老三镇|金正茂|金昌|翡翠座|小商品市场|中心商城|品牌/",$post->address,$matches)){
+			$regions = ['周边','云尚','蓝宝石','红宝石','金座','银座','老三镇','金正茂','金昌','翡翠座','小商品市场','中心商城','品牌'];
+			$region_no = array_search($matches[0][0], $regions);//找数组里指定值的键
+			//var_dump($res,$region_no,$matches);
+		}else{
+			$region_no = 0;
+		}
+		$customerModel->consignee   = $model->consignee;
+		$customerModel->region_id   = $model->region_id;
+		$customerModel->region_name = $model->region_name;
+		$customerModel->address = $model->address;
+		$customerModel->zipcode = $model->zipcode;
+		$customerModel->phone_mob = $model->phone_mob;
+		$customerModel->region_no = $region_no;
+		//$customerModel->add_date = @date('Y-m-d',time());
+		$customerModel->up_time = time();//-8*3600;
+		$customerModel->save();
 		/*
 		//修改用户的昵称和真实姓名
 		if($user = UserModel::find()->where(['userid' =>$orderM->buyer_id])->one()) {
