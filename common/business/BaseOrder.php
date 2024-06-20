@@ -148,26 +148,35 @@ class BaseOrder
 			
 			unset($consignee_info['book_id']);
 			unset($consignee_info['book_amount']);
+			
 			//入长下单商品库
-			$orderGoods =  \common\models\OrderGoodsModel::find()->select('goods_id')->where(['order_id'=>$order_id])->one();
-			$hotsModel   =  \common\models\GoodsHotsModel::find()->select('*')->where(['goods_id'=>$orderGoods->goods_id])->one();
-			if(!$hotsModel){
-				$hotsModel = new \common\models\GoodsHotsModel();
-				$hotsModel->goods_id = $orderGoods->goods_id;
-				$hotsModel->up_time  = time();
-			}else{
-				$hotsModel->up_time  = time();
+			$orderGoods =  \common\models\OrderGoodsModel::find()->select('goods_id,goods_name')->where(['order_id'=>$order_id])->one();
+			if($res = preg_match_all("/【周边】|【绿植】|【花篮】/",$orderGoods->goods_name,$matches)){
+				//$paramArr    = ['【周边】','【绿植】','【花篮】'];
+				//$paramArrKey = array_search($matches[0][0], $paramArr);//找数组里指定值的键
+				$hotsModel   =  \common\models\GoodsHotsModel::find()->select('*')->where(['goods_id'=>$orderGoods->goods_id])->one();
+				if(!$hotsModel){
+					$hotsModel = new \common\models\GoodsHotsModel();
+					$hotsModel->goods_id = $orderGoods->goods_id;
+					$hotsModel->up_time  = time();
+				}else{
+					$hotsModel->up_time  = time();
+				}
+				$hotsModel->save();
 			}
-			$hotsModel->save();
 		}
-		
-		//var_dump($consignee_info);die;
+		if(preg_match_all("/订货会/",$consignee_info['content'],$matches)){
+			$consignee_info['is_meeting'] = 1;
+		}else{
+			$consignee_info['is_meeting'] = 0;
+		}
 		$model = new OrderExtmModel();
 		$model->order_id = $order_id;
-		foreach($consignee_info as $key => $value) {
-			$model->$key = $value;
-		}
 		
+		foreach($consignee_info as $key => $value) {
+			$model->$key = $value;	
+		}
+	
 		return $model->save();
 	}
 

@@ -75,8 +75,8 @@
   margin: 0 ;
   position: absolute;
   top: 68px;
-  left: 82%;
-  width:24%;
+  left: 77%;
+  width:30%;
   padding:0;
   z-index: 999999;
   transform: translateX(-25%); /* 水平居中分页 */
@@ -104,7 +104,7 @@
   padding:0;
   position: absolute;
   top: 74px;
-  left: 50%;
+  left: 45%;
   width:32%;
   z-index: 999999;
   transform: translateX(-25%); /* 水平居中分页 */
@@ -150,6 +150,7 @@
 	dialog_id="seller_order_adjust_fee" id="order{$order.orderExtm.order_id}_action_adjust_fee" ><i class="layui-icon layui-icon-username"></i>创建用户</a> 
 	<a class="layui-btn layui-btn-primary layui-bg-green" href="javascript:;" uri="{url route='order_printed/caddress'}" dialog_width="600" dialog_title="创建地址" ectype="dialog"
 	dialog_id="seller_order_adjust_fee" id="order{$order.orderExtm.order_id}_action_address" ><i class="layui-icon layui-icon-location"></i>创建地址</a>
+	<button class="layui-btn layui-btn-primary layui-bg-blue" lay-event="address-list"><i class="layui-icon layui-icon-export"></i>地址</button>
 	</div>
 	</div>
 </script>
@@ -237,9 +238,15 @@
 		+'" fieldvalue="'+res.is_error+'" title="可编辑"><i class="fa '
 		+(res.is_error==0 ? 'fa-ban':'fa-check-circle')+'"></i>'+(res.is_error==0 ? '否':'是')+'</em>';
 	  }}
+
 	, { field: 'consignee', title: '收货人', width: 100 ,align: 'left',style:'color: #FF8800;',templet:function(res){
 		return "<em class='layui-icon layui-icon-dialogue consignee' lay-event='viewContent'    style='color:#00aaff;'></em>"+res.consignee;//+'('+res.buyer_name+')' ;
 	}}
+	, { field: 'isMeeting', title: '订货会', width: 60,  align: 'center',templet:function(res){
+		return '<em class="'+(res.is_meeting==0 ? 'no':'yes')+'" ectype="inline_edit" controller="orderbyhh" fieldname="is_meeting" fieldid="'+res.order_id
+		+'" fieldvalue="'+res.is_meeting+'" title="'+(res.is_meeting==0 ? '非订货会':'订货会')+'"><i class="fa '
+		+(res.is_meeting==0 ? 'fa-ban':'fa-check-circle')+'"></i>'+(res.is_meeting==0 ? '否':'是')+'</em>';
+	  }}
 	, { field: 'address', title: '收货地址', width: 140 ,align: 'left',style:'color: #202120;',templet:function(res){
 		
 		return '<a href="JavaScript:;"   dialog_title="修改收货人信息" ectype="dialog" '
@@ -269,6 +276,11 @@
 	, { field: 'order_amount', title: '金额', width: 70,  align: 'center',templet:function(res){
 		return "<span style='color:#00AA00;' controller='orderbyhh' fieldid='"+res.order_id+"' fieldname='order_amount'  ectype='inline_edit' >"+res.order_amount+"</span>"
 	} }
+	, { field: 'isSend', title: '已配送', width: 50, sort: false, align: 'center',templet:function(res){
+		return '<em class="'+(res.is_send==0 ? 'no':'yes')+'" ectype="inline_edit" controller="orderbyhh" fieldname="is_send" fieldid="'+res.order_id
+		+'" fieldvalue="'+res.is_send+'" title="'+(res.is_send==0 ? '未配送':'已配送')+'"><i class="fa '
+		+(res.is_send==0 ? 'fa-ban':'fa-check-circle')+'"></i>'+(res.is_send==0 ? '否':'是')+'</em>';
+	  }}
 	, { field: 'real_name', title: '配送时间', width: 210 ,align: 'left',style:'color: #666;',templet:function(res){
 		var _conent =  res.send_date;
 		if(res.msg == '预订'){
@@ -299,11 +311,7 @@
 		+'" fieldvalue="'+res.is_printed+'" title="可编辑"><i class="fa '
 		+(res.is_printed==0 ? 'fa-ban':'fa-check-circle')+'"></i>'+(res.is_printed==0 ? '否':'是')+'</em>';
 	  }}
-	, { field: 'isSend', title: '已配送', width: 50, sort: false, align: 'center',templet:function(res){
-		return '<em class="'+(res.is_send==0 ? 'no':'yes')+'" ectype="inline_edit" controller="orderbyhh" fieldname="is_send" fieldid="'+res.order_id
-		+'" fieldvalue="'+res.is_send+'" title="可编辑"><i class="fa '
-		+(res.is_send==0 ? 'fa-ban':'fa-check-circle')+'"></i>'+(res.is_send==0 ? '否':'是')+'</em>';
-	  }}
+
 	, { field: 'status', title: '已支付', width: 80, sort: false, align: 'center',templet:function(res){
 
 		//console.log(res);
@@ -378,7 +386,9 @@
 			  $('.downChoose').val('select');
 			 window.location.href = url(['orderbyhh/export', $.extend($("#formSearch").serializeJson(), { id: items.join(',') })]);
 		  }
-      }
+      }else if(obj.event === 'address-list'){
+		  window.open(url(['order_printed/addresss', $.extend($("#formSearch").serializeJson(), { id: items.join(',') })]));
+	  }
     });
 
     //监听行工具事件

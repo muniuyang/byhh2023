@@ -80,6 +80,13 @@ class ExtroForm extends Model
 		$model->send_date 	= $post->send_date;//送货时间
 		$model->is_year 	= $post->is_year;//年结单
 		$model->is_send 	= $post->is_send;//配送状态
+		if($res =preg_match_all("/订货会/",$post->content,$matches)){
+			$model->is_meeting = 1;
+		}else{
+			$model->is_meeting = 0;	
+		}
+		//var_dump($post->content,$res,$matches,$model->is_meeting);
+		//var_dump($model->attributes());die;
 		/**********************[START]JchengCustom with local**********************/
 		if(!$model->save()) {
 			$this->errors = $model->errors;

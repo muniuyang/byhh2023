@@ -155,7 +155,10 @@ class My_addressController extends \common\controllers\BaseUserController
 				$region_no = array_search($matches[0][0], $regions);//找数组里指定值的键
 				/*客户表入库*/
 				$customerModel = \common\models\AddressCustomerModel::find()
-				->where(['like','consignee',$post->consignee])->one();	
+				//->where(['like','consignee',$post->consignee])->one();
+				->andWhere(['and', ['like', 'consignee', $post->consignee],['like','add_date' , @date('Y')]])
+				->one();
+				
 				if(!$customerModel){
 					$customerModel = new \common\models\AddressCustomerModel();
 				}

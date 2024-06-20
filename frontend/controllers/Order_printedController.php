@@ -76,11 +76,12 @@ class Order_printedController extends \common\controllers\BaseUserController
 		$orderInfo['ptf'] = $post->ptf;
 		//VAR_DUMP($orderInfo['orderExtm']);die;
 		$orderInfo['postscript'] = $orderInfo['orderExtm']['signature'];
-		$orderInfo['content'] = $orderInfo['orderExtm']['content'];
-
+		$orderInfo['content']    = $orderInfo['orderExtm']['content'];
+		
 		if($post->ptf >=1 && $post->ptf<=100){
 			$this->actionExcute($orderInfo);
 		}else if($post->ptf >=101 && $post->ptf<=201){
+			$orderInfo['is_meeting'] = $orderInfo['orderExtm']['is_meeting'];
 			$this->actionPrinted($orderInfo);
 		}else{
 			return Message::warning("没找到模版，模版不存在！");
@@ -550,6 +551,9 @@ class Order_printedController extends \common\controllers\BaseUserController
 		$templateProcessor = new \PhpOffice\PhpWord\TemplateProcessor($templateFile);
 		$templateProcessor->setValue('address',$orderExt['address']);// On section/content
 		$templateProcessor->setValue('title', $orderExt['consignee']);// On footer
+		if($order['is_meeting'] == 1){
+			$order['content'] = "订货会圆满成功";
+		}
 		if(!$order['content']){
 			$order['content'] = "开业大吉,生意兴隆";
 		}

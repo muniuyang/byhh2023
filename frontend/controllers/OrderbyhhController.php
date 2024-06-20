@@ -71,7 +71,7 @@ class OrderbyhhController extends \common\controllers\BaseUserController
 			$defaulthots = \common\models\GoodsHotsModel::find()->alias('o')->select('o.*,g.goods_id,g.goods_name')
 			->joinWith('goods g', false)
 			->orderBy(['up_time' => SORT_DESC])
-			->offset(0)->limit(20)->asArray()->all(); 
+			->offset(0)->limit(30)->asArray()->all(); 
 			//var_dump($defaulthots);die;
 			
 			foreach($defaulthots as $k=>$v){
@@ -90,7 +90,7 @@ class OrderbyhhController extends \common\controllers\BaseUserController
 		else
 		{
 			$query = OrderModel::find()->alias('o')->select('o.order_id,o.order_sn,o.buyer_name,o.seller_name as store_name,o.goods_amount,o.order_amount,o.payment_name,o.status,o.add_time,o.pay_time,o.finished_time,
-			oe.consignee,oe.signature,oe.address,oe.shipping_fee,oe.what_day,oe.send_date,oe.is_printed,oe.is_year,oe.is_send,oe.is_error,oe.content,obi.real_name,og.goods_name,og.goods_image,og.goods_id,og.quantity');
+			oe.consignee,oe.signature,oe.address,oe.shipping_fee,oe.what_day,oe.send_date,oe.is_printed,oe.is_meeting,oe.is_year,oe.is_send,oe.is_error,oe.content,obi.real_name,og.goods_name,og.goods_image,og.goods_id,og.quantity');
 			//var_dump($post);die;
 			$query = $this->getConditions($post, $query);
 			$query = $query->joinWith('orderExtm oe', false)
@@ -167,7 +167,7 @@ class OrderbyhhController extends \common\controllers\BaseUserController
 						$this->params['defaultSignature'][$v['userid']] = $v['signature'];
 					}
 				}
-				$this->params['defaultContents'] = ['开业大吉,生意兴隆','开业大吉,财源广进','开业大吉,爆款连连','订货会圆满成功'];
+				$this->params['defaultContents'] = ['开业大吉,生意兴隆','开业大吉,财源广进','爆款多多，生意兴隆','开业大吉,爆款连连','日进桶金，爆款爆单','订货会圆满成功'];
 				//die('33');
 				return $this->render('../my_extro.nearextroform.html', $this->params);
 			}
@@ -605,7 +605,7 @@ class OrderbyhhController extends \common\controllers\BaseUserController
 	{
 		$get = Basewind::trimAll(Yii::$app->request->get(), true);
 		$post = Basewind::trimAll(Yii::$app->request->get(), true, ['id', 'is_printed']);
-		if(in_array($post->column, ['is_printed','is_year','is_send','is_error','recommended'])) 
+		if(in_array($post->column, ['is_printed','is_meeting','is_year','is_send','is_error','recommended'])) 
 		{
 		  	$orderExt = \common\models\OrderExtmModel::find()->where(['order_id'=>$post->id])->one();
 			
@@ -644,8 +644,9 @@ class OrderbyhhController extends \common\controllers\BaseUserController
 					$region_no = 0;
 				}
 				$customerModel = \common\models\AddressCustomerModel::find()->alias('o')
-				->where(['o.consignee' => $orderExt->consignee])
-				->andWhere(['like','o.add_date' , @date('Y')]);
+				//->where(['o.consignee' => $orderExt->consignee])
+				->andWhere(['and', ['like', 'o.consignee', $orderExt->consignee],['like','o.add_date' , @date('Y')]]);
+				//->andWhere(['like','o.add_date' , @date('Y')]);
 				//var_dump($customerModel->createCommand()->getRawSql());die('33');
 				$customerModel = $customerModel->one();
 				if(!$customerModel){
