@@ -551,7 +551,7 @@ class Order_printedController extends \common\controllers\BaseUserController
 		$templateProcessor = new \PhpOffice\PhpWord\TemplateProcessor($templateFile);
 		$templateProcessor->setValue('address',$orderExt['address']);// On section/content
 		$templateProcessor->setValue('title', $orderExt['consignee']);// On footer
-		if($order['is_meeting'] == 1){
+		if($order['is_meeting'] == 1 && !$order['content']){
 			$order['content'] = "订货会圆满成功";
 		}
 		if(!$order['content']){

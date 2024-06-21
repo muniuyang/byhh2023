@@ -165,7 +165,7 @@ class BaseOrder
 				$hotsModel->save();
 			}
 		}
-		if(preg_match_all("/订货会/",$consignee_info['content'],$matches)){
+		if(preg_match_all("/订货/",$consignee_info['content'],$matches)){
 			$consignee_info['is_meeting'] = 1;
 		}else{
 			$consignee_info['is_meeting'] = 0;

@@ -5,8 +5,8 @@
 		<input type="text" class="layui-btn layui-bg-red layui-btn-sm pick_date" style="cursor: pointer;width:80px;height:30px;border:0;padding:10px 0;margin-top:-6px;" value="选择配送日期"/>
 	</a>
 	&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;	
-	<label class="ml5 mr5  pointer layui-btn-sm layui-btn layui-btn-primary layui-icon "><input type="radio" class="is_year_choose"  name="is_year" value="1"  />年结客户</label>&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;
-	<label class="ml5 mr5  pointer layui-btn-sm layui-btn layui-bg-blue layui-icon layui-icon-flag" ><input type="radio" class="is_year_choose"   style="margin-right:5px;" name="is_year" value="0" checked="checked" />非年结客户</label>
+	<label class="ml5 mr5  pointer layui-btn-sm layui-btn layui-icon  layui-btn-primary"><input type="radio" class="is_yearb_choose"  name="is_year" value="1"  />年结客户</label>&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;
+	<label class="ml5 mr5  pointer layui-btn-sm layui-btn layui-icon layui-icon-flag layui-bg-blue" ><input type="radio" class="is_yearb_choose"   style="margin-right:5px;" name="is_year" value="0" checked="checked" />非年结客户</label>
 </div>
 <div class="w mt20 clearfix">
 	<div class="address-confirm">
@@ -45,9 +45,10 @@
 </div>
 <script type="text/javascript">
 $(function(){
-	$(".is_year_choose").click(function(){
-		$('.is_year_choose').parents('label').removeClass('layui-bg-blue layui-icon-flag').addClass('layui-btn-primary ');
-		console.log($(this).parents('label').hasClass())
+	$(".is_yearb_choose").click(function(e){
+		e.preventDefault();
+		$('.is_yearb_choose').parents('label').removeClass('layui-bg-blue layui-icon-flag').addClass('layui-btn-primary');
+		//console.log('class=>', $(this).parent().attr('class'))
 		$(this).parent('label').addClass('layui-bg-blue layui-icon-flag');
 	})
 	/* 订单配送时间 */
