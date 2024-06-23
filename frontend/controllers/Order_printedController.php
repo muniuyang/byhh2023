@@ -84,6 +84,7 @@ class Order_printedController extends \common\controllers\BaseUserController
 			$orderInfo['is_meeting'] = $orderInfo['orderExtm']['is_meeting'];
 			$this->actionPrinted($orderInfo);
 		}else{
+			$this->actionPrintedt($orderInfo);
 			return Message::warning("没找到模版，模版不存在！");
 		} 
 	  
@@ -437,7 +438,7 @@ class Order_printedController extends \common\controllers\BaseUserController
 	}
 	
 	public function selectItems($pid, $cid=0, $type='no'){
-		$SeleOne = [1=>'生日',2=>'节日',3=>'纪念日',4=>'其他特殊日子'];
+		$SeleOne = [1=>'生日',2=>'节日',3=>'纪念日',4=>'其他特殊日子',5=>'开业'];
 		
 		$SeleTwo = [
 			1=>[
@@ -463,6 +464,10 @@ class Order_printedController extends \common\controllers\BaseUserController
 			4=>[
 				41=>['mls_id'=>'41','mls_name'=>'高考'],
 				42=>['mls_id'=>'42','mls_name'=>'老人'],
+			],
+			5=>[
+				51=>['mls_id'=>'51','mls_name'=>'订货会'],
+				52=>['mls_id'=>'52','mls_name'=>'开业'],
 			],
 		];
 		if( $type == 'no'){
@@ -511,6 +516,8 @@ class Order_printedController extends \common\controllers\BaseUserController
 
 		$logo = dirname(Yii::$app->BasePath).'/frontend/web/data/system/byhhgzh.png';
 		$templateFile = dirname(Yii::$app->BasePath).'/frontend/web/data/template/printed_card_a'.$order['ptf'].'.docx';
+		
+		
 		$orderExt = $order['orderExtm'];
 		$filename = 'F'.$order['ptf'].'['.$order['order_id'].']['.$order['postscript'].']送['.$orderExt['consignee'].'].docx';
 		$resultFile = dirname(Yii::$app->BasePath).'/frontend/web/data/sales/'.$filename;
@@ -537,19 +544,110 @@ class Order_printedController extends \common\controllers\BaseUserController
 	/**
 	 * 开业打印
 	 */
-	public function actionPrinted($order){
-		$logo = dirname(Yii::$app->BasePath).'/frontend/web/data/system/byhhgzh.png';
-		$templateFile = dirname(Yii::$app->BasePath).'/frontend/web/data/template/printed_card_b'.$order['ptf'].'.docx';
+	public function actionPrintedt($order)
+	{
+		$templateFile = dirname(Yii::$app->BasePath).'/frontend/web/data/template/create/'.$order['ptf'].'.docx';
+		//var_dump($templateFile);die;
 		$orderExt = $order['orderExtm'];
-		$specialChars = array("$", "#", "@", "!", "^", "&", "*");
+		$specialChars = array("$", "#", "@", "!", "^", "&", "*"," ");
 		$orderExt['consignee'] = str_replace($specialChars, '', $orderExt['consignee']);
+		$orderExt['address'] = str_replace($specialChars, '', $orderExt['address']);
 		//$orderExt['consignee'] = preg_replace('/[^a-zA-Z0-9\s]/', '', $orderExt['consignee']);
+		$tempResFile = dirname(Yii::$app->BasePath).'/frontend/web/data/template/create/tempFile.docx';
+		
+		
+		
+		
+		//重新加载加入图片
+		$phpWord = new PhpWord();
+		//$phpWord = \PhpOffice\PhpWord\IOFactory::load($templateFile);
+		//$sections = $phpWord->getSections();
+		//$section  = $sections[0];
+		// 设置一个新的节，并添加文本流
+		$section = $phpWord->addSection([
+			'paperSize' => 'A4', 
+			'marginLeft' => 0, 
+			'marginRight' => 0, 
+			'marginTop' => 0, 
+			'marginBottom' => 0,
+			'orientation' => \PhpOffice\PhpWord\Style\Section::ORIENTATION_LANDSCAPE // 设置页面大小为横向
+			
+			]
+		);
+
+		//Absolute positioning
+		//$section->addText('Absolute positioning: see top right corner of page');
+		// 设置左右边距，单位为磅
+ 
+		$a4 = dirname(Yii::$app->BasePath).'/frontend/web/data/template/a4-1.png';
+		// 加载背景图片
+		$backgroundImage = imagecreatefrompng($a4);
+		// 加载二维码图片
+		$qrCodePath =  dirname(Yii::$app->BasePath).'/frontend/web/data/template/byQrcodeM400.png';
+		$qrCodeImage = imagecreatefrompng($qrCodePath);
+		// 获取图片尺寸
+		$backgroundWidth = imagesx($backgroundImage);
+		$backgroundHeight = imagesy($backgroundImage);
+		$qrCodeWidth = imagesx($qrCodeImage);
+		$qrCodeHeight = imagesy($qrCodeImage);
+		// 合并图片
+		// 假设你想把二维码放在右下角，调整这里的坐标
+		$x = $backgroundWidth - $qrCodeWidth-120;
+		$y = ($backgroundHeight - $qrCodeHeight)/2-680;
+		imagecopy($backgroundImage, $qrCodeImage, $x, $y, 0, 0, $qrCodeWidth, $qrCodeHeight);
+		$imagePath = dirname(Yii::$app->BasePath).'/frontend/web/data/template/img/QrCode/createQrCode-'.$order['order_id'].'.png';
+		imagejpeg($backgroundImage,$imagePath);
+		
+		
+		
+		$section->addImage(
+		   $imagePath,
+			[
+			'width' => '840',
+			'height' =>  '595',
+				'wrap' => \PhpOffice\PhpWord\Style\Image::WRAPPING_STYLE_SQUARE,
+				 
+			]
+		);
+/*
+		 $section->addImage(
+			$a4,
+			 [
+				'width' => '840',
+				'height' =>  '595',
+				 'positioning' => \PhpOffice\PhpWord\Style\Image::POSITION_ABSOLUTE,
+				 'posHorizontal' => \PhpOffice\PhpWord\Style\Image::POSITION_HORIZONTAL_RIGHT,
+				 'posHorizontalRel' => \PhpOffice\PhpWord\Style\Image::POSITION_RELATIVE_TO_PAGE,
+				 'posVerticalRel' => \PhpOffice\PhpWord\Style\Image::POSITION_RELATIVE_TO_PAGE,
+				 'marginLeft' => \PhpOffice\PhpWord\Shared\Converter::cmToPixel(15.5),
+				 'marginTop' => \PhpOffice\PhpWord\Shared\Converter::cmToPixel(1.55),
+			 ]
+		 );
+  */
+ 
+		$objWriter = \PhpOffice\PhpWord\IOFactory::createWriter($phpWord, 'Word2007');
+		$objWriter->save($tempResFile);
+			
+		
+		
+		
+		
+		
+		
+		
+		
+		
+		
 		$filename = 'F'.$order['ptf'].'['.$order['order_id'].']送['.$orderExt['consignee'].'].docx';
-		$resultFile = dirname(Yii::$app->BasePath).'/frontend/web/data/sales/'.$filename;
+		$resultFile = dirname(Yii::$app->BasePath).'/frontend/web/data/template/create/'.$filename;
+		
 		
 		// 创建新文档
-		$templateProcessor = new \PhpOffice\PhpWord\TemplateProcessor($templateFile);
+		$templateProcessor = new \PhpOffice\PhpWord\TemplateProcessor($tempResFile);
 		$templateProcessor->setValue('address',$orderExt['address']);// On section/content
+
+ 
+		//content
 		$templateProcessor->setValue('title', $orderExt['consignee']);// On footer
 		if($order['is_meeting'] == 1 && !$order['content']){
 			$order['content'] = "订货会圆满成功";
@@ -576,9 +674,37 @@ class Order_printedController extends \common\controllers\BaseUserController
 		}else{
 			$templateProcessor->setValue('signer',$order['postscript']); // On header
 		}
-        //保存文件
-		$templateProcessor->saveAs($resultFile);
 		
+		/*
+		// 加载背景图片
+		$backgroundPath = dirname(Yii::$app->BasePath).'/frontend/web/data/template/byQrcodeB200.png';
+		$backgroundImage = imagecreatefrompng($backgroundPath);
+		// 加载二维码图片
+		$qrCodePath =  dirname(Yii::$app->BasePath).'/frontend/web/data/template/byQrcodeM200.png';
+		$qrCodeImage = imagecreatefrompng($qrCodePath);
+		// 获取图片尺寸
+		$backgroundWidth = imagesx($backgroundImage);
+		$backgroundHeight = imagesy($backgroundImage);
+		$qrCodeWidth = imagesx($qrCodeImage);
+		$qrCodeHeight = imagesy($qrCodeImage);
+		// 合并图片
+		// 假设你想把二维码放在右下角，调整这里的坐标
+		$x = ($backgroundWidth - $qrCodeWidth)/2 - 10;
+		$y = ($backgroundHeight - $qrCodeHeight)/2+25;
+		imagecopy($backgroundImage, $qrCodeImage, $x, $y, 0, 0, $qrCodeWidth, $qrCodeHeight);
+		$imagePath = dirname(Yii::$app->BasePath).'/frontend/web/data/template/img/QrCode/createQrCode-'.$order['order_id'].'.png';
+		imagejpeg($backgroundImage,$imagePath);
+		// 替换图片占位符
+		$templateProcessor->setImageValue('qrCode', [
+			'path' => $imagePath,
+			'width' => 180,
+			'height' => 210,
+			//'alignment' => \PhpOffice\PhpWord\SimpleType\JcTable::CENTER,
+			'ratio' => false
+		]);
+       //*/
+	   
+	   $templateProcessor->saveAs($resultFile);
 		/**
 		 * 改变打印状态
 		 */
@@ -588,6 +714,66 @@ class Order_printedController extends \common\controllers\BaseUserController
 			$orderExt->	is_printed = 1;
 			$orderExt->save();
 		}
+		
+		
+
+		//下载文件
+		$this->actionDown($resultFile);
+	} 
+	public function actionPrinted($order){
+		$logo = dirname(Yii::$app->BasePath).'/frontend/web/data/system/byhhgzh.png';
+		$templateFile = dirname(Yii::$app->BasePath).'/frontend/web/data/template/printed_card_b'.$order['ptf'].'.docx';
+		$orderExt = $order['orderExtm'];
+		$specialChars = array("$", "#", "@", "!", "^", "&", "*"," ");
+		$orderExt['consignee'] = str_replace($specialChars, '', $orderExt['consignee']);
+		$orderExt['address'] = str_replace($specialChars, '', $orderExt['address']);
+		//$orderExt['consignee'] = preg_replace('/[^a-zA-Z0-9\s]/', '', $orderExt['consignee']);
+		$filename = 'F'.$order['ptf'].'['.$order['order_id'].']送['.$orderExt['consignee'].'].docx';
+		$resultFile = dirname(Yii::$app->BasePath).'/frontend/web/data/sales/'.$filename;
+		
+		// 创建新文档
+		$templateProcessor = new \PhpOffice\PhpWord\TemplateProcessor($templateFile);
+		$templateProcessor->setValue('address',$orderExt['address']);// On section/content
+	
+	 
+		//content
+		$templateProcessor->setValue('title', $orderExt['consignee']);// On footer
+		if($order['is_meeting'] == 1 && !$order['content']){
+			$order['content'] = "订货会圆满成功";
+		}
+		if(!$order['content']){
+			$order['content'] = "开业大吉,生意兴隆";
+		}
+		$templateProcessor->setValue('content',$order['content']); 
+	
+		if(in_array($order['ptf'],[23,24,25,26,27,28])){
+			$sigers = explode(',',$order['postscript']);
+			$ct = count($sigers);
+			foreach($sigers as $k=>$v){
+				$templateProcessor->setValue('signer'.$k,$v); 
+			}
+			if($order['ptf'] == 23){$j=3;$st=$j-$ct;}
+			if($order['ptf'] == 24){$j=4;$st=$j-$ct;}
+			if($order['ptf'] == 25){$j=6;$st=$j-$ct;}
+			if($st>0){
+				for($i=$ct;$i<$j;$i++){
+					$templateProcessor->setValue('signer'.$i,''); 
+				}
+			}
+		}else{
+			$templateProcessor->setValue('signer',$order['postscript']); // On header
+		}
+	   $templateProcessor->saveAs($resultFile);
+		/**
+		 * 改变打印状态
+		 */
+		//var_dump($order['order_id']);
+		if($order['order_id']){
+			$orderExt = \common\models\OrderExtmModel::find()->where(['order_id'=>$order['order_id']])->one();
+			$orderExt->	is_printed = 1;
+			$orderExt->save();
+		}
+		
 		//下载文件
 		$this->actionDown($resultFile);
 	} 

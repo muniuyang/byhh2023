@@ -167,8 +167,16 @@ class OrderbyhhController extends \common\controllers\BaseUserController
 						$this->params['defaultSignature'][$v['userid']] = $v['signature'];
 					}
 				}
-				$this->params['defaultContents'] = ['开业大吉,生意兴隆','开业大吉,财源广进','爆款多多，生意兴隆','开业大吉,爆款连连','日进桶金，爆款爆单','订货会圆满成功'];
-				//die('33');
+				$model = new \frontend\models\OrderPrintContentForm();
+				$param = Basewind::trimAll(['pid'=>5], true);
+				$oInfo = $model->formData($param);
+				$defaultContents= [];
+				foreach ($oInfo as $k =>$v) {
+					array_push($defaultContents,$v['content']);
+				}
+				//var_dump($defaultContents);die('22');
+				$this->params['defaultContents'] = $defaultContents;
+				
 				return $this->render('../my_extro.nearextroform.html', $this->params);
 			}
 		}else{
@@ -753,6 +761,27 @@ class OrderbyhhController extends \common\controllers\BaseUserController
 			if(!$order->save()) {
 				return Message::popWarning($order->errors);
 			}
+			if($post->goods_id == '407'){//无效单
+				//修改订单扩展信息
+				$params = Basewind::trimAll([
+					'subscriber'=>'无效用户',
+					'consignee'=>'无效用户',
+					'signature'=>'无效用户',
+					'address'=>'无效地址',
+					'is_error'=>1,
+					'is_year'=>0,
+					'is_send'=>0,
+					'is_meeting'=>0,
+					'is_printed'=>0,
+					'send_date'=>@date('Y-m-d H:i:s')
+				], true, ['order_id']);
+				$model = new \frontend\models\ExtroForm(['order_id' => $post->order_id]);
+				if(!($extroInfo = $model->upSave($params, $valid))) {
+					return Message::popWarning($model->errors);
+				}
+			}
+
+			
 			return Message::popSuccess("编辑成功", urldecode(Yii::$app->request->post('redirect', Url::toRoute('orderbyhh/index'))));
 		}
 	}

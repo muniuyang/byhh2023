@@ -52,7 +52,26 @@ class ExtroForm extends Model
 
 		return true;
 	}
+	//无效单更新
+	public function upSave($params, $valid = true){
+		if($valid === true && !$this->valid($params)) {
+			return false;
+		}
+		$uPparams = (array) $params;
+		if(!$this->order_id || !($model = OrderExtmModel::find()->where(['order_id' => $this->order_id])->one())) {
+			$model = new OrderExtmModel();
+		} 
+			//var_dump($params);die;
+		foreach($uPparams as $key=>$value){
+			$model->$key = $value;
+		}
 	
+		if(!$model->save()) {
+			$this->errors = $model->errors;
+			return false;
+		}
+		return $this->upUser($params,$model);
+	}
 	public function save($post, $valid = true)
 	{
 		if($valid === true && !$this->valid($post)) {
@@ -62,8 +81,7 @@ class ExtroForm extends Model
 		if(!$this->order_id || !($model = OrderExtmModel::find()->where(['order_id' => $this->order_id])->one())) {
 			$model = new OrderExtmModel();
 		}
-		//var_dump($post);die('33');
-		
+
 		$model->order_id 	= $post->order_id;
 		$model->consignee 	= $post->consignee;
 		$model->region_id 	= $post->region_id;
@@ -92,6 +110,11 @@ class ExtroForm extends Model
 			$this->errors = $model->errors;
 			return false;
 		}
+		return $this->upUser($post,$model);
+	}
+		
+	public function upUser($post,$model)
+	{	
 		
 		//修改订单的下单用户JchengCustom
 		$orderM = OrderModel::find()->where(['order_id'=>$model->order_id])->one();
@@ -122,6 +145,8 @@ class ExtroForm extends Model
 		$customerModel = $customerModel->one();
 		if(!$customerModel){
 			$customerModel = new \common\models\AddressCustomerModel();
+			$customerModel->add_date = @date('Y-m-d',time());
+			
 		}
 		if($res = preg_match_all("/云尚|蓝宝石|红宝石|金座|银座|老三镇|金正茂|金昌|翡翠座|小商品市场|中心商城|品牌/",$post->address,$matches)){
 			$regions = ['周边','云尚','蓝宝石','红宝石','金座','银座','老三镇','金正茂','金昌','翡翠座','小商品市场','中心商城','品牌'];
@@ -137,7 +162,6 @@ class ExtroForm extends Model
 		$customerModel->zipcode = $model->zipcode;
 		$customerModel->phone_mob = $model->phone_mob;
 		$customerModel->region_no = $region_no;
-		//$customerModel->add_date = @date('Y-m-d',time());
 		$customerModel->up_time = time();//-8*3600;
 		$customerModel->save();
 		/*

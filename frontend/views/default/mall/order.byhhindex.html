@@ -179,6 +179,15 @@
 	, title: '订单列表'
 	//, size: 'lg'
 	,done: function(res, curr, count){
+		 var that = $("#tablegrid").siblings();
+		 console.log('tr==>',that);
+		     res.data.forEach(function (item, index) {
+				  console.log('item==>',item);
+		         if (item.is_error === '1') {
+		            var tr = that.find(".layui-table tbody tr[data-index='" + index + "']");
+		            tr.css("background-color", "rgb(147 147 50 / 18%)");
+		         }
+		    });
 	      // 将分页的元素移动到指定位置
 	      //document.getElementById('tablegrid-page').innerHTML = '';
 	     // document.getElementById('tablegrid').parentNode.insertBefore(document.getElementById('tablegrid-page'), document.getElementById('tablegrid').nextSibling);
@@ -243,6 +252,7 @@
 		return "<em class='layui-icon layui-icon-dialogue consignee' lay-event='viewContent'    style='color:#00aaff;'></em>"+res.consignee;//+'('+res.buyer_name+')' ;
 	}}
 	, { field: 'isMeeting', title: '订货会', width: 60,  align: 'center',templet:function(res){
+		$(this).parents('tr').addClass('close')
 		return '<em class="'+(res.is_meeting==0 ? 'no':'yes')+'" ectype="inline_edit" controller="orderbyhh" fieldname="is_meeting" fieldid="'+res.order_id
 		+'" fieldvalue="'+res.is_meeting+'" title="'+(res.is_meeting==0 ? '非订货会':'订货会')+'"><i class="fa '
 		+(res.is_meeting==0 ? 'fa-ban':'fa-check-circle')+'"></i>'+(res.is_meeting==0 ? '否':'是')+'</em>';
@@ -373,6 +383,7 @@
     table.on('toolbar(tablegrid)', function (obj) {
       var checkStatus = table.checkStatus(obj.config.id);
       var items = new Array();
+	  console.log(checkStatus.data);
       $.each(checkStatus.data, function (i, item) {
         items.push(item.order_id);
       });

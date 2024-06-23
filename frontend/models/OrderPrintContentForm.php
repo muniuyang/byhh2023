@@ -76,8 +76,19 @@ class OrderPrintContentForm extends Model
 	}
 	public function formData($post = null)
 	{
-		$oInfo = OrderPrintContentModel::find()->select('id,pid,cid,content,status,p_sort')
-			->where(['id' => $post->id])->asArray()->one();
+		//var_dump($post);
+		if($post->id){
+			$oInfo = OrderPrintContentModel::find()->select('id,pid,cid,content,status,p_sort')
+				->where(['id' => $post->id]);	
+				$oInfo = $oInfo->asArray()->one();
+				
+		}else{
+			$oInfo = OrderPrintContentModel::find()->select('content')
+				->where(['pid' => $post->pid]);
+				$oInfo = $oInfo->asArray()->all();
+				
+		}
+		//var_dump($oInfo->createCommand()->getRawSql());die;
 		return $oInfo;
 	}
 }

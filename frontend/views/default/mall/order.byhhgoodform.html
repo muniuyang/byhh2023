@@ -8,7 +8,8 @@
         <li class="B_Consignee">
           <p>
             <input type="text" class="text width_normal I_Consignee" placeholder="输入商品ID" name="goods_id" value="{$orderExt.goods_id}"/>
-            <label class="field_message"><span class="field_notice"><a href="{url route='/goods' id=$orderExt.goods_id}" target="_blank">[查看]</a>商品ID详情页查看</span></label>
+            <label class="field_message"><span class="field_notice"><a href="{url route='/goods' id=$orderExt.goods_id}" target="_blank">[查看]</a>
+			详情页查看(无效ID:<i class="isError_id" data-id="407" style="cursor: pointer;">407</i>)</span></label>
           </p>
 		  <div class="I_Consignee_list"></div>
         </li>
@@ -29,6 +30,8 @@ $(function(){
     $('.default-user').click(function(){
         $('.subscriber').val($(this).val())
     })
-
+	$('.isError_id').click(function(e){
+		 $('.I_Consignee').val($(this).data('id'))
+	})
 });
 </script>

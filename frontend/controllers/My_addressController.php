@@ -94,7 +94,15 @@ class My_addressController extends \common\controllers\BaseUserController
 						$this->params['defaultSignature'][$v['userid']] = $v['signature'];
 					}
 				}
-				$this->params['defaultContents'] = ['开业大吉,生意兴隆','开业大吉,财源广进','开业大吉,爆款连连','订货会圆满成功'];
+				$model = new \frontend\models\OrderPrintContentForm();
+				$param = Basewind::trimAll(['pid'=>5], true);
+				$oInfo = $model->formData($param);
+				$defaultContents= [];
+				foreach ($oInfo as $k =>$v) {
+					array_push($defaultContents,$v['content']);
+				}
+				//var_dump($defaultContents);die('22');
+				$this->params['defaultContents'] = $defaultContents;
 				$this->params['defaultconsignee'] =[
 					['userid'=>'81','real_name'=>'匿名']
 				] ;
@@ -244,7 +252,18 @@ class My_addressController extends \common\controllers\BaseUserController
 						$this->params['defaultSignature'][$v['userid']] = $v['signature'];
 					}
 				}
-				$this->params['defaultContents'] = ['开业大吉,生意兴隆','开业大吉,财源广进','开业大吉,爆款连连','订货会圆满成功'];
+				//$this->params['defaultContents'] = ['开业大吉,生意兴隆','开业大吉,财源广进','开业大吉,爆款连连','订货会圆满成功'];
+				
+				$model = new \frontend\models\OrderPrintContentForm();
+				$param = Basewind::trimAll(['pid'=>5], true);
+				$oInfo = $model->formData($param);
+				$defaultContents= [];
+				foreach ($oInfo as $k =>$v) {
+					array_push($defaultContents,$v['content']);
+				}
+				//var_dump($defaultContents);die('22');
+				$this->params['defaultContents'] = $defaultContents;
+				
 				$this->params['defaultconsignee'] =[
 					['userid'=>'81','real_name'=>'匿名']
 				] ;

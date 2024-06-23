@@ -33,7 +33,7 @@
         "2amigos/qrcode-library": "~1.1",
         "mk-j/php_xlsxwriter": "^0.38.0",
         "phpoffice/phpexcel": "^1.8",
-        "phpoffice/phpword": "^1.1",
+        "phpoffice/phpword": "^1.2",
         "overtrue/pinyin": "^4.1"
     },
     "require-dev": {

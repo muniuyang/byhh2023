@@ -125,6 +125,7 @@
 	<div class="layui-btn-container">
 	<a class="layui-btn layui-btn-primary layui-bg-green" href="javascript:;" uri="{url route='order_printed/caddress'}" dialog_width="600" dialog_title="创建地址" ectype="dialog"
 	dialog_id="seller_order_adjust_fee" id="order_action_address" ><i class="layui-icon layui-icon-location"></i>创建地址</a>
+	<button class="layui-btn layui-btn-primary layui-bg-blue" lay-event="address-list"><i class="layui-icon layui-icon-export"></i>祝贺内容</button>
 	</div>
 	</div>
 </script>
@@ -205,22 +206,28 @@
  
     //监听头工具栏事件
     table.on('toolbar(tablegrid)', function (obj) {
-      var checkStatus = table.checkStatus(obj.config.id);
-      if (checkStatus.data.length <= 0) {
-        return false;
-      }
-      var items = new Array();
-      $.each(checkStatus.data, function (i, item) {
-        items.push(item.order_id);
-      });
-
+		
+		
+      //var checkStatus = table.checkStatus(obj.config.id);
+	  //console.log('time1',obj.config.id,checkStatus.data);
+     // if (checkStatus.data.length <= 0) {
+      //  return false;
+     // }
+     // var items = new Array();
+    //  $.each(checkStatus.data, function (i, item) {
+    //    items.push(item.id);
+    //  });
       if (obj.event === 'export') {
-        window.location.href = url(['orderbyhh/export', $.extend($("#formSearch").serializeJson(), { id: items.join(',') })]);
+        window.location.href = url(['orderbyhh/export', $.extend($("#formSearch").serializeJson(), {  })]);
+      }else if(obj.event === 'address-list'){
+      		  window.open(url(['order_printed/contents', $.extend($("#formSearch").serializeJson(), {  })]));
       }
     });
 
     //监听行工具事件
     table.on('tool(tablegrid)', function (obj) {
+		console.log('time');
+		
 		var data = obj.data;
 		if(obj.event === 'printed'){
 			window.open(url(['order_printed/lists', { order_id: data.order_id }]));
