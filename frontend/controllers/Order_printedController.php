@@ -196,7 +196,7 @@ class Order_printedController extends \common\controllers\BaseUserController
 			if($post->search_name){
 				$query = $query->andWhere(['like','o.consignee' , $post->search_name]);
 			}
-			if($post->region_no || isset($post->region_no)){
+			if($post->region_no!='' && $post->region_no>=0){
 				$query = $query->andWhere(['=','o.region_no' , $post->region_no]);
 			}
 			if(isset($post->isDefect) && $post->isDefect!='' && in_array($post->isDefect,[0,1])){
