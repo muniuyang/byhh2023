@@ -182,7 +182,7 @@ class Order_printedController extends \common\controllers\BaseUserController
 				'style' =>  'jquery.ui/themes/smoothness/jquery.ui.css,dialog/dialog.css,jquery.plugins/timepicker/jquery-ui-timepicker-addon.css'
 			]);
 			$this->params['filtered'] = $this->getConditions($post);
-			$this->params['defaultMarkets']   = ['周边','云尚','蓝宝石','红宝石','金座','银座','老三镇','金正茂','金昌','翡翠座','小商品市场','中心商城','品牌'];
+			$this->params['defaultMarkets']   = ['周边','云尚','蓝宝石','红宝石','金座','银座','老三镇','金正茂','金昌','翡翠座','小商品','中心商城','品牌'];
 			$this->params['defaultisDefects'] = ['不完整地址','完整地址'];
 			return $this->render('../printed.address.html', $this->params);
 		}
@@ -196,7 +196,7 @@ class Order_printedController extends \common\controllers\BaseUserController
 			if($post->search_name){
 				$query = $query->andWhere(['like','o.consignee' , $post->search_name]);
 			}
-			if($post->region_no){
+			if($post->region_no || is_set($post->region_no)){
 				$query = $query->andWhere(['=','o.region_no' , $post->region_no]);
 			}
 			if(isset($post->isDefect) && $post->isDefect!='' && in_array($post->isDefect,[0,1])){
@@ -265,8 +265,8 @@ class Order_printedController extends \common\controllers\BaseUserController
 			if(!$post->address){
 				return Message::popWarning("请输入详细地址!");
 			}
-			if($res = preg_match_all("/云尚|蓝宝石|红宝石|金座|银座|老三镇|金正茂|金昌|翡翠座|小商品市场|中心商城|品牌/",$post->address,$matches)){
-				$regions = ['周边','云尚','蓝宝石','红宝石','金座','银座','老三镇','金正茂','金昌','翡翠座','小商品市场','中心商城','品牌'];
+			if($res = preg_match_all("/云尚|蓝宝石|红宝石|金座|银座|老三镇|金正茂|金昌|翡翠座|小商品|中心商城|品牌/",$post->address,$matches)){
+				$regions = ['周边','云尚','蓝宝石','红宝石','金座','银座','老三镇','金正茂','金昌','翡翠座','小商品','中心商城','品牌'];
 				$region_no = array_search($matches[0][0], $regions);//找数组里指定值的键
 				//var_dump($res,$region_no,$matches);
 			}else{
