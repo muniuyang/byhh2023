@@ -645,8 +645,8 @@ class OrderbyhhController extends \common\controllers\BaseUserController
 				}
 				
 				//更新客户地址
-				if($res = preg_match_all("/云尚|蓝宝石|红宝石|金座|银座|老三镇|金正茂|金昌|翡翠座|小商品|中心商城|品牌/",$orderExt->address,$matches)){
-					$regions = ['周边','云尚','蓝宝石','红宝石','金座','银座','老三镇','金正茂','金昌','翡翠座','小商品','中心商城','品牌'];
+				if($res = preg_match_all("/云尚|蓝宝石|红宝石|金座|银座|老三镇|金正茂|金昌|翡翠座|小商品|中心商城|品牌|大夹街/",$orderExt->address,$matches)){
+					$regions = ['周边','云尚','蓝宝石','红宝石','金座','银座','老三镇','金正茂','金昌','翡翠座','小商品','中心商城','品牌','大夹街'];
 					$region_no = array_search($matches[0][0], $regions);//找数组里指定值的键
 				}else{
 					$region_no = 0;
