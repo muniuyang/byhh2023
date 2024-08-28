@@ -120,6 +120,10 @@ class OrderbyhhController extends \common\controllers\BaseUserController
 					
 				}else if(date('Y-m-d',strtotime($list[$key]['send_date'])) == date('Y-m-d')){
 					$list[$key]['msg'] = "今天";
+				}else if(date('Y-m-d',strtotime($list[$key]['send_date'])) == date('Y-m-d',strtotime("-1 days"))){
+					$list[$key]['msg'] = "昨天";
+				}else if(date('Y-m-d',strtotime($list[$key]['send_date'])) == date('Y-m-d',strtotime("-2 days"))){
+					$list[$key]['msg'] = "前天";
 				}else{
 					$list[$key]['msg'] = "历史";
 				}

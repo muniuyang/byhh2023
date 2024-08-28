@@ -298,19 +298,31 @@
 			+"uri={url route='orderbyhh/extro' redirect=$redirect }?from=send_date&order_id="+res.order_id
 			+" dialog_id='my_address_extro' name='order_id'>"
 			+"<i class='layui-icon layui-icon-edit'  style='cursor: pointer;color:#ff0000;'></i></a>"
-			+"<span style='cursor: pointer;color:#00aaff;'>["+res.msg+"]</span>"+ res.send_date+"送";
+			+"<span style='cursor: pointer;color:#00aaff'>["+res.msg+"]</span>"+ res.send_date+"送";
 		}else if(res.msg == '今天'){
 			_conent = '<a href="JavaScript:;"  dialog_width="450" title="修改配送时间"  dialog_title="修改配送时间" ectype="dialog" '
 			+"uri={url route='orderbyhh/extro' redirect=$redirect }?from=send_date&order_id="+res.order_id
 			+" dialog_id='my_address_extro' name='order_id'>"
 			+"<i class='layui-icon layui-icon-edit'  style='cursor: pointer;color:#ff0000;'></i></a>"
-			+"<span style='cursor: pointer;color:#ff5500;'>["+res.msg+"]</span>"+ res.send_date+"送";
+			+"<span style='cursor: pointer;color:#ff5500'>["+res.msg+"]</span>"+ res.send_date+"送";
+		}else if(res.msg == '昨天'){
+			_conent = '<a href="JavaScript:;"  dialog_width="450" title="修改配送时间"  dialog_title="修改配送时间" ectype="dialog" '
+			+"uri={url route='orderbyhh/extro' redirect=$redirect }?from=send_date&order_id="+res.order_id
+			+" dialog_id='my_address_extro' name='order_id'>"
+			+"<i class='layui-icon layui-icon-edit'  style='cursor: pointer;color:#ff0000;'></i></a>"
+			+"<span style='cursor: pointer;color:#1BBC9D'>["+res.msg+"]</span>"+ res.send_date+"送";
+		}else if(res.msg == '前天'){
+			_conent = '<a href="JavaScript:;"  dialog_width="450" title="修改配送时间"  dialog_title="修改配送时间" ectype="dialog" '
+			+"uri={url route='orderbyhh/extro' redirect=$redirect }?from=send_date&order_id="+res.order_id
+			+" dialog_id='my_address_extro' name='order_id'>"
+			+"<i class='layui-icon layui-icon-edit'  style='cursor: pointer;color:#ff0000;'></i></a>"
+			+"<span style='cursor: pointer;color:#00aaff'>["+res.msg+"]</span>"+ res.send_date+"送";
 		}else{
 			_conent = '<a href="JavaScript:;"  dialog_width="450" title="修改配送时间"  dialog_title="修改配送时间" ectype="dialog" '
 			+"uri={url route='orderbyhh/extro' redirect=$redirect }?from=send_date&order_id="+res.order_id
 			+" dialog_id='my_address_extro' name='order_id'>"
 			+"<i class='layui-icon layui-icon-edit'  style='cursor: pointer;color:#ff0000;'></i></a>"
-			+"<span style='cursor: pointer;color:#55ff00;'>["+res.msg+"]</span>"+ res.send_date+"送";
+			+"<span style='cursor: pointer;color:#55ff00'>["+res.msg+"]</span>"+ res.send_date+"送";
 		}
 		return  _conent;		
 	}}
