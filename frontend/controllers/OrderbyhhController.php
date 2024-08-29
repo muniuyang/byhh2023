@@ -541,7 +541,7 @@ class OrderbyhhController extends \common\controllers\BaseUserController
 	/**
 	 * 创建年结单用户
 	 */
-	public function actionSearchClose()
+	public function actionSearch()
 	{
 		/**********************[END]JchengCustom with local**********************/
 		if(!Yii::$app->request->isAjax)

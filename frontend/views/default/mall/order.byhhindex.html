@@ -217,8 +217,9 @@
 	, cols: [[
 	{ type: 'checkbox', fixed: 'left', width: 30,}
     , { field: 'order_id', title: 'ID', width: 40, fixed: 'left', unresize: true, sort: true ,templet:function(res){
-          return "<i title='修改商品ID' uri='{url route='orderbyhh/editgood' }?order_id="+res.order_id+"' id='order"+res.order_id+"_action_upgood' dialog_id='seller_order_upgood'  ectype='dialog' dialog_width='450' dialog_title='变更订单商品'  style='cursor: pointer;color:#FF8800;' lay-event='goodsUpdate'>"+res.order_id+"</i>";
-        }}
+          return "<i title='修改商品ID' uri='{url route='orderbyhh/editgood' }?order_id="+res.order_id+"' id='order"+res.order_id+"_action_upgood' dialog_id='seller_order_upgood'  ectype='dialog' dialog_width='450' dialog_title='变更订单商品'  style='cursor: pointer;color:#FF8800;' lay-event='goodsUpdate'>"
+		  +''+res.LAY_INDEX+''+"</i>";//+res.order_id+
+	}}
     , { field: 'goods_image', title: '图片', width: 35,templet:function(res){
 				return '<img src='+res.goods_image+' />' ;
 			}}
@@ -327,7 +328,7 @@
 		return  _conent;		
 	}}
 	, { field: 'isPrinted', title: '已打印', width: 50, sort: false, align: 'center',templet:function(res){
-		console.log(res);
+		//console.log(res);
 		
 		return res.LAY_INDEX+'<em class="'+(res.is_printed==0 ? 'no':'yes')+'" ectype="inline_edit" controller="orderbyhh" fieldname="is_printed" fieldid="'+res.order_id
 		+'" fieldvalue="'+res.is_printed+'" title="可编辑"><i class="fa '
