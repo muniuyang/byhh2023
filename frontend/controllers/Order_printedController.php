@@ -746,18 +746,18 @@ class Order_printedController extends \common\controllers\BaseUserController
 		}
 		$templateProcessor->setValue('content',$order['content']); 
 	
-		if(in_array($order['ptf'],[23,24,25,26,27,28])){
+		if(in_array($order['ptf'],[23,24,25,26,27,28,108,107,106])){
 			$sigers = explode(',',$order['postscript']);
 			$ct = count($sigers);
 			foreach($sigers as $k=>$v){
-				$templateProcessor->setValue('signer'.$k,$v); 
+				$templateProcessor->setValue('s'.$k,$v); 
 			}
 			if($order['ptf'] == 23){$j=3;$st=$j-$ct;}
 			if($order['ptf'] == 24){$j=4;$st=$j-$ct;}
 			if($order['ptf'] == 25){$j=6;$st=$j-$ct;}
 			if($st>0){
 				for($i=$ct;$i<$j;$i++){
-					$templateProcessor->setValue('signer'.$i,''); 
+					$templateProcessor->setValue('s'.$i,''); 
 				}
 			}
 		}else{
