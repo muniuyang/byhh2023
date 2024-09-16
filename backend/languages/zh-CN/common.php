@@ -296,6 +296,7 @@ return array(
     'deposit_setting' => '佣金设置',
 	'order' => '订单',
     'order_list' => '订单列表',
+	'order_printed' => '祝贺语列表',
     'refund_list' => '退款售后',  
 	'db_backup' => '数据库备份',
     'db_recover' => '数据库恢复',

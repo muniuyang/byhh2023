@@ -129,6 +129,7 @@ class Order_printedController extends \common\controllers\BaseUserController
 		//$this->params['nameS'] = explode(' ',$post->cate_name);
 		//var_dump(Yii::$app->request->get());
 		//var_dump($this->params['cate_name']);
+		$this->params['page'] = Page::seo(['title' => Language::get('contents')]);
 		
 		$this->params['SeleOne'] = $this->selectItems($v['pid'],$v['cid'],'one');
 		$this->params['_foot_tags'] = Resource::import([
@@ -176,13 +177,14 @@ class Order_printedController extends \common\controllers\BaseUserController
 		$post = Basewind::trimAll(Yii::$app->request->get(), true, ['limit', 'page', 'status']);
 		if(!Yii::$app->request->isAjax) 
 		{
+			$this->params['page'] = Page::seo(['title' => Language::get('adresses')]);
 			$this->params['_foot_tags'] = Resource::import([
 				'script' => 'jquery.ui/jquery.ui.js,jquery.ui/i18n/' . Yii::$app->language . '.js,jquery.plugins/jquery.validate.js,dialog/dialog.js,mlselection.js,user.js
 				,jquery.plugins/jquery.form.js,inline_edit.js,jquery.plugins/timepicker/jquery-ui-timepicker-addon.js',
 				'style' =>  'jquery.ui/themes/smoothness/jquery.ui.css,dialog/dialog.css,jquery.plugins/timepicker/jquery-ui-timepicker-addon.css'
 			]);
 			$this->params['filtered'] = $this->getConditions($post);
-			$this->params['defaultMarkets']   = ['周边','云尚','蓝宝石','红宝石','金座','银座','老三镇','金正茂','金昌','翡翠座','小商品','中心商城','品牌','大夹街'];
+			$this->params['defaultMarkets']   = ['周边','云尚','蓝宝石','红宝石','金座','银座','老三镇','金正茂','金昌','翡翠座','小商品','中心商城','品牌','大夹街','暨济商城','新街'];
 			$this->params['defaultisDefects'] = ['不完整地址','完整地址'];
 			return $this->render('../printed.address.html', $this->params);
 		}
@@ -265,8 +267,8 @@ class Order_printedController extends \common\controllers\BaseUserController
 			if(!$post->address){
 				return Message::popWarning("请输入详细地址!");
 			}
-			if($res = preg_match_all("/云尚|蓝宝石|红宝石|金座|银座|老三镇|金正茂|金昌|翡翠座|小商品|中心商城|品牌|大夹街/",$post->address,$matches)){
-				$regions = ['周边','云尚','蓝宝石','红宝石','金座','银座','老三镇','金正茂','金昌','翡翠座','小商品','中心商城','品牌','大夹街'];
+			if($res = preg_match_all("/云尚|蓝宝石|红宝石|金座|银座|老三镇|金正茂|金昌|翡翠座|小商品|中心商城|品牌|大夹街|暨济商城|新街/",$post->address,$matches)){
+				$regions = ['周边','云尚','蓝宝石','红宝石','金座','银座','老三镇','金正茂','金昌','翡翠座','小商品','中心商城','品牌','大夹街','暨济商城','新街'];
 				$region_no = array_search($matches[0][0], $regions);//找数组里指定值的键
 				//var_dump($res,$region_no,$matches);
 			}else{
@@ -447,7 +449,8 @@ class Order_printedController extends \common\controllers\BaseUserController
 				13=>['mls_id'=>'13','mls_name'=>'送母亲生日'],
 				14=>['mls_id'=>'14','mls_name'=>'送父亲生日'],
 				15=>['mls_id'=>'15','mls_name'=>'送闺蜜生日'],
-				16=>['mls_id'=>'16','mls_name'=>'送朋友生日']
+				16=>['mls_id'=>'16','mls_name'=>'送朋友生日'],
+				17=>['mls_id'=>'17','mls_name'=>'送同事生日']
 			],
 			2=>[
 				21=>['mls_id'=>'21','mls_name'=>'七夕'],
@@ -464,6 +467,7 @@ class Order_printedController extends \common\controllers\BaseUserController
 			4=>[
 				41=>['mls_id'=>'41','mls_name'=>'高考'],
 				42=>['mls_id'=>'42','mls_name'=>'老人'],
+				43=>['mls_id'=>'43','mls_name'=>'教师节'],
 			],
 			5=>[
 				51=>['mls_id'=>'51','mls_name'=>'订货会'],

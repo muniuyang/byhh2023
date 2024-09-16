@@ -268,30 +268,27 @@
 	, { field: 'signature', title: '签名落款', width: 95 ,align: 'left',style:'color: #FF8800;'}
 	
 	
-	, { field: 'goods_amount', title: '售价', width: 70, align: 'center' ,templet:function(res){
-		return "<span style=' text-decoration: line-through;color:red;'>"+res.goods_amount+"</span>"
-	} }
-	, { field: 'shipping_fee', title: '运费', width: 70, align: 'center' ,templet:function(res){
-		
-		return "<i uri='{url route='orderbyhh/cdelivery' }?order_id="+res.order_id+"' id='order"+res.order_id+"_action_delivery'"
-		+" dialog_id='seller_order_delivery'  ectype='dialog' dialog_width='450' dialog_title='配送人'"
-				+" class='layui-icon layui-icon-release' style='cursor: pointer;color:#ff0000;' lay-event='goodsDelivery'></i>"
-				+"<span style=' text-decoration: line-through;color:red;'>"+res.shipping_fee+"</span>"
-	} }
+
 	, { field: 'real_name', title: '订花人', width: 120 ,align: 'left',style:'color: #00AA00;',templet:function(res){
 		return '<a href="JavaScript:;" dialog_width="550"  title="修改订花人"  dialog_title="修改订花人信息" ectype="dialog" '
 		 +"uri={url route='orderbyhh/editbuyer' redirect=$redirect }?order_id="+res.order_id
 		 +" dialog_id='my_address_extro' name='order_id'>"
 		 +"<i class='layui-icon layui-icon-edit'  style='cursor: pointer;color:#ff0000;'></i></a>"+ res.real_name;		
 	}}
-	, { field: 'order_amount', title: '金额', width: 70,  align: 'center',templet:function(res){
-		return "<span style='color:#00AA00;' controller='orderbyhh' fieldid='"+res.order_id+"' fieldname='order_amount'  ectype='inline_edit' >"+res.order_amount+"</span>"
-	} }
+
 	, { field: 'isSend', title: '已配送', width: 50, sort: false, align: 'center',templet:function(res){
 		return '<em class="'+(res.is_send==0 ? 'no':'yes')+'" ectype="inline_edit" controller="orderbyhh" fieldname="is_send" fieldid="'+res.order_id
 		+'" fieldvalue="'+res.is_send+'" title="'+(res.is_send==0 ? '未配送':'已配送')+'"><i class="fa '
 		+(res.is_send==0 ? 'fa-ban':'fa-check-circle')+'"></i>'+(res.is_send==0 ? '否':'是')+'</em>';
 	  }}
+	  , { field: 'isPrinted', title: '已打印', width: 50, sort: false, align: 'center',templet:function(res){
+	  	//console.log(res);
+	  	
+	  	return res.LAY_INDEX+'<em class="'+(res.is_printed==0 ? 'no':'yes')+'" ectype="inline_edit" controller="orderbyhh" fieldname="is_printed" fieldid="'+res.order_id
+	  	+'" fieldvalue="'+res.is_printed+'" title="可编辑"><i class="fa '
+	  	+(res.is_printed==0 ? 'fa-ban':'fa-check-circle')+'"></i>'+(res.is_printed==0 ? '否':'是')+'</em>';
+	    }}
+	  
 	, { field: 'real_name', title: '配送时间', width: 210 ,align: 'left',style:'color: #666;',templet:function(res){
 		var _conent =  res.send_date;
 		if(res.msg == '预订'){
@@ -327,13 +324,19 @@
 		}
 		return  _conent;		
 	}}
-	, { field: 'isPrinted', title: '已打印', width: 50, sort: false, align: 'center',templet:function(res){
-		//console.log(res);
+	, { field: 'goods_amount', title: '售价', width: 70, align: 'center' ,templet:function(res){
+		return "<span style=' text-decoration: line-through;color:red;'>"+res.goods_amount+"</span>"
+	} }
+	, { field: 'shipping_fee', title: '运费', width: 70, align: 'center' ,templet:function(res){
 		
-		return res.LAY_INDEX+'<em class="'+(res.is_printed==0 ? 'no':'yes')+'" ectype="inline_edit" controller="orderbyhh" fieldname="is_printed" fieldid="'+res.order_id
-		+'" fieldvalue="'+res.is_printed+'" title="可编辑"><i class="fa '
-		+(res.is_printed==0 ? 'fa-ban':'fa-check-circle')+'"></i>'+(res.is_printed==0 ? '否':'是')+'</em>';
-	  }}
+		return "<i uri='{url route='orderbyhh/cdelivery' }?order_id="+res.order_id+"' id='order"+res.order_id+"_action_delivery'"
+		+" dialog_id='seller_order_delivery'  ectype='dialog' dialog_width='450' dialog_title='配送人'"
+				+" class='layui-icon layui-icon-release' style='cursor: pointer;color:#ff0000;' lay-event='goodsDelivery'></i>"
+				+"<span style=' text-decoration: line-through;color:red;'>"+res.shipping_fee+"</span>"
+	} }
+	, { field: 'order_amount', title: '金额', width: 70,  align: 'center',templet:function(res){
+		return "<span style='color:#00AA00;' controller='orderbyhh' fieldid='"+res.order_id+"' fieldname='order_amount'  ectype='inline_edit' >"+res.order_amount+"</span>"
+	} }
 
 	, { field: 'status', title: '已支付', width: 80, sort: false, align: 'center',templet:function(res){
 
