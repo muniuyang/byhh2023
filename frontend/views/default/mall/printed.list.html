@@ -28,7 +28,7 @@
             <div class="type mt10" style="float:right;">程进  <b>赠</b></div>
           </div>
           <div class="rp float-right">
-            <div class="wp"><a href="{url route='/order_printed/view' ptf={$record.temp_sort} order_id=$order_id}" > <span class="line"></span> <em class="text">立即打印</em> </a> </div>
+            <div class="wp"><a href="{url route='/order_printed/view' ptf={$record.temp_sort} order_ids=$order_ids order_id=$order_id}" > <span class="line"></span> <em class="text">立即打印</em> </a> </div>
           </div>
           <div class="ins float-right"> <i class="i1"></i> <i class="i2"></i> </div>
         </li>
@@ -64,7 +64,7 @@
     background-image: -webkit-gradient(linear, left top, left bottom, color-stop(0, #05d7a8), color-stop(1, #f02353));
     filter: progid: DXImageTransform.Microsoft.gradient(startColorstr='#05d7a8', endColorstr='#05d7a8', GradientType='0');
     -ms-filter: progid: DXImageTransform.Microsoft.gradient(startColorstr='#05d7a8', endColorstr='#05d7a8');
-    background-image: linear-gradient(to bottom, #05d7a8 0, #05d7a8 100%);"><a href="{url route='/order_printed/view' ptf=($record.temp_sort) order_id=$order_id}" > <span class="line"></span> <em class="text" >立即打印</em> </a> </div>
+    background-image: linear-gradient(to bottom, #05d7a8 0, #05d7a8 100%);"><a href="{url route='/order_printed/view' ptf=($record.temp_sort) order_ids=$order_ids order_id=$order_id}" > <span class="line"></span> <em class="text" >立即打印</em> </a> </div>
           </div>
           <div class="ins float-right"> <i class="i1"></i> <i class="i2"></i> </div>
         </li>

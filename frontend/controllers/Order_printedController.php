@@ -65,29 +65,35 @@ class Order_printedController extends \common\controllers\BaseUserController
 
 	public function actionView()
     {
-		
 		$post = Basewind::trimAll(Yii::$app->request->get(), true, ['order_id','ptf']);
-		
-		$model = new \frontend\models\Buyer_orderViewForm();
-		//$model = new \frontend\models\Seller_orderViewForm(['store_id' => $this->visitor['store_id']]);
-		if(!($orderInfo = $model->formData($post))) {
-			return Message::warning($model->errors);
-		}
-		$orderInfo['ptf'] = $post->ptf;
-		//VAR_DUMP($orderInfo['orderExtm']);die;
-		$orderInfo['postscript'] = $orderInfo['orderExtm']['signature'];
-		$orderInfo['content']    = $orderInfo['orderExtm']['content'];
-		
-		if($post->ptf >=1 && $post->ptf<=100){
-			$this->actionExcute($orderInfo);
-		}else if($post->ptf >=101 && $post->ptf<=201){
-			$orderInfo['is_meeting'] = $orderInfo['orderExtm']['is_meeting'];
-			$this->actionPrinted($orderInfo);
+		//var_dump($post);
+		if($post->order_ids){
+			$model = new \frontend\models\Buyer_orderViewForm();
+			if(!($orders = $model->formDatas($post))) {
+				return Message::warning($model->errors);
+			}
+			//var_dump($orders);die;
+			$this->actionPrinteds($post->ptf,$orders);
 		}else{
-			$this->actionPrintedt($orderInfo);
-			return Message::warning("没找到模版，模版不存在！");
-		} 
-	  
+			$model = new \frontend\models\Buyer_orderViewForm();
+			//$model = new \frontend\models\Seller_orderViewForm(['store_id' => $this->visitor['store_id']]);
+			if(!($orderInfo = $model->formData($post))) {
+				return Message::warning($model->errors);
+			}	
+			$orderInfo['ptf'] = $post->ptf;
+			$orderInfo['postscript'] = $orderInfo['orderExtm']['signature'];
+			$orderInfo['content']    = $orderInfo['orderExtm']['content'];
+		
+			if($post->ptf >=1 && $post->ptf<=100){
+				$this->actionExcute($orderInfo);
+			}else if($post->ptf >=101 && $post->ptf<=201){
+				$orderInfo['is_meeting'] = $orderInfo['orderExtm']['is_meeting'];
+				$this->actionPrinted($orderInfo);
+			}else{
+				$this->actionPrintedt($orderInfo);
+				return Message::warning("没找到模版，模版不存在！");
+			} 
+		}
 	}
 	/**
 	 *  打印模版列表
@@ -113,6 +119,7 @@ class Order_printedController extends \common\controllers\BaseUserController
 		//var_dump($tempList);die;
 		$this->params['cate_id'] = $post->cate_id;
 		$this->params['order_id'] = $post->order_id;
+		$this->params['order_ids'] = $post->order_ids;
 		$this->params['tempList']=$tempList;
 		$this->params['_foot_tags'] = Resource::import([
 			'script' => 'jquery.ui/jquery.ui.js,jquery.ui/i18n/' . Yii::$app->language . '.js, dialog/dialog.js',
@@ -613,35 +620,10 @@ class Order_printedController extends \common\controllers\BaseUserController
 				 
 			]
 		);
-/*
-		 $section->addImage(
-			$a4,
-			 [
-				'width' => '840',
-				'height' =>  '595',
-				 'positioning' => \PhpOffice\PhpWord\Style\Image::POSITION_ABSOLUTE,
-				 'posHorizontal' => \PhpOffice\PhpWord\Style\Image::POSITION_HORIZONTAL_RIGHT,
-				 'posHorizontalRel' => \PhpOffice\PhpWord\Style\Image::POSITION_RELATIVE_TO_PAGE,
-				 'posVerticalRel' => \PhpOffice\PhpWord\Style\Image::POSITION_RELATIVE_TO_PAGE,
-				 'marginLeft' => \PhpOffice\PhpWord\Shared\Converter::cmToPixel(15.5),
-				 'marginTop' => \PhpOffice\PhpWord\Shared\Converter::cmToPixel(1.55),
-			 ]
-		 );
-  */
- 
+
 		$objWriter = \PhpOffice\PhpWord\IOFactory::createWriter($phpWord, 'Word2007');
 		$objWriter->save($tempResFile);
-			
-		
-		
-		
-		
-		
-		
-		
-		
-		
-		
+
 		$filename = 'F'.$order['ptf'].'['.$order['order_id'].']送['.$orderExt['consignee'].'].docx';
 		$resultFile = dirname(Yii::$app->BasePath).'/frontend/web/data/template/create/'.$filename;
 		
@@ -918,6 +900,66 @@ class Order_printedController extends \common\controllers\BaseUserController
 		 header('Content-Length: ' . filesize($resultFile));
 		 readfile($resultFile);
 	}
+	/**
+	 * @param 打印多个
+	 */
+	public function actionPrinteds($ptf,$orders){
+		$logo = dirname(Yii::$app->BasePath).'/frontend/web/data/system/byhhgzh.png';
+		
+		$oct = count($orders);
+		$templateFile = dirname(Yii::$app->BasePath).'/frontend/web/data/template/printed_card_bs'.$ptf.'.docx';
+		$templateProcessor = new \PhpOffice\PhpWord\TemplateProcessor($templateFile);
+		
+		$ids=[];
+		foreach($orders as $ok=>$ov)
+		{
+			$ids[] = $ov['order_id'];
+			$sortK = $ok+1;
+			$orderExt = $ov['orderExtm'];
+			//var_dump($ov);continue;
+			$templateProcessor->setValue('a'.$sortK,$orderExt['address']);// 设置地址
+			$specialChars = array("$", "#", "@", "!", "^", "&", "*"," ");
+			$ov['consignee'] = str_replace($specialChars, '', $orderExt['consignee']);
+			$ov['address'] = str_replace($specialChars, '', $orderExt['address']);
+			$ov['postscript'] = $orderExt['signature'];
+			
+			//$ov['consignee'] = preg_replace('/[^a-zA-Z0-9\s]/', '', $ov['consignee']);
+			$templateProcessor->setValue('t'.$sortK, $ov['consignee']);// 设置抬头
+			if($ov['is_meeting'] == 1 && !$ov['content']){
+				$ov['content'] = "订货会圆满成功";
+			}
+			if(!$ov['content']){
+				$ov['content'] = "开业大吉,生意兴隆";
+			}
+			$templateProcessor->setValue('c'.$sortK,$ov['content']); //设置祝贺语
+			if(in_array($ptf,[23,24,25,26,27,28,108,107,106])){
+					$sigers = explode(',',$ov['postscript']);
+					$ct = count($sigers);
+					foreach($sigers as $k=>$v){
+						$templateProcessor->setValue('s'.$sortK.$k,$v); //设置签名落款
+					}
+					if($ptf == 23){$j=3;$st=$j-$ct;}
+					if($ptf == 24){$j=4;$st=$j-$ct;}
+					if($ptf == 25){$j=6;$st=$j-$ct;}
+					if($st>0){
+						for($i=$ct;$i<$j;$i++){
+							$templateProcessor->setValue('s'.$sortK.$i,''); //设置签名落款
+						}
+					}
+			}else{
+				$templateProcessor->setValue('s'.$sortK,$ov['postscript']); // On header
+			}
+		}
+		//die;
+		$filename = 'F'.$oct.'合并打印.docx';
+		$resultFile = dirname(Yii::$app->BasePath).'/frontend/web/data/sales/'.$filename;
+		$templateProcessor->saveAs($resultFile);
+		if($ids){
+			$status = \common\models\OrderExtmModel::updateAll(['is_printed'=>1],['order_id' =>$ids]);
+		}
+		//下载文件
+		$this->actionDown($resultFile);
+	} 
 	private function getConditions($post, $query = null)
 	{	
 		if($query === null) {

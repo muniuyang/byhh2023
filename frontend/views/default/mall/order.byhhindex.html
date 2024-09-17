@@ -145,11 +145,12 @@
 </div>
 <script type="text/html" id="toolbar">
 	<div class="layui-btn-container">
-	  <button class="layui-btn layui-btn-primary layui-bg-blue" lay-event="export"><i class="layui-icon layui-icon-export"></i>导出数据</button>
+		<button class="layui-btn layui-btn-primary layui-bg-blue" lay-event="printeds"><i class="layui-icon layui-icon-print"></i>打印</button>
+	  <button class="layui-btn layui-btn-primary layui-bg-blue" lay-event="export"><i class="layui-icon layui-icon-export"></i>导出</button>
 	<a class="layui-btn layui-btn-primary layui-bg-orange" href="javascript:;" uri="{url route='orderbyhh/cuser'}" dialog_width="600" dialog_title="创建用户" ectype="dialog"
-	dialog_id="seller_order_adjust_fee" id="order{$order.orderExtm.order_id}_action_adjust_fee" ><i class="layui-icon layui-icon-username"></i>创建用户</a> 
+	dialog_id="seller_order_adjust_fee" id="order{$order.orderExtm.order_id}_action_adjust_fee" ><i class="layui-icon layui-icon-username"></i>用户</a> 
 	<a class="layui-btn layui-btn-primary layui-bg-green" href="javascript:;" uri="{url route='order_printed/caddress'}" dialog_width="600" dialog_title="创建地址" ectype="dialog"
-	dialog_id="seller_order_adjust_fee" id="order{$order.orderExtm.order_id}_action_address" ><i class="layui-icon layui-icon-location"></i>创建地址</a>
+	dialog_id="seller_order_adjust_fee" id="order{$order.orderExtm.order_id}_action_address" ><i class="layui-icon layui-icon-location"></i>创建</a>
 	<button class="layui-btn layui-btn-primary layui-bg-blue" lay-event="address-list"><i class="layui-icon layui-icon-export"></i>地址</button>
 	</div>
 	</div>
@@ -413,9 +414,11 @@
 			  $('.downChoose').val('select');
 			 window.location.href = url(['orderbyhh/export', $.extend($("#formSearch").serializeJson(), { id: items.join(',') })]);
 		  }
-      }else if(obj.event === 'address-list'){
+		}else if(obj.event === 'printeds'){
+			window.open(url(['order_printed/view', $.extend($("#formSearch").serializeJson(), { order_ids: items.join(',') ,ptf:115})]));
+		}else if(obj.event === 'address-list'){
 		  window.open(url(['order_printed/addresss', $.extend($("#formSearch").serializeJson(), { id: items.join(',') })]));
-	  }
+		}
     });
 
     //监听行工具事件

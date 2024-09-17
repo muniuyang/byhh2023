@@ -32,6 +32,31 @@ class Buyer_orderViewForm extends Model
 {
 	public $errors = null;
 	
+	public function formDatas($post = null){
+		//$users = User::find()->where(['id' => [1, 2, 3]])->all();
+		$ids = explode(',',$post->order_ids);
+		//var_dump($post->order_ids);
+		/**********************[START]JchengCustom with local**********************/
+		$userid = Yii::$app->user->id;
+		$orderInfo = OrderModel::find()->alias('o')
+		->select('o.order_id,o.buyer_id,o.seller_id,o.order_amount,o.discount,o.payment_code,o.payment_name,o.pay_message,o.pay_time,
+		o.ship_time,o.finished_time,o.express_no,o.postscript,o.status,o.order_sn,o.add_time as order_add_time,
+		s.store_name,s.region_name,s.address,s.im_qq')
+		->joinWith('store s', false)
+		->joinWith('orderExtm')
+		->with('orderGoods')
+		->where(['o.order_id' =>$ids]);
+		//var_dump($orderInfo->createCommand()->getRawSql());die;
+		
+		$orderInfo = $orderInfo->asArray()->all();
+		/**********************[START]JchengCustom with local**********************/
+		if(!($orderInfo)) {
+			$this->errors = Language::get('no_such_order');
+			return false;
+		}
+		return $orderInfo;
+	}
+	
 	public function formData($post = null)
 	{
 		
