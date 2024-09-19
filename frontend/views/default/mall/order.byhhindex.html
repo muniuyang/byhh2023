@@ -145,7 +145,7 @@
 </div>
 <script type="text/html" id="toolbar">
 	<div class="layui-btn-container">
-		<button class="layui-btn layui-btn-primary layui-bg-blue" lay-event="printeds"><i class="layui-icon layui-icon-print"></i>打印</button>
+		<button class="layui-btn layui-btn-primary layui-bg-blue" lay-event="printeds"><i class="layui-icon layui-icon-print"></i>打印已选</button>
 	  <button class="layui-btn layui-btn-primary layui-bg-blue" lay-event="export"><i class="layui-icon layui-icon-export"></i>导出</button>
 	<a class="layui-btn layui-btn-primary layui-bg-orange" href="javascript:;" uri="{url route='orderbyhh/cuser'}" dialog_width="600" dialog_title="创建用户" ectype="dialog"
 	dialog_id="seller_order_adjust_fee" id="order{$order.orderExtm.order_id}_action_adjust_fee" ><i class="layui-icon layui-icon-username"></i>用户</a> 
@@ -284,13 +284,13 @@
 	  }}
 	  , { field: 'isPrinted', title: '已打印', width: 50, sort: false, align: 'center',templet:function(res){
 	  	//console.log(res);
-	  	
-	  	return res.LAY_INDEX+'<em class="'+(res.is_printed==0 ? 'no':'yes')+'" ectype="inline_edit" controller="orderbyhh" fieldname="is_printed" fieldid="'+res.order_id
+	  	//res.LAY_INDEX+
+	  	return '<em class="'+(res.is_printed==0 ? 'no':'yes')+'" ectype="inline_edit" controller="orderbyhh" fieldname="is_printed" fieldid="'+res.order_id
 	  	+'" fieldvalue="'+res.is_printed+'" title="可编辑"><i class="fa '
 	  	+(res.is_printed==0 ? 'fa-ban':'fa-check-circle')+'"></i>'+(res.is_printed==0 ? '否':'是')+'</em>';
 	    }}
 	  
-	, { field: 'real_name', title: '配送时间', width: 210 ,align: 'left',style:'color: #666;',templet:function(res){
+	, { field: 'real_name', title: '配送时间', width: 210 ,align: 'center',style:'color: #666;',templet:function(res){
 		var _conent =  res.send_date;
 		if(res.msg == '预订'){
 			_conent = '<a href="JavaScript:;"  dialog_width="450"   title="修改配送时间" dialog_title="修改配送时间" ectype="dialog" '

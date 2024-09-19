@@ -907,6 +907,12 @@ class Order_printedController extends \common\controllers\BaseUserController
 		$logo = dirname(Yii::$app->BasePath).'/frontend/web/data/system/byhhgzh.png';
 		
 		$oct = count($orders);
+		if($oct>20){
+			die('数据量太大, 您需要打印的有'.$oct.'条, 最多打印20条, 请联系管理员!');
+			//return Message::warning("数据量太大，请联系管理员!");
+		}
+		$ptf = $oct;
+		//var_dump($ptf);die;
 		$templateFile = dirname(Yii::$app->BasePath).'/frontend/web/data/template/printed_card_bs'.$ptf.'.docx';
 		$templateProcessor = new \PhpOffice\PhpWord\TemplateProcessor($templateFile);
 		

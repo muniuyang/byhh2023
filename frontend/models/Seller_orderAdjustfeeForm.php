@@ -66,13 +66,14 @@ class Seller_orderAdjustfeeForm extends Model
 			
 		$model = OrderModel::findOne($orderInfo['order_id']);
 		$model->order_amount = $post->order_amount;
+		//$model->checkout_time=time();
 		$model->adjust_amount = $post->order_amount - ($orderInfo['goods_amount'] + $orderInfo['shipping_fee'] - $orderInfo['discount']);
 		$model->pay_alter = 1;
-		if(!$model->save()) {
+		if(!$s=$model->save()) {
 			$this->errors = $model->errors;
 			return false;
 		}
-
+       // var_dump($s);die;
 		DepositTradeModel::updateAll(['amount' => $post->order_amount, 'pay_alter' => 1], ['bizOrderId' => $orderInfo['order_sn']]);
 
 		$model = new OrderLogModel();
