@@ -966,6 +966,181 @@ class Order_printedController extends \common\controllers\BaseUserController
 		//下载文件
 		$this->actionDown($resultFile);
 	} 
+	public function actionCreatdocx(){
+		// 创建一个新文档
+ 		
+		$phpWord = new \PhpOffice\PhpWord\PhpWord();
+		
+		$phpWordVersion = \PhpOffice\PhpWord\PhpWord::VERSION;
+		$settings =  $phpWord->getDocInfo();
+		var_dump($settings);die;
+		
+		
+		// 加载现有的.docx文件
+		//$source =  dirname(Yii::$app->BasePath).'/frontend/web/data/template/bs000000.docx';
+		$source =  dirname(Yii::$app->BasePath).'/frontend/web/data/sales/F3合并打印.docx';
+		$phpWord =  \PhpOffice\PhpWord\IOFactory::load($source);
+		
+		
+		//$phpWord = IOFactory::load($source);
+		 
+		// 找到文档中的所有文本元素
+		$elements = $phpWord->getElements();
+		 
+		foreach ($elements as $element) {
+		    if (method_exists($element, 'setFontSize')) {
+		        // 对文本元素进行缩放，这里以50%为例
+		        $element->setFontSize(round($element->getFontSize() * 0.5));
+		    }
+		}
+		 
+		// 保存或输出修改后的文档
+		//$objWriter = IOFactory::createWriter($phpWord, 'Word2007');
+		//$objWriter->save('scaled_output.docx');
+		
+		
+		
+		/* Note: any element you append to a document must reside inside of a Section. */
+		//$section =  $phpWord->getSections()[0];
+		// 添加一个章节至phpword文档
+		//$section = $phpWord->addSection();
+		// 添加一个新的空白页面，设置方向为横向
+		/*
+		$section = $phpWord->addSection(
+		    array(
+				'marginTop' => 100,  // 上边距，单位微米
+				'marginBottom' => 100, // 下边距
+				'marginLeft' => 100,  // 左边距
+				'marginRight' => 100, // 右边距
+		        'orientation' => \PhpOffice\PhpWord\Style\Section::ORIENTATION_LANDSCAPE // 横向
+		    )
+		);	
+		// 添加页眉和页脚
+		$header = $section->addHeader();
+		$footer = $section->addFooter();
+
+		$header->addTextBreak(-9); // 模拟上边距，9行
+		$header->addText('页眉内容', array('size' => 10));
+		$header->addTextBreak(-9); // 模拟下边距，9行
+		*/
+		/*
+		//$header->addPreserveText('这是页眉', array('alignment' =>\PhpOffice\PhpWord\SimpleType\Jc::CENTER,'size' => 10,'spaceBefore'=>10,'spaceAfter'=>10));
+		$header->addPreserveText('这是页眉', ['bold' => true,'name' => '黑体','spacing'=>120, 'colsSpace'=>20,'italic' => false, 'size' => 14,], 
+		array('spaceAfter'=>10, 'space' => array('pt' => 100), // 设置上边距为100pt
+		  'height' => 10, // 设置保留文本的高度为500unit
+		'alignment' =>\PhpOffice\PhpWord\SimpleType\Jc::RIGHT));
+		
+		
+		//设置页眉边距
+		$header->setMargin(20); // 同样是Twips
+		
+		$footer->addPreserveText('第 {PAGE} 页，共 {NUMPAGES} 页');
+
+		$footer->setMargin(20); // 单位是Twips，大约等同于1/20个点
+*/
+		// 获取页面的宽度和高度
+		//$pageWidth = $section->getPageWidth();
+		//$pageHeight =$section->getPageHeight();
+		
+		//var_dump([$pageWidth,$pageHeight]);
+		/*
+		$logo = dirname(Yii::$app->BasePath).'/frontend/web/data/system/byhhgzh.png';
+		$header->addWatermark($logo, array(
+			'width' =>120,
+			'height' => 120,
+			'spaceAfter'=>100,
+			'wrappingStyle' => 'infront', // inline, square, tight, behind, or infront.
+			'positioning' => \PhpOffice\PhpWord\Style\Image::POSITION_ABSOLUTE,
+			'posHorizontal' => \PhpOffice\PhpWord\Style\Image::POSITION_HORIZONTAL_RIGHT,
+			'posHorizontalRel' => \PhpOffice\PhpWord\Style\Image::POSITION_RELATIVE_TO_PAGE,
+			'posVerticalRel' => \PhpOffice\PhpWord\Style\Image::POSITION_RELATIVE_TO_PAGE,
+		),['spaceAfter'=>1000]);
+		
+		*/
+		
+		// 加载水印图片
+ 		 
+		// 设置水印的样式
+		 
+		
+		// 克隆第一个Section
+	//	$clonedSection = clone $phpWord->getSections()[0];
+		
+		//var_dump($clonedSection);die;
+		
+		// 创建一个新的PhpWord实例，并添加克隆的Section
+		//$newPhpWord = new PhpWord();
+		//$clonedSection->addText('这是克隆的section的文本。', array('size' => 16, 'bold' => true));
+
+	//	$phpWord->addSection($clonedSection);
+	//	$innerCloneBlock = $clonedSection->addCloneBlock(2); // 内部克隆块也克隆2次
+
+		
+		
+
+		// Adding Text element to the Section having font styled by default...
+		/*
+		$section->addText(
+		    '"Learn from yesterday, live for today, hope for tomorrow. '
+		        . 'The important thing is not to stop questioning." '
+		        . '(Albert Einstein)'
+		);
+		*/
+		/*
+		 * Note: it's possible to customize font style of the Text element you add in three ways:
+		 * - inline;
+		 * - using named font style (new font style object will be implicitly created);
+		 * - using explicitly created font style object.
+		 */
+		/*
+		// Adding Text element with font customized inline...
+		$section->addText(
+		    '"Great achievement is usually born of great sacrifice, '
+		        . 'and is never the result of selfishness." '
+		        . '(Napoleon Hill)',
+		    array('name' => 'Tahoma', 'size' => 10)
+		);
+		
+		// 添加自定义字体样式文本元素
+		$fontStyleName = 'oneUserDefinedStyle';
+		$phpWord->addFontStyle(
+		    $fontStyleName,
+		    array('name' => 'Tahoma', 'size' => 10, 'color' => '1B2232', 'bold' => true)
+		);
+		$section->addText(
+		    '"The greatest accomplishment is not in never falling, '
+		        . 'but in rising again after you fall." '
+		        . '(Vince Lombardi)',
+		    $fontStyleName
+		);
+		
+		// Adding Text element with font customized using explicitly created font style object...
+		$fontStyle = new \PhpOffice\PhpWord\Style\Font();
+		$fontStyle->setBold(true);
+		$fontStyle->setName('Tahoma');
+		$fontStyle->setSize(13);
+		$myTextElement = $section->addText('"Believe you can and you\'re halfway there." (Theodor Roosevelt)');
+		$myTextElement->setFontStyle($fontStyle);
+		*/
+		// Saving the document as OOXML file...
+		
+		//$filename = 'testdoc.docx';
+		$filename = md5(rand(1000, 9999)).'.docx';
+
+		$resultFile = dirname(Yii::$app->BasePath).'/frontend/web/data/sales/'.$filename;
+		
+		
+		$objWriter = \PhpOffice\PhpWord\IOFactory::createWriter($phpWord, 'Word2007');
+		$objWriter->save($resultFile);
+		die('3');
+		// Saving the document as ODF file...
+		//$objWriter = \PhpOffice\PhpWord\IOFactory::createWriter($phpWord, 'ODText');
+		//$objWriter->save('helloWorld.odt');
+		
+		// Saving the document as HTML file...
+		//$objWriter = \PhpOffice\PhpWord\IOFactory::createWriter($phpWord, 'HTML');
+		//$objWriter->save('helloWorld.html');
+	}
 	private function getConditions($post, $query = null)
 	{	
 		if($query === null) {
