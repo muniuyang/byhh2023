@@ -6,7 +6,7 @@
 -- 生成日期： 2024-10-16 00:16:15
 -- 服务器版本： 5.7.26
 -- PHP 版本： 7.3.4
-
+-- last 2024-10-16
 SET SQL_MODE = "NO_AUTO_VALUE_ON_ZERO";
 SET AUTOCOMMIT = 0;
 START TRANSACTION;
