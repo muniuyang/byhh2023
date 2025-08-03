@@ -244,13 +244,15 @@ class BaseOrder
         // 返回基本信息
 		$result = array();
 		$post = ArrayHelper::toArray($this->post);
+		var_dump($post);
+		
 		foreach($goods_info['orderList'] as $store_id => $order)
 		{
 			$buyerInfo['buyer_id'] = Yii::$app->user->id;
 			$buyerInfo['buyer_name'] = addslashes(Yii::$app->user->identity->username);
 			$buyerInfo['buyer_email'] = '';
 			$buyerInfo['postscript'] =  trim($post['postscript'][$store_id]);//卖家留言 = 落款签名
-			
+			$buyerInfo['giveprice'] =  trim($post['giveprice'][$store_id]);//卖家给价 = 最终结款价格
 			
         	$result[$store_id] = array(
 				'order_sn'      =>  OrderModel::genOrderSn($store_id),

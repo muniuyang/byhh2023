@@ -152,6 +152,7 @@
 	<a class="layui-btn layui-btn-primary layui-bg-green" href="javascript:;" uri="{url route='order_printed/caddress'}" dialog_width="600" dialog_title="创建地址" ectype="dialog"
 	dialog_id="seller_order_adjust_fee" id="order{$order.orderExtm.order_id}_action_address" ><i class="layui-icon layui-icon-location"></i>创建</a>
 	<button class="layui-btn layui-btn-primary layui-bg-blue" lay-event="address-list"><i class="layui-icon layui-icon-export"></i>地址</button>
+	
 	</div>
 	</div>
 </script>
@@ -188,6 +189,10 @@
 		            var tr = that.find(".layui-table tbody tr[data-index='" + index + "']");
 		            tr.css("background-color", "rgb(147 147 50 / 18%)");
 		         }
+				if (item.isDaynewlast === true) {
+				   var tr = that.find(".layui-table tbody tr[data-index='" + index + "']");
+				   tr.css("background-color", "rgb(65 253 13 / 25%)");
+				} 
 		    });
 	      // 将分页的元素移动到指定位置
 	      //document.getElementById('tablegrid-page').innerHTML = '';
@@ -225,6 +230,9 @@
 				return '<img src='+res.goods_image+' />' ;
 			}}
 	, { field: 'goods_name', title: '标题', width: 220 ,templet:function(res){
+		if(res.msg == '预订'){
+			res.goods_name = "<span style=color:#00aaff>"+res.goods_name+"</span>";
+		}
 		//return res.goods_name+"("+res.quantity+")";
 		if(res.what_day == '生日'){
 			return "<i title='修改订单属性' uri='{url route='orderbyhh/class' }?order_id="+res.order_id+"' id='order"+res.order_id+"_action_whatday' dialog_id='seller_order_whatday'  ectype='dialog' dialog_width='400' dialog_title='纪念日' class='layui-icon layui-icon-gift' style='cursor: pointer;color:#FF8800;' lay-event='goodsClass'></i> <a href='javascript:;' lay-event='goodsView'>"+res.goods_name+"("+res.quantity+")</a>";
@@ -251,7 +259,12 @@
 	  }}
 
 	, { field: 'consignee', title: '收货人', width: 100 ,align: 'left',style:'color: #FF8800;',templet:function(res){
+		if(res.msg == '预订'){
+			res.consignee = "<span style=color:#00aaff>"+res.consignee+"</span>";
+		} 
 		return "<em class='layui-icon layui-icon-dialogue consignee' lay-event='viewContent'    style='color:#00aaff;'></em>"+res.consignee;//+'('+res.buyer_name+')' ;
+	
+	
 	}}
 	, { field: 'isMeeting', title: '订货会', width: 60,  align: 'center',templet:function(res){
 		$(this).parents('tr').addClass('close')
@@ -260,17 +273,28 @@
 		+(res.is_meeting==0 ? 'fa-ban':'fa-check-circle')+'"></i>'+(res.is_meeting==0 ? '否':'是')+'</em>';
 	  }}
 	, { field: 'address', title: '收货地址', width: 140 ,align: 'left',style:'color: #202120;',templet:function(res){
-		
+		if(res.msg == '预订'){
+			res.address = "<span style=color:#00aaff>"+res.address+"</span>";
+		} 
 		return '<a href="JavaScript:;"   dialog_title="修改收货人信息" ectype="dialog" '
 		 +"uri={url route='orderbyhh/extro' redirect=$redirect }?order_id="+res.order_id
 		 +" dialog_id='my_address_extro' name='order_id'>"
 		 +"<i class='layui-icon layui-icon-edit'  style='cursor: pointer;color:#ff0000;'></i></a>"+ res.address;
 	}}
-	, { field: 'signature', title: '签名落款', width: 95 ,align: 'left',style:'color: #FF8800;'}
+	, { field: 'signature', title: '签名落款', width: 95 ,align: 'left',style:'color: #FF8800;',templet:function(res){
+		if(res.msg == '预订'){
+			return "<span style=color:#00aaff>"+res.signature+"</span>";
+		}else{
+			return res.signature;
+		}
+	}}
 	
 	
 
 	, { field: 'real_name', title: '订花人', width: 120 ,align: 'left',style:'color: #00AA00;',templet:function(res){
+		if(res.msg == '预订'){
+			res.real_name = "<span style=color:#00aaff>"+res.real_name+"</span>";
+		} 
 		return '<a href="JavaScript:;" dialog_width="550"  title="修改订花人"  dialog_title="修改订花人信息" ectype="dialog" '
 		 +"uri={url route='orderbyhh/editbuyer' redirect=$redirect }?order_id="+res.order_id
 		 +" dialog_id='my_address_extro' name='order_id'>"

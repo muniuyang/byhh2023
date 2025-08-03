@@ -113,7 +113,7 @@ class Order_printedController extends \common\controllers\BaseUserController
 			$tempType = 1;
 		}
 		
-		$tempList = \common\models\OrderPrintTempModel::find()->select('temp_sort,temp_w,temp_h,temp_t')
+		$tempList = \common\models\OrderPrintTempModel::find()->select('title,temp_sort,temp_w,temp_h,temp_t')
 		->where(['and',['=', 'temp_t', $tempType],['=', 'status', 1]])->orderBy(['temp_sort' => SORT_DESC])->asArray()->all();
 		
 		//var_dump($tempList);die;
@@ -301,6 +301,8 @@ class Order_printedController extends \common\controllers\BaseUserController
 				$customerModel->address = $post->address;
 				$customerModel->zipcode = $post->zipcode;
 				$customerModel->phone_mob = $post->phone_mob;
+				$customerModel->phone_mob2 = $post->phone_mob2;
+				
 				$customerModel->region_no = $region_no;
 				$customerModel->add_date = @date('Y-m-d',time());
 				$customerModel->up_time = time();//-8*3600;
@@ -721,15 +723,26 @@ class Order_printedController extends \common\controllers\BaseUserController
 		$templateProcessor = new \PhpOffice\PhpWord\TemplateProcessor($templateFile);
 		$templateProcessor->setValue('address',$orderExt['address']);// On section/content
 	
-	 
+	 //var_dump($order['content']);
 		//content
 		$templateProcessor->setValue('title', $orderExt['consignee']);// On footer
 		if($order['is_meeting'] == 1 && !$order['content']){
-			$order['content'] = "订货会圆满成功";
+			$order['content'] = "订货会,圆满成功";
 		}
+		if($order['ptf'] == 120 && !$order['content']){
+		 	$order['content'] = "订货会,圆满成功";
+		}
+		//var_dump($order);die;
 		if(!$order['content']){
 			$order['content'] = "开业大吉,生意兴隆";
 		}
+
+		if(in_array($order['ptf'],[117,118,119])){
+			$content = explode(',',$order['content']);
+			$order['content'] =$content[0]."<w:br />".$content[1];
+		}
+		  //  $order['content']='<w:p color="red">手动阀即使考虑到房价阿斯蒂芬卢卡斯就</w:p>';
+		//var_dump($content);die;
 		$templateProcessor->setValue('content',$order['content']); 
 	
 		if(in_array($order['ptf'],[23,24,25,26,27,28,108,107,106])){
@@ -753,7 +766,7 @@ class Order_printedController extends \common\controllers\BaseUserController
 		/**
 		 * 改变打印状态
 		 */
-		//var_dump($order['order_id']);
+		//var_dump($order);die;
 		if($order['order_id']){
 			$orderExt = \common\models\OrderExtmModel::find()->where(['order_id'=>$order['order_id']])->one();
 			$orderExt->	is_printed = 1;

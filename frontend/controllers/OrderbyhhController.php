@@ -72,12 +72,15 @@ class OrderbyhhController extends \common\controllers\BaseUserController
 			->joinWith('goods g', false)
 			->orderBy(['up_time' => SORT_DESC])
 			->offset(0)->limit(30)->asArray()->all(); 
+			
 			//var_dump($defaulthots);die;
 			
 			foreach($defaulthots as $k=>$v){
+				
+				
 				$this->params['defaulthots'][$v['goods_id']] = $v['goods_name'];
 			}
-			
+			//die;
 			$temps = [''];
 			if(!empty($userBills)){
 				foreach($userBills  as $k => $v){
@@ -100,8 +103,11 @@ class OrderbyhhController extends \common\controllers\BaseUserController
 			//var_dump($query->createCommand()->getRawSql());die;
 			$page = Page::getPage($query->count(), $post->limit ? $post->limit : 15);
 			$list = $query->offset($page->offset)->limit($page->limit)->asArray()->all();
+			//var_dump($list);
+			$isDaynewlast = false;
 			foreach ($list as $key => $value)
 			{
+				$list[$key]['isDaynewlast'] =false;
 				$list[$key]['tradeNo'] = DepositTradeModel::find()->select('tradeNo')->where(['bizOrderId' => $value['order_sn']])->scalar();// 是否申请过退款
 				$list[$key]['add_time'] = Timezone::localDate('Y-m-d H:i:s', $value['add_time']);
 				$list[$key]['pay_time'] = Timezone::localDate('Y-m-d H:i:s', $value['pay_time']);
@@ -120,6 +126,10 @@ class OrderbyhhController extends \common\controllers\BaseUserController
 					
 				}else if(date('Y-m-d',strtotime($list[$key]['send_date'])) == date('Y-m-d')){
 					$list[$key]['msg'] = "今天";
+					if(!$isDaynewlast){
+						$isDaynewlast = true;
+						$list[$key]['isDaynewlast'] =true;	
+					}
 				}else if(date('Y-m-d',strtotime($list[$key]['send_date'])) == date('Y-m-d',strtotime("-1 days"))){
 					$list[$key]['msg'] = "昨天";
 				}else if(date('Y-m-d',strtotime($list[$key]['send_date'])) == date('Y-m-d',strtotime("-2 days"))){
@@ -128,6 +138,7 @@ class OrderbyhhController extends \common\controllers\BaseUserController
 					$list[$key]['msg'] = "历史";
 				}
 			}
+			
 			return Json::encode(['code' => 0, 'msg' => '', 'count' => $query->count(), 'data' => $list]);
 		}
 	}
@@ -625,6 +636,27 @@ class OrderbyhhController extends \common\controllers\BaseUserController
 		  	if(!($status = $orderExt->save())) {
 		  		return Message::warning($orderExt->errors);
 		  	}
+			//年结单用户入库
+		    if($post->column == 'is_year'){
+				$usModel = \common\models\UserModel::find()->where(['or',
+					['like', 'username', $orderExt->subscriber],
+					['like', 'real_name', $orderExt->subscriber]
+				]);
+				$user = $usModel->one();
+				//var_dump($orderExt->subscriber);
+				//var_dump($user);die;
+				
+				$ubill = \common\models\UserBillModel::find()->where(['userid'=>$user->userid])->one();
+				if(empty($ubill)){
+					$ubmodel = new \common\models\UserBillModel();
+					$ubmodel->userid = $user->userid;
+					if(!$ubmodel->save()) {
+						return Message::popWarning($ubmodel->errors);
+					}	
+				}
+
+				
+			}
 			//创建客户关系
 			if( $post->column == 'is_printed'){
 				$date = @strtotime($orderExt->send_date);
