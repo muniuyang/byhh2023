@@ -155,7 +155,7 @@ class NormalOrder extends BaseOrder
 
 		$result = $query->asArray()->all();
 		foreach ($result as $key => $value) {
-			$result[$key]['goods_image'] = Page::urlFormat($value['goods_image'], Yii::$app->params['default_goods_image']);
+			//$result[$key]['goods_image'] = Page::urlFormat($value['goods_image'], Yii::$app->params['default_goods_image']);
 
 			// 如果规格已经不存在，则删除购物车该规格商品记录
 			if(!$value['spec_id']) {

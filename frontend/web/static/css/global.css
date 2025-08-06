@@ -228,6 +228,8 @@ img.lazyload{background:#fff url(../images/loading.gif) center  center no-repeat
 
 /* buyer_order.evaluate.html and cart.index.html ... use it */
 .step{width:100%;background:url(../images/step.png) 0 0; height:23px; line-height:23px;color:#666; overflow:hidden}
+
+
 .step1000{ background:url(../images/step1000.png);}
 .step2{ background-position:0 -23px}
 .step3{ background-position:0 -47px;}

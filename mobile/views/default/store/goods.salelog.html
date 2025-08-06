@@ -1,0 +1,19 @@
+{include file="header.html"}
+<div id="page-goods-index">  
+  {include file="goodsinfo.html"}
+  <div class="w-shop clearfix" > 
+   
+    <div class="col-main  ml20 mr20" style="min-width:320px;">
+      <div class="attr-tabs" style="width:100%;">
+        <ul class="user-menu clearfix" >
+          <li class="ml10 mr10 float-left"> <a href="{url route='goods/index' id=$goods.goods_id}"> <span> {$lang.goods_detail} </span> </a> </li>
+          <li class="ml10  mr10 float-left"> <a href="{url route='goods/comment' id=$goods.goods_id}#menu"> <span> {$lang.goods_comment}({$goods.comments|default:0}) </span> </a> </li>
+          <li class="active ml10 mr10  float-left"> <a href="{url route='goods/salelog' id=$goods.goods_id}"> <span> {$lang.sales_log}({$goods.sales|default:0}) </span> </a> </li>
+          <li class="ml10  mr10 float-left"> <a href="{url route='goods/qa' id=$goods.goods_id}#menu"> <span> {$lang.qa} </span> </a> </li>
+        </ul>
+      </div>
+      <div class="salelog-list"> {include file="salelog.html"} </div>
+    </div>
+  </div>
+</div>
+{include file="footer.html"}

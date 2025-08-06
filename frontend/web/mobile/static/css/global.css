@@ -9,10 +9,10 @@ h1,h2,h3,h4,h5,h6{font-size:14px;}
 ins{text-decoration:none;}
 em,i{font-style:normal;}
 ul,ol{ list-style:none;}
-input, button, select, textarea{outline: none;filter: none !important;-webkit-appearance:none;}
 input:-webkit-autofill { -webkit-box-shadow: 0 0 0px 1000px white inset;box-shadow: 0 0 0px 100px white inset;}
 input[type="button"],input[type="submit"] {-webkit-appearance:none; border-radius:0;} /* don't set input[type="text"] */
-input,button,select,textarea{outline:none;}
+ 
+input, button, select, textarea{outline: none;filter: none !important;background:#fff;}
 textarea{resize:none}
 img{border:0;}
 a{text-decoration:none;blr:expression(this.onFocus=this.blur());outline:none;outline: none;appearance:none;-webkit-tap-highlight-color: transparent;}
@@ -235,3 +235,33 @@ img.lazyload{background:#fff url(../images/loading.gif) no-repeat center center;
 
 
 /************** common end ***************************************************/
+
+
+/* buyer_order.evaluate.html and cart.index.html ... use it */
+.step{width:100%;background:url(../../../static/images/step.png); background-size: 100% 580%;background-repeat: no-repeat;height:23px; line-height:23px;color:#666; overflow:hidden}
+.step1000{ background:url(../../../static/images/step1000.png);}
+.container {
+ 
+  background-size: cover; /* 或者使用 '100% 100%' */
+  background-position: center; /* 确保图像居中 */
+  background-repeat: no-repeat; /* 防止图像重复 */
+}
+
+
+.step2{ background-position:0 -27px}
+.step3{ background-position:0 -47px;}
+.step4{ background-position:0 -71px;}
+.step5{ background-position:0 -95px;}
+.step span{float:left;width:20%; text-align:center; display:block;}
+
+
+
+/* captcha.form.html */
+.captcha-form .tab li { border-bottom: 0; float: left; background: #ddd;  line-height: 35px;  height: 35px; width: 50%; text-align: center; cursor: pointer;}
+.captcha-form .tab li.active {  background: #1E9FFF; color: #fff}
+.captcha-form .captcha-fields{ line-height:40px;}
+.captcha-form .captcha-fields p { float:left;}
+.captcha-form .captcha-fields p.first{width:80px;}
+.captcha-form .captcha-fields .width_short{width:80px; border-radius:0;}
+.captcha-form .captcha-fields .btn-sendcode{ background:#09F; border:0; color:#fff; height:30px; line-height:30px; padding:0 10px; cursor:pointer}
+.captcha-form .btn-submit{background:#f60;margin-left:80px; border-radius:4px; color:#fff;border:0;padding: 8px 22px 8px 22px; display:inline-block; cursor:pointer}

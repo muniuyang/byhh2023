@@ -1,0 +1,78 @@
+{use class='yii\helpers\Url'}
+{use class='common\library\Def'}
+{include file="byhh.header.html"}
+<div id="main" class="clearfix">  
+  <div id="right">  
+    <div class="wrapful">{include file="user.submenu.html"}
+      <div class="profile clearfix">
+        <div class="photo">
+          <p><img src="{$visitor.portrait|url_format}" width="70" height="70" /></p>
+        </div>
+        <div class="info clearfix">
+          <dl class="col-1 float-left">
+            <dt><strong>{$visitor.username|escape}</strong> <a href="{url route='user/profile'}">{$lang.edit_profile}</a> <a class="ml10" href="{url route='user/logout'}">退出登录</a></dt>
+            <dd class="gray"> <span>{$lang.last_login}{$lang.colon}{$visitor.last_login|date_format:"%Y.%m.%d %H:%M:%S"}</span> <span>{$lang.last_ip}{$lang.colon}{$visitor.last_ip}</span> </dd>
+          </dl>
+        </div>
+      </div>
+      <div class="platform clearfix"> 
+        
+        <!--{if $store && in_array($smarty.session.userRole, array('seller'))}-->
+        <div class="clearfix w-full deal">
+          <div class="welitem clearfix"> <a class="wrap" href="{url route='store/credit' id=$store.store_id}">
+            <p>{$lang.credit_value}</p>
+            <h3><img src="{$store.credit_image|url_format}" align="absmiddle" /></h3>
+            </a> </div>
+          <div class="welitem clearfix"> <a class="wrap" href="{url route='store/credit' id=$store.store_id}">
+            <p>{$lang.praise_rate}</p>
+            <h3>{$store.praise_rate|default:0}%</h3>
+            </a> </div>
+          <div class="welitem clearfix"> <a class="wrap" href="{url route='store/index' id=$store.store_id}">
+            <p>卖家等级</p>
+            <h3 style="font-size:15px">{$sgrade.grade_name}</h3>
+            </a> </div>
+        </div>
+        <!--{else}-->
+        <div class="clearfix w-full">
+          <div class="welitem clearfix"> <a class="wrap" href="{url route='my_message/index'}">
+            <p>未读短信息</p>
+            <h3>{$new_message|default:0}</h3>
+            </a> </div>
+          <div class="welitem clearfix"> <a class="wrap" href="{url route='deposit/index'}">
+            <p>我的余额</p>
+            <h3>{$visitor.money|default:0}</h3>
+            </a> </div>
+          <div class="welitem clearfix"> <a class="wrap" href="{url route='my_integral/index'}">
+            <p>我的积分</p>
+            <h3>{$visitor.integral|default:0}</h3>
+            </a> </div>
+        </div>
+ 
+        <div class="buyer-notice">
+          <div class="box-notice box">
+            <div class="hd">
+              <h2>订单提醒</h2>
+            </div>
+            <div class="bd dealt">
+              <div class="list clearfix">
+                <dl>
+                  <dd> <span>{sprintf($lang.order_for_pay_remind, Url::toRoute(['buyer_order/index', 'type' => 'pending']), $buyer_stat.pending|default:0)}</span> </dd>
+                </dl>
+                <dl>
+                  <dd> <span>{sprintf($lang.order_for_confirm_remind, Url::toRoute(['buyer_order/index', 'type' => 'shipped']), $buyer_stat.shipped|default:0)}</span> </dd>
+                </dl>
+                <dl>
+                  <dd><span>{sprintf($lang.order_for_evaluate_remind, Url::toRoute(['buyer_order/index', 'type' => 'finished']), $buyer_stat.finished|default:0)}</span> </dd>
+                </dl>
+              </div>
+            </div>
+          </div>
+        </div>
+  
+        <!--{/if}-->
+         
+      </div>
+    </div>
+  </div>
+</div>
+{include file="byhh.footer.html"} 

@@ -1,0 +1,88 @@
+﻿<div class="mb10 mt10 clearfix is_year_choose">
+	<input class="layui-btn-cj" type="text" value="{$lang.send_time}" id="send_date" name="send_date"  />
+	<a class="layui-btn layui-bg-red layui-btn-sm pick_date" id="pick_date" style="color:red;cursor:none;">
+		<i class="layui-icon layui-icon-date"></i>
+		<input type="text" class="layui-btn layui-bg-red layui-btn-sm pick_date" style="cursor: pointer;width:80px;height:30px;border:0;padding:10px 0;margin-top:-6px;" value="选择配送日期"/>
+	</a>
+	 
+</div>
+<div class="mb10 mt10 clearfix is_year_choose">
+ 	
+	<label class="ml5 mr5  pointer layui-btn-sm layui-btn layui-icon  layui-btn-primary"><input type="radio" class="is_yearb_choose"  name="is_year" value="1"  />年结客户</label>&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;
+	<label class="ml5 mr5  pointer layui-btn-sm layui-btn layui-icon layui-icon-flag layui-bg-blue" ><input type="radio" class="is_yearb_choose"   style="margin-right:5px;" name="is_year" value="0" checked="checked" />非年结客户</label>
+</div>
+<div class="w mt20 clearfix">
+	<div class="address-confirm">
+		<div class="box">
+			<div class="realPay"> 
+				<strong>{$lang.real_amount}{$lang.colon}</strong>
+				<span class="price"><i>&yen;</i><em class="J_OrderAmount">{$goods_info.amount}</em></span>
+			</div>
+			<div class="address">
+				<p> 
+					<strong>{$lang.send_to}{$lang.colon}</strong>
+					<span class="address-detail J_AddressDetail"></span>
+				</p>
+				<p>
+					<strong>{$lang.consignee_and_phone}{$lang.colon}</strong>
+					<span class="address-detail J_Consignee"></span>
+				</p>
+			</div>
+		</div>
+	</div>
+</div>
+
+
+<div class="w clearfix">
+	<div class="make_sure mb10">
+		<p>
+			<!--{if !in_array($smarty.get.goods, array('meal'))}-->
+            <a href="{url route='cart/index'}" class="back">{$lang.backto_cart}</a>
+            <!--{/if}-->
+			<a href="javascript:void($('#order_form').submit());" class="btn-step fff center strong fs14 ml20 J_SubmitOrder">{$lang.submit_order}</a>
+		</p>
+	</div>
+</div>
+<div class="w clearfix">
+	<div class="notice-word price-notice"><span class="yellow">{$lang.price_notice}</span></div>
+</div>
+<script type="text/javascript">
+$(function(){
+	$(".is_yearb_choose").click(function(e){
+		e.preventDefault();
+		$('.is_yearb_choose').parents('label').removeClass('layui-bg-blue layui-icon-flag').addClass('layui-btn-primary');
+		//console.log('class=>', $(this).parent().attr('class'))
+		$(this).parent('label').addClass('layui-bg-blue layui-icon-flag');
+	})
+	/* 订单配送时间 */
+	// $('#send_date').datepicker({ dateFormat: 'yy-mm-dd' });
+	$('.pick_date').datetimepicker({
+	  timeText: '时间',
+	  hourText: '小时',
+	  minuteText: '分钟',
+	  secondText: '秒',
+	  currentText: '现在',
+	  closeText: '完成',
+	  showSecond: true, //显示秒  
+	  timeFormat: 'HH:mm:ss' ,//格式化时间
+		onChange(res){
+		consol.log('change');
+		},
+		onselect:function(){
+		console.log('onselect');
+		},
+		beforeShow:function(){
+		console.log('beforeShow');
+		},
+		onClose:function(res){
+		$(this).val('选择日期');
+		if(res == '选择日期'){
+		 return false;
+		}
+		let time = new Date();
+
+		$('#send_date').val(res);  
+		}
+	});
+});
+</script>

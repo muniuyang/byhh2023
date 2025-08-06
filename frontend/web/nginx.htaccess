@@ -1,0 +1,21 @@
+location /admin {
+  try_files $uri $uri/ /admin/index.php$is_args$args;
+}
+location /home {
+  try_files $uri $uri/ /home/index.php$is_args$args;
+}
+location /mobile {
+  try_files $uri $uri/ /mobile/index.php$is_args$args;
+}
+location /install {
+  try_files $uri $uri/ /install/index.php$is_args$args;
+}
+location /api {
+  try_files $uri $uri/ /api/index.php$is_args$args;
+}
+location /h5 {
+  try_files $uri $uri/ /h5/index.html;
+}
+location / {
+  try_files $uri $uri/ /index.php$is_args$args;
+} 

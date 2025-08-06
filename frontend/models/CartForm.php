@@ -125,6 +125,7 @@ class CartForm extends Model
 		// 如果是自己店铺的商品，则不能购买
 		if($specInfo['store_id'] == Yii::$app->user->id) {
 			$this->errors = Language::get('can_not_buy_yourself');
+			//var_dump($this->errors);
 			return false;
 		}
 		if($specInfo['stock'] < $post->quantity) {

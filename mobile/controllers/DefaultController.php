@@ -12,13 +12,14 @@
 namespace mobile\controllers;
 
 use Yii;
-use yii\web\Response;
+//use yii\web\Response;
 use yii\helpers\ArrayHelper;
+use yii\helpers\Url;
 
 use common\models\GoodsModel;
 use common\models\GcategoryModel;
 
-use common\library\Basewind;
+
 use common\library\Resource;
 use common\library\Page;
 use common\library\Weixin;
@@ -45,8 +46,11 @@ class DefaultController extends \common\controllers\BaseMallController
     public function actionIndex()
     {
 		$this->params['index'] = true;
-		
+					
+		//return $this->redirect(['/byhh/index']);
 		$this->params['page'] = Page::seo();
+		$this->params['redirect'] = Url::toRoute(['byhh/index', 'order_id' => 1]);
+
         return $this->render('../index.html', $this->params);
     }
 }

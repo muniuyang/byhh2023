@@ -346,6 +346,9 @@ class TemplateController extends \common\controllers\BaseAdminController
 			$mobileUrl = Basewind::mobileUrl(false, true);
 			$data['index'] = array('title' => Language::get('index'), 'url' => Url::toRoute(['default/index'], $siteUrl), 'path' => $mobileUrl, 'action' => array());
 			$data['community'] = array('title' => Language::get('community'), 'url' => Url::toRoute(['community/index'], $siteUrl), 'path' => $mobileUrl ? $mobileUrl . '/pages/community/index/index' : '', 'action' => array());
+			/*自定义jcheng*/
+			$data['detail'] = array('title' => Language::get('detail'), 'url' => Url::toRoute(['detail/index'], $siteUrl), 'path' => $mobileUrl ? $mobileUrl . '/pages/detail/index/index' : '', 'action' => array());
+			/*/自定义jcheng*/
 		}
 		
 		return $data;

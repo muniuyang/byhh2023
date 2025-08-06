@@ -71,7 +71,7 @@ class BaseMallController extends Controller
 	{
 		parent::init();
 		// 安装检测
-		Basewind::environment();
+		//Basewind::environment();
 
 		// 获取当前访客信息
 		$this->visitor = Basewind::getVisitor();

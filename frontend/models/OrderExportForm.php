@@ -16,7 +16,7 @@ use yii\base\Model;
 
 use common\library\Timezone;
 use common\library\Def;
-
+use common\library\Pageoutdown;
 /**
  * @Id OrderExportForm.php 2018.8.2 $
  * @author mosir
@@ -90,7 +90,7 @@ class OrderExportForm extends Model
 		if(in_array(Yii::$app->user->id,Yii::$app->params['createRights'])){//权限判断[START]JchengCustom
 			$sheetName = $sheetName ?$sheetName.'-博艺花卉客户':'博艺花卉客户账单';
 			$folder = $sheetName.Timezone::localDate('Ymdhis', Timezone::gmtime());
-			return \common\library\pageOutDown::export([
+			return  Pageoutdown::export([
 				'models' 	=> $record_xls, 
 				'fileName' 	=> $folder,
 				'sheetName' =>$sheetName

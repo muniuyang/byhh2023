@@ -34,7 +34,7 @@ return array(
     'empty_queue' => '备份队列为空或已完成',
     'fail_save_sql' => '备份写入失败',
     'download' => '下载',
-    'version_error' => 'ShopWind 当前版本%s与备份数据版本%s不同，备份恢复失败',
+    'version_error' => '当前版本%s与备份数据版本%s不同，备份恢复失败',
     'import_vol_error' => '导入分卷%s失败',
     'recover_init_ok' => '初始化完成！',
     'recover_success' => '数据恢复成功。',

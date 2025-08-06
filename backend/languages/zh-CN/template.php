@@ -11,6 +11,7 @@
     'end_edit'  => '退出编辑',
     'index' => '首页',
     'community' => '社区团购',
+    'detail' => '商品详情',
     'recommend_new' => '最新商品',
     'gcategory' => '商品分类页',
 	'scategory'=>'店铺分类页',

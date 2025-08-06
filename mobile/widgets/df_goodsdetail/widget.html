@@ -1,0 +1,139 @@
+<div id="page-goods-index"> {include file="curlocal.html"} 
+  {include file="goodsinfo.html"}
+  <div class="w-shop clearfix">
+    <div class="col-sub"> {include file="left.html"} </div>
+    <div class="col-main float-right"> {include file="goods.meal.html"}
+      <div class="attr-tabs">
+        <ul class="user-menu clearfix">
+          <li class="active ml10 mr10 float-left"> <a href="{url route='goods/index' id=$goods.goods_id}"> <span> {$lang.goods_detail} </span> </a> </li>
+          <li class="ml10 mr10 float-left"> <a href="{url route='goods/comment' id=$goods.goods_id}#menu"> <span> {$lang.goods_comment}({$goods.comments|default:0}) </span> </a> </li>
+          <li class="ml10 mr10 float-left"> <a href="{url route='goods/salelog' id=$goods.goods_id}#menu"> <span> {$lang.sales_log}({$goods.sales|default:0}) </span> </a> </li>
+          <li class="ml10 mr10 float-left"> <a href="{url route='goods/qa' id=$goods.goods_id}#menu"> <span> {$lang.qa} </span> </a> </li>
+        </ul>
+      </div>
+      <!--{if $goods.props}-->
+      <div class="attr-list mb10 mt20 clearfix"> 
+        <!--{foreach from=$goods.props item=prop}-->
+        <dl class="clearfix">
+          <dt>{$prop.name}</dt><dd class="line-clamp-1" title="{$prop.value}">{$prop.value|escape|truncate:30}</dd>
+        </dl>
+        <!--{/foreach}-->
+        <!--{if count($goods.props) % 2 neq 0}--><dl class="clearfix"><dt>&nbsp;</dt><dd>&nbsp;</dd></dl><!--{/if}--> 
+      </div>
+      <!--{/if}-->
+      <div class="option_box">
+        <div class="detail-info clearfix"> {$goods.description|escape:editor} </div>
+      </div>
+      {include file="comments.html"} </div>
+  </div>
+</div>
+<div class="goodslist" id="goodslist-{$widget_data.uniqueid}">
+  <div class="content {$widget_data.theme|default:'square'}">
+    <ul class="clearfix {if !$widget_data.list.0.goods_id}empty{/if}">
+      <!--{foreach from=$widget_data.list item=item name=fe_item}-->
+      <li class="item clearfix ml5 mr5 mt10">
+        <p class="image center">
+          <!--{if !$widget_data.list.0.goods_id}-->
+          <i class="iconfont icon-icon_pic"></i>
+          <!--{else}-->
+          <img src="{$item.default_image|url_format}">
+          <!--{/if}-->
+        </p>
+        <div class="extra mt10 ml10 mr10 pb10">
+          <p class="desc fs14 mb20">{$item.goods_name|default:'商品名称'}</p>
+          <p class="webkit-box">
+            <span class="price fs14 flex1">{$item.price|price_format}</span>
+            <span class="gray fs13">{$item.sales|default:0}人已买</span>
+          </p>
+        </div>
+      </li>
+      <!--{/foreach}-->
+    </ul>
+    <!--{if $widget_data.paging eq 1}-->
+    <div class="center gray fs14 padding10">加载更多</div>
+    <!--{/if}-->
+  </div>
+</div>
+
+<style>
+  .goodslist .content {
+    padding: 0 5px;
+  }
+
+  .goodslist .item {
+    width: calc(50% - 10px);
+    float: left;
+    border-radius: 10px;
+    background-color: #fff;
+  }
+
+  .goodslist .item img {
+    width: 100%;
+    height: 100%;
+    border-radius: 10px 10px 0 0;
+  }
+
+  .goodslist .item .desc {
+    height: 36px;
+    line-height: 18px;
+    overflow: hidden;
+    word-break: break-all;
+  }
+
+  .goodslist .empty .item .image {
+    padding: 25% 0;
+    background-color: rgb(238, 248, 248);
+    border-radius: 10px 10px 0 0;
+  }
+
+  .goodslist .empty .iconfont {
+    color: rgb(156, 190, 190);
+    font-size: 80px;
+  }
+
+  .goodslist .list {
+    border-radius: 10px;
+  }
+
+  .goodslist .list .item {
+    padding: 10px;
+    width: calc(100% - 30px);
+  }
+
+  .goodslist .list .item .image,
+  .goodslist .list .item .extra {
+    float: left;
+  }
+
+  .goodslist .list .item .image {
+    width: 35%;
+    height: 35%;
+  }
+
+  .goodslist .list .empty .item .image {
+    padding: 5% 0;
+    border-radius: 4px;
+  }
+
+  .goodslist .list .item .extra {
+    margin-right: 0;
+    margin-top: 0;
+    width: calc(65% - 10px);
+  }
+
+  .goodslist .list .item img {
+    border-radius: 4px;
+  }
+
+  .goodslist .banner .item {
+    width: calc(100% - 10px);
+  }
+</style>
+<script>
+  $(function () {
+    $('#goodslist-{$widget_data.uniqueid} .item:nth-child(1)').css('margin-top', '0');
+    $('#goodslist-{$widget_data.uniqueid} .square .item:nth-child(2)').css('margin-top', '0');
+    $('#goodslist-{$widget_data.uniqueid}').css('background-color', '{$widget_data.bgcolor|default:""}');
+    $('#goodslist-{$widget_data.uniqueid}').css('padding', '{$widget_data.space|default:5}px 0');
+  });
+</script>

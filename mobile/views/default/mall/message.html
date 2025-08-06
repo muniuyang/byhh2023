@@ -1,0 +1,26 @@
+{include file="byhh.header.html"}
+<div id="main" class="clearfix" >
+    <div class="particular">
+        <div class="particular_wrap"> 
+            <p class="{if $notice.done}success{else}defeated{/if}"  >
+                <span style="margin-left:30% ;"></span>
+                <b style="float: left;   font-weight:normal">{$notice.msg}</b>
+                <!--{if !$notice.done}-->
+                <font style="clear: both; display:block; margin:0 0 0 50px;margin-left:40% ;">
+                <!--{foreach from=$notice.links item=item}-->
+               	<a href="{$item.url}" class="mr10">>>{$item.label}</a>
+                <!--{/foreach}-->
+                </font>
+                <!--{/if}-->
+            </p>
+        </div>
+    </div>
+</div>
+<!--{if $notice.redirect}-->
+<script type="text/javascript">
+window.setTimeout(function(){
+	location.href = "{$notice.redirect}";
+}, 500);
+</script>
+<!--{/if}-->
+ 

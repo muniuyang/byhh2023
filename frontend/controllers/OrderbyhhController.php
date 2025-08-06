@@ -47,10 +47,12 @@ class OrderbyhhController extends \common\controllers\BaseUserController
 		if(!in_array(Yii::$app->user->id,Yii::$app->params['createRights'])){//权限判断[START]JchengCustom
 			//die("未授权，不能访问！");
 		}
+
 	}
 	//http://www.byhh.com/orderbyhh/index.html
 	public function actionIndex()
 	{
+
 		$post = Basewind::trimAll(Yii::$app->request->get(), true, ['limit', 'page', 'status']);
 		if(!Yii::$app->request->isAjax) 
 		{
@@ -62,7 +64,9 @@ class OrderbyhhController extends \common\controllers\BaseUserController
 				,jquery.plugins/jquery.form.js,inline_edit.js,jquery.plugins/timepicker/jquery-ui-timepicker-addon.js',
 				'style' =>  'jquery.ui/themes/smoothness/jquery.ui.css,dialog/dialog.css,jquery.plugins/timepicker/jquery-ui-timepicker-addon.css'
 			]);
+
 			$this->params['page'] = Page::seo(['title' => Language::get('order_list')]);
+			//var_dump($this->params['page']);die;
 			$userBills =  UserBillModel::find()->alias('b')->select('u.real_name')
 			->joinWith('user u', false)
 			->orderBy(['b.userid' => SORT_DESC])
@@ -87,6 +91,7 @@ class OrderbyhhController extends \common\controllers\BaseUserController
 					$temps[$k] = $v['real_name'];
 				}
 			}
+
 			$this->params['userBill'] = $temps;
 			return $this->render('../order.byhhindex.html', $this->params);
 		}

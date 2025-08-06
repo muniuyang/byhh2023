@@ -202,7 +202,7 @@ return array(
     'cancel_query' => '撤销检索',
     'checkall'  => '全选',
     'db' => '数据',
-    'default_site_description' => '这是一个用ShopWind架设的网上商城',
+    'default_site_description' => '这是一个网上商城',
     'default_closed_reason' => '商城维护中，暂时关闭，请稍候访问',
     'if_admin' => '是否是管理员',
     'bat_upload' => '批量上传',

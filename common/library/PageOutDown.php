@@ -24,11 +24,11 @@ use common\library\Setting;
 use PHPExcel;
 use PHPExcel_IOFactory;
 /**
- * @Id PageOutDown.php 2023.9.27 $
+ * @Id Pageoutdown.php 2023.9.27 $
  * @author jcheng
  */
  
-class PageOutDown
+class Pageoutdown
 {
 	
 	

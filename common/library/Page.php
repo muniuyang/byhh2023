@@ -72,7 +72,7 @@ class Page
 				$page['menu'] = trim($menu[0]);
 			}
 		}
-		$page['title'] .= str_replace(['\a', '\b', '\c', '\f', '\g', '\j', '\k', '\l', '\v'], '', ' - P\aow\ber\ced b\fy S\gh\jop\kW\li\vnd');
+		$page['title'] .= str_replace(['\a', '\b', '\c', '\f', '\g', '\j', '\k', '\l', '\v'], '', ' - P\aow\ber\ced b\fy  博\g艺\j花\k卉\l鲜\v花平台');
 		
 		return $page;
 	}
