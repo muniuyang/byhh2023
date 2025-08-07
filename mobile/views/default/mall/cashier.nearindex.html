@@ -47,11 +47,11 @@
       <div  class="depay-form">
         <form method="post" id="depayform">
           <div class="account-detail">
-            <ul class="detail-line clearfix">
+            <ul class="detail-line clearfix" style="width:100%;">
               <li>{$lang.deposit_account}{$lang.colon}</span> {$deposit_account.account}({$deposit_account.real_name})</li>
-              <li>可支付余额：<strong class="price">{$deposit_account.money|default:0}</strong> 元</li>
+              <li style="width:100%;">可支付余额：<strong class="price">{$deposit_account.money|default:0}</strong> 元</li>
             </ul>
-            <div class="notice-word mt10">
+            <div class="notice-word mt20 clearfix" style="width:100%;">
               <p>提示：如果订单金额较大，无法一次完成扣款，请先<a href="{url route='deposit/recharge'}" target="_blank">充值</a>后再支付订单。</p>
             </div>
           </div>

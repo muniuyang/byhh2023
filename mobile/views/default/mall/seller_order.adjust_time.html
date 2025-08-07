@@ -1,0 +1,63 @@
+
+<div class="eject_con">
+  <form  method="post" target="iframe" action="{url route='seller_order/adjusttime' order_id=$order.order_id}">
+    <div class="content_line">
+      <div id="warning"></div>
+      {$lang.buyer_name}:&nbsp;&nbsp;{$order.buyer_name|escape}<br />
+      {$lang.order_sn}&nbsp;&nbsp;:<strong class="color8">{$order.order_sn}</strong></div>
+
+    <div class="total_value">
+      <p> <span style="width:80px; display:inline-block">下单时间:</span>
+        <input type="text" name="add_time"  class="add_time_input" value="{$order.add_time|date_format:"%Y.%m.%d %H:%M:%S"}" />
+        <input type="text" class="layui-btn layui-btn-primary pick_date" style="width:70px;height:32px;" value="选择日期">
+          <i calss="layui-icon layui-icon-date "></i>
+        </input>
+      </p>
+      <p class="explain gray mt10 mb10" style="padding-left:80px;padding-right:60px;">下单时间，请不要随意改。</p>
+    </div>
+    <div class="total_value">
+      <p> <span style="width:80px; display:inline-block">订单留言:</span>
+         <textarea id="remark_input" class="text width_normal"  class="text" name="postscript" 
+            value="{$order.postscript|escape}"   style="width:270px;height:60px;" placeholder="2023-09-30号赠送，早上9点前送到">{$order.postscript|escape}</textarea>
+      </p>
+      <p class="explain gray mt10 mb10" style="padding-left:80px;padding-right:60px;">如: "2023-09-30号赠送，早上9点前送到"</p>
+    </div>
+
+    <div class="wrap_btn" style="padding-left:80px;padding-right:60px;">
+      <input type="submit" id="confirm_button" class="btn1" value="{$lang.confirm}" />
+      <input type="button" id="cancel_button" class="btn2" value="{$lang.cancel}" />
+    </div>
+  </form>
+</div>
+<script type="text/javascript">
+$(function(){
+    $('#cancel_button').click(function(){
+        DialogManager.close('seller_order_adjust_fee');
+    });
+
+
+ 
+   $('.pick_date').datepicker({ dateFormat: 'yy-mm-dd',
+      onChange(res){
+        consol.log('change');
+      },
+      onselect:function(){
+        console.log('onselect');
+      },
+      beforeShow:function(){
+        console.log('beforeShow');
+      },
+      onClose:function(res){
+         $(this).val('选择日期');
+         if(res == '选择日期'){
+          return false;
+         }
+         let time = new Date();
+
+         $('.add_time_input').val(res+" "+time.getHours()+':'+time.getMinutes()+':'+time.getSeconds());  
+      }
+    });
+  
+
+});
+</script>

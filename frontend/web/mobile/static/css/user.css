@@ -255,7 +255,7 @@ select {border: 1px solid #d9d9d9;padding:5px;border-radius:3px}
 .content1 .btn .btn1 {width: 75px;height: 29px;border: 0;background:#06F; color:#fff; border-radius:4px;font-weight:normal;font-size: 14px; cursor:pointer}
 .content1 .btn .btn2 {width: 75px;height: 29px;border: 0;background: #666; border-radius:4px;color: #fff;font-weight:normal;font-size: 14px; cursor:pointer}
 /*9*/
-.content_line {width: 400px;overflow: hidden;border-bottom: 1px dotted #ddd;color: #666;padding: 10px;line-height: 20px;}
+.content_line {overflow: hidden;border-bottom: 1px dotted #ddd;color: #666;padding: 10px;line-height: 20px;}
 .dialog_content strong {font-size: 16px;font-weight:normal;}
 .content_line .foll_in {width: 230px;float: left;}
 .content_line .foll_in li {width: 220px;overflow: hidden;}
@@ -721,9 +721,9 @@ span[fieldname=closed].wrong_ico {display: block;width: 11px;height: 11px;overfl
 .transportation span {padding-right: 20px;color: #3f3f3f;}
 .transportation span strong {font-weight: normal;font-size: 12px;color: #3f3f3f;}
 .transportation b {color: #ff4f01;font-size: 16px;}
-.goods {width: 908px;padding: 10px;color: #676767;overflow: hidden;line-height: 20px;}
+.goods {padding: 10px;color: #676767;overflow: hidden;line-height: 20px;}
 
-.search_div {padding:20px 20px; background:#ecf6fd}
+.search_div {padding:0px 0px; background:#ecf6fd}
 .search_div form{ font-size:13px; float:left}
 .search_div .btn {border: 0;width: 61px;height: 27px;background:#06F; color:#fff; cursor:pointer; font-size:13px;}
 .add_ico {background: url(../../../static/images/member/ico.gif) no-repeat 0 -1529px;}
@@ -1105,7 +1105,7 @@ a:hover {color: #108ee9;}
 .depopay .explain span {display: block;position: absolute;width: 45px;height: 46px;background: url(../../../static/images/member/2V0t7Te9SO.png) -1px top no-repeat;left: 0;top: -20px;}
 .depopay .goods-message {margin-top: 20px}
 .depopay .goods-message h3 {font-size: 14px;font-family: Tahoma, Geneva, sans-serif;color: #4D4D4D;margin-right: 40px; font-weight:normal;}
-.depopay .payAmount {position: absolute;right: 30px;top: 45px; line-height:22px;}
+.depopay .payAmount {position: absolute;right: 30px;top: 8px; line-height:22px;}
 .depopay .payAmount strong {line-height: 22px;font-size: 22px;color: #f60;font-family: Tahoma, Geneva, sans-serif;vertical-align: middle; font-weight:normal}
 .depopay .payAmount a {text-decoration: none;color: #0099CC}
 .depopay .payAmount a:hover {color: #f60;text-decoration: underline}
@@ -1119,7 +1119,7 @@ a:hover {color: #108ee9;}
 .depopay .detail-more .arrow-down {background-position: -71px -48px;}
 .depopay .detail-more a {color: #fff;text-decoration: none}
 .depopay .detail-more a:hover {text-decoration: underline}
-.depopay .account-detail, .depopay .paysubmit, .depopay .netpay .netpay-content {margin: 20px;padding: 0 10px 0 10px;}
+.depopay .account-detail, .depopay .paysubmit, .depopay .netpay .netpay-content {margin: 10px; }
 .depopay .paysubmit .pay-password{border:1px  #A7A6AA solid;height:22px; background:none; text-indent:8px;}
 .depopay .account-detail .detail-line {border-bottom: 1px #CFD2D7 dotted;height: 30px;line-height: 30px;}
 .depopay .account-detail .detail-line li {float: left;margin-right: 50px;}

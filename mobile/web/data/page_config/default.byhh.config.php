@@ -26,17 +26,17 @@ return array (
         array (
           0 => 
           array (
-            'ad_image_url' => 'data/files/mall/template/20210902101154967.jpg',
+            'ad_image_url' => '/data/files/mall/template/20210902101154967.jpg',
             'ad_link_url' => 'goods/index.html?id=37',
           ),
           1 => 
           array (
-            'ad_image_url' => 'data/files/mall/template/20210902101146758.jpg',
+            'ad_image_url' => '/data/files/mall/template/20210902101146758.jpg',
             'ad_link_url' => 'goods/index.html?id=35',
           ),
           2 => 
           array (
-            'ad_image_url' => 'data/files/mall/template/20210902101200542.jpg',
+            'ad_image_url' => '/data/files/mall/template/20210902101200542.jpg',
             'ad_link_url' => 'goods/index.html?id=38',
           ),
         ),
@@ -85,15 +85,15 @@ return array (
         'radius' => 'round',
         'ad_image_url' => 
         array (
-          0 => 'data/files/mall/template/20210824125533323.jpeg',
-          1 => 'data/files/mall/template/20210824125542590.jpeg',
-          2 => 'data/files/mall/template/20210824125549707.jpeg',
+          0 => 'data/files/store_2/goods/20250710113259953.jpg.thumb.jpg',
+          1 => 'data/files/store_2/goods/20240606080014567.jpg.thumb.jpg',
+          2 => 'data/files/store_2/goods/20240606101018425.jpg.thumb.jpg',
         ),
         'ad_link_url' => 
         array (
-          0 => '',
-          1 => '',
-          2 => '',
+          0 => 'goods.html?id=460',
+          1 => 'goods.html?id=416',
+          2 => 'goods.html?id=417',
         ),
         'bgcolor' => '#7529f5',
         'space' => '10',
@@ -112,15 +112,15 @@ return array (
         'radius' => 'round',
         'ad_image_url' => 
         array (
-          0 => 'data/files/mall/template/20210824102124757.jpeg',
-          1 => 'data/files/mall/template/20210824102128800.jpeg',
-          2 => 'data/files/mall/template/20210823164309235.jpg',
+          0 => 'data/files/store_2/goods/20240612155646286.jpg.thumb.jpg',
+          1 => 'data/files/store_2/goods/20240615123149338.jpg.thumb.jpg',
+          2 => 'data/files/store_2/goods/20240531215657268.jpg.thumb.jpg',
         ),
         'ad_link_url' => 
         array (
-          0 => 'mobile/goods/index.html?id=42',
-          1 => '2',
-          2 => '3',
+          0 => 'goods.html?id=389',
+          1 => 'goods.html?id=422',
+          2 => 'goods.html?id=403',
         ),
         'bgcolor' => '#ffffff',
         'space' => '10',

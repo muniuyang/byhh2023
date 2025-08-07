@@ -210,4 +210,30 @@ class GselectorController extends \common\controllers\BaseAdminController
 			return Message::result(['list' => $list, 'pagination' => Page::formatPage($page, true, 'basic')]);
 		}
 	}
+	public function actionAppointbuy()
+	{
+		if(!Yii::$app->request->isPost) {
+			$this->params['page'] = Page::seo(['title' => Language::get('gselector')]);
+			return $this->render('../gselector.limitbuy.html', $this->params);
+		}
+		else {
+
+			$post = Basewind::trimAll(Yii::$app->request->post(), true);
+
+			$query = LimitbuyModel::find()->alias('lb')->select('g.goods_id,g.goods_name,g.default_image,g.price,g.default_spec as spec_id')
+            	->joinWith('goods g', false, 'INNER JOIN')
+            	->joinWith('store s', false)
+            	->where(['and', ['s.state' => 1, 'g.if_show' => 1, 'g.closed' => 0], ['<=', 'lb.start_time', Timezone::gmtime()], ['>=', 'lb.end_time', Timezone::gmtime()]]);
+
+			$page = Page::getPage($query->count(), 5, true, $post->page);
+			$list = $query->offset($page->offset)->limit($page->limit)->asArray()->all();
+
+			$promotool = Promotool::getInstance()->build();
+			foreach($list as $key => $value) {
+				$list[$key]['promotion'] = $promotool->getItemProInfo($value['goods_id'], $value['spec_id']);
+			}
+
+			return Message::result(['list' => $list, 'pagination' => Page::formatPage($page, true, 'basic')]);
+		}
+	}
 }

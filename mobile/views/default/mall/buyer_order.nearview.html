@@ -39,7 +39,7 @@
           <!--{/foreach}--> 
 
           <div class="transportation">{$lang.carriage}&nbsp;:&nbsp;<span>{$order.orderExtm.shipping_fee|price_format}<strong>({$order.orderExtm.shipping_name|escape})</strong></span>{$lang.preference}&nbsp;:&nbsp;<span>{$order.discount|price_format}</span>{$lang.total_price}&nbsp;:&nbsp;<b>{$order.order_amount|price_format}</b>&nbsp;&nbsp;&nbsp;&nbsp;
-    		   <a href="javascript:;" uri="{url route='seller_order/adjustfee' order_id=$order.orderExtm.order_id}" dialog_width="450" dialog_title="调整价格" ectype="dialog"  
+    		   <a href="javascript:;" uri="{url route='seller_order/adjustfee' order_id=$order.orderExtm.order_id}" dialog_width="400" dialog_title="调整价格" ectype="dialog"  
     		  dialog_id="seller_order_adjust_fee" class="layui-btn layui-bg-blue"
     		   id="order{$order.orderExtm.order_id}_action_adjust_fee" ><i class="layui-icon layui-icon-edit"></i>调整价格</a> 
 		      </div>
@@ -51,7 +51,7 @@
             <!--{if $order.pay_message}-->
             <li>{$lang.pay_message}&nbsp;:&nbsp;{$order.pay_message|escape}</li>
             <!--{/if}-->
-            <li>{$lang.add_time}&nbsp;:&nbsp;{$order.order_add_time|date_format:"%Y.%m.%d %H:%M:%S"}&nbsp;&nbsp;&nbsp;&nbsp;<a href="javascript:;" uri="{url route='seller_order/adjusttime' order_id=$order.orderExtm.order_id}" dialog_width="450" dialog_title="调整时间" ectype="dialog"  
+            <li>{$lang.add_time}&nbsp;:&nbsp;{$order.order_add_time|date_format:"%Y.%m.%d %H:%M:%S"}&nbsp;&nbsp;&nbsp;&nbsp;<a href="javascript:;" uri="{url route='seller_order/adjusttime' order_id=$order.orderExtm.order_id}" dialog_width="400" dialog_title="调整时间" ectype="dialog"  
       dialog_id="seller_order_adjust_fee"
        id="order{$order.orderExtm.order_id}_action_adjust_fee" class="layui-btn layui-bg-blue" ><i class="layui-icon layui-icon-edit"></i>调整时间</a> </li>
             <!--{if $order.pay_time}-->
@@ -96,8 +96,8 @@
 		<form method="post" id="extro_form">
 			<input type="hidden" name="order_id" value="{$order.orderExtm.order_id}" checked="checked">
 		
-		<a href="JavaScript:;"   dialog_title="修改收货人信息"
-		 ectype="dialog" class="layui-btn layui-bg-blue" uri="{url route='my_address/extro' redirect=$redirect order_id=$order.orderExtm.order_id}" 
+		<a href="JavaScript:;"   dialog_title="修改收货人信息" ectype="dialog" dialog_width="400" class="layui-btn layui-bg-blue" 
+    uri="{url route='my_address/extro' redirect=$redirect order_id=$order.orderExtm.order_id}" 
 		 dialog_id="my_address_extro" name="order_id">
 				  <i class="layui-icon layui-icon-edit"></i>修改地址</a>
 				  <a href="/order_printed/lists.html?order_id={$order.order_id}&ptf=1" class="layui-btn layui-bg-orange" >

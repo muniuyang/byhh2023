@@ -1,0 +1,110 @@
+<div class="eject_con">
+  <div class="add">
+    <div id="warning"></div>
+    <form method="post" action="{$action}" id="address_form" target="iframe">
+      <ul>
+        <li>
+          <h3>收货人(祝?): </h3>
+          <p>
+            <input type="text" class="text width_normal" name="consignee" value="{$extro_info.consignee|escape}"/>
+            <label class="field_message"><span class="field_notice"> </span></label>
+          </p>
+        </li>
+        <li>
+          <h3>{$lang.region}: </h3>
+          <p>
+          <div id="region">
+            <input type="hidden" name="region_id" value="{$extro_info.region_id}" id="region_id" class="mls_id" />
+            <input type="hidden" name="region_name" value="{$extro_info.region_name|escape}" class="mls_names" />
+            <!-- {if $extro_info.region_id} --> 
+            <span>{$extro_info.region_name|escape}</span>
+            <input type="button" value="{$lang.edit}" class="edit_region" />
+            <select style="display:none" onchange="hide_error();">
+              <option>{$lang.select_pls}</option>
+              
+                          {html_options options=$regions}
+                        
+            </select>
+            <!-- {else} -->
+            <select onchange="hide_error();">
+              <option>{$lang.select_pls}</option>
+              
+                          {html_options options=$regions}
+                        
+            </select>
+            <!-- {/if} --> 
+            <b class="field_message" style="font-weight:normal;">
+            <label class="field_notice"></label>
+            </b> </div>
+          </p>
+        </li>
+        <li>
+          <h3>{$lang.address}: </h3>
+          <p>
+            <input type="text" class="text width_normal" name="address" value="{$extro_info.address|escape}"/>
+            <label class="field_message"><span class="field_notice"> </span></label>
+          </p>
+        </li>
+		<li>
+      <h3>落款(赠送人): </h3>
+		  <p>
+		    <input type="text" class="text width_normal" name="signature" value="{$extro_info.signature|escape}"/>
+		    <label class="field_message"><span class="field_notice"> </span></label>
+		  </p>
+		</li>
+		<li>
+			<h3>订货人(结款): </h3>
+			<p>
+				<input type="text" class="text width_normal" name="subscriber" value="{$extro_info.subscriber|escape}"/>
+				<label class="field_message"><span class="field_notice"> </span></label>
+			</p>
+			
+		</li>
+  
+        
+         
+        <li>
+          <h3>{$lang.phone_mob}(1):</h3>
+          <p>
+            <input type="text" class="text width_normal" name="phone_mob" value="{$extro_info.phone_mob}"/>
+            <label class="field_message"><span class="field_notice"> </span></label>
+          </p>
+        </li>
+             <li>
+          <h3>{$lang.phone_mob}(2):</h3>
+          <p>
+            <input type="text" class="text width_normal" name="phone_mob2" value="{$extro_info.phone_mob2}"/>
+            <label class="field_message"><span class="field_notice"> </span></label>
+          </p>
+        </li>
+  <li>
+          <h3>祝福语:</h3>
+          <p>
+            <textarea id="remark_input" class="text width_normal"  class="text" name="content" 
+            value="{$extro_info.content|escape}"   style="width:270px;height:90px;" placeholder="如：”开业大吉，生意兴隆“">{$extro_info.content|escape}</textarea>
+            <label class="field_message"><span class="field_notice"> </span></label>
+          </p>
+        </li> 
+		<li>
+		  <h3>&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;纪念日:</h3>
+		  <p style="line-height: 24px;">
+			  <select class="querySelect" name="what_day">
+				<option value="">--选择纪念日--</option>
+				{html_options  values=$whatdays output=$whatdays selected=$extro_info.what_day}
+			  </select>
+		  </p>
+		</li>
+      </ul>
+      <div class="submit">
+		  <input type="hidden" name="order_id" value="{$extro_info.order_id}" />
+      	<input type="hidden" name="redirect" value="{$redirect}" />
+        <input type="submit" class="btn" value="{$lang.submit}" />
+      </div>
+    </form>
+  </div>
+</div>
+<script type="text/javascript">
+$(function(){
+    regionInit("region");
+});
+</script>

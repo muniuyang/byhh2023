@@ -336,6 +336,39 @@ return array (
         'space' => '5',
       ),
     ),
+    '_widget_698' => 
+    array (
+      'name' => 'df_limitbuy',
+      'options' => NULL,
+    ),
+    '_widget_589' => 
+    array (
+      'name' => 'df_goodsappoint',
+      'options' => 
+      array (
+        'direction' => 'vertical',
+        'source' => 'choice',
+        'items' => '463,464',
+        'quantity' => '0',
+        'txtcolor' => '#2bfcd5',
+        'bgcolor' => '',
+        'space' => '0',
+      ),
+    ),
+    '_widget_657' => 
+    array (
+      'name' => 'df_goodsappoint',
+      'options' => 
+      array (
+        'direction' => 'vertical',
+        'source' => 'choice',
+        'items' => '466,42',
+        'quantity' => '0',
+        'txtcolor' => '#fc2b34',
+        'bgcolor' => '',
+        'space' => '5',
+      ),
+    ),
   ),
   'config' => 
   array (
@@ -358,6 +391,25 @@ return array (
       14 => '_widget_724',
       15 => '_widget_997',
       16 => '_widget_811',
+      17 => '_widget_698',
+      18 => '_widget_589',
+      19 => '_widget_657',
+    ),
+  ),
+  'tmp' => 
+  array (
+    '_widget_589' => 
+    array (
+      'options' => 
+      array (
+        'direction' => 'vertical',
+        'source' => 'choice',
+        'items' => '463,464',
+        'quantity' => '0',
+        'txtcolor' => '#2bfcd5',
+        'bgcolor' => '',
+        'space' => '0',
+      ),
     ),
   ),
 );

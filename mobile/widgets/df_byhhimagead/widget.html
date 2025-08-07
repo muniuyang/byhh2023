@@ -4,7 +4,7 @@
     <div class="hd webkit-box {if !$widget_data.title}hidden{/if}">{$widget_data.title} {if $widget_data.label}<span class="box-align-center">{$widget_data.label}</span>{/if}</div>
     <div class="bd webkit-box">
       <!--{foreach from=$widget_data.images item=item}-->
-      <div class="item"><a href="{$item.link|url_format}"><img class="block" src="{$item.url|url_format}"></a></div>
+      <div class="item"><a href="{$item.link|url_format}"><img class="block" src="/{$item.url}"></a></div>
       <!--{/foreach}-->
     </div>
     <!--{else}-->

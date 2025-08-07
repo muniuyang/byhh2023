@@ -14,8 +14,7 @@
                     <input type="text" class="text1 width2" name="add_time_from" id="add_time_from" value="{$smarty.get.add_time_from}"/>
                     &#8211;
                     <input type="text" class="text1 width2" name="add_time_to" id="add_time_to" value="{$smarty.get.add_time_to}"/>
-                    <span>{$lang.order_sn}:</span>
-                    <input type="text" class="text1 width_normal" name="order_sn" value="{$smarty.get.order_sn|escape}">
+                     
                     <input type="submit" class="btn" value="{$lang.search}" />
                   </form>
                   <!--{if $filtered}--> 
@@ -53,17 +52,18 @@
               </tr>
               <tr class="line-hd">
                 <th colspan="8"> <p> <input type="checkbox" value="{$order.order_id}" class="checkitem" {if $order.status neq Def::ORDER_PENDING && $order.status neq Def::ORDER_SUBMITTED}disabled="disabled"{/if} />
-                    <label>{$lang.order_sn}：</label>
-                    {$order.order_sn}
+                   
                     <label>{$lang.add_time}：</label>
-                    {$order.add_time|date_format:"%Y.%m.%d %H:%M:%S"} <a href="{url route='store/index' id=$order.seller_id}" target="_blank" style="margin-left:15px;">卖家：<span style="font-weight: bold;color:red;">[{$order.seller_name|escape}]</span></a> <a target="_blank" href="{url route='my_message/send' to_id=$order.seller_id}" class="email"></a> </p>
+                    {$order.add_time|date_format:"%Y.%m.%d %H:%M:%S"} <a href="{url route='store/index' id=$order.seller_id}" target="_blank" style="margin-left:15px;">卖家：<span style="font-weight: bold;color:red;">[{$order.seller_name|escape}]</span></a> 
+                    <a target="_blank" href="{url route='my_message/send' to_id=$order.seller_id}" class="email"></a> </p>
                 </th>
               </tr>
               
               <!--{foreach from=$order.orderGoods item=goods name=fe_goods}-->
               <tr class="line line-blue {if $smarty.foreach.fe_goods.last}last_line{/if}">
-                <td valign="top" class="first clearfix"><div class="pic-info float-left"> <a href="{url route='goods/index' id=$goods.goods_id}" target="_blank"><img src="{$goods.goods_image|url_format}" width="50" height="50" /></a> </div>
-                  <div class="float-left"> <!--txt-info -->
+                <td valign="top" class="first clearfix">
+                  <div class="pic-info float-left" style="width:32%;"> <a href="{url route='goods/index' id=$goods.goods_id}" target="_blank"><img src="{$goods.goods_image|url_format}" width="50" height="50" /></a> </div>
+                  <div class="float-left" style="width:50%;">  <!--txt-info -->
                     <div class="txt"> <a href="{url route='goods/index' id=$goods.goods_id}" target="_blank">{$goods.goods_name}</a> </div>
                     <!--{if $goods.specification}-->
                     <p class="gray-color mt5">{$goods.specification}</p>
