@@ -106,7 +106,24 @@ class GselectorController extends \common\controllers\BaseAdminController
 		
 		return Message::result(array_values($list));
 	}
-
+	/*jcheng自定义*/
+	public function actionAppointmcate()
+	{
+	 
+		if(!Yii::$app->request->isPost) {
+			$this->params['page'] = Page::seo(['title' => Language::get('appointmcate')]);
+			return $this->render('../gselector.appointmcate.html', $this->params);
+		}
+		else {
+			$post = Basewind::trimAll(Yii::$app->request->post(), true);
+			$query = GcategoryModel::find()->select('cate_id,cate_name,parent_id')->where([ 'if_show' => 1]);
+			$page = Page::getPage($query->count(), 5, true, $post->page);
+			$list = $query->offset($page->offset)->limit($page->limit)->asArray()->all();
+			//var_dump($list);
+			return Message::result(['list' => $list, 'pagination' => Page::formatPage($page, true, 'basic')]);
+		}
+		
+	}
 	public function actionArticle()
 	{
 		if(!Yii::$app->request->isPost) {
@@ -210,6 +227,7 @@ class GselectorController extends \common\controllers\BaseAdminController
 			return Message::result(['list' => $list, 'pagination' => Page::formatPage($page, true, 'basic')]);
 		}
 	}
+	/*jcheng 自定义*/
 	public function actionAppointbuy()
 	{
 		if(!Yii::$app->request->isPost) {

@@ -64,6 +64,9 @@ class UserController extends \common\controllers\BaseUserController
 
     public function actionIndex()
     {
+    	if(in_array(Yii::$app->user->id,Yii::$app->params['createRights'])){//权限判断[START]JchengCustom
+			return $this->redirect(['orderbyhh/index', 'from' => 'ucenter']);
+		}
 		// 在用户中心显示积分
 		if(IntegralSettingModel::getSysSetting('enabled')) 
 		{
@@ -197,8 +200,8 @@ class UserController extends \common\controllers\BaseUserController
 			UserModel::afterLogin($identity);
 			/**********************[START]JchengCustom with local**********************/
 			if($post->username == '开业零售'){
-				//$post->redirect = Url::toRoute(['orderbyhh/index', 'from' => 'login']);  
-				$post->redirect = Url::toRoute(['/index', 'from' => 'login']);  
+				$post->redirect = Url::toRoute(['orderbyhh/index', 'from' => 'login']);  
+				//$post->redirect = Url::toRoute(['/index', 'from' => 'login']);  
 			}
 			/**********************[END]JchengCustom with local**********************/
 			return Message::display(Language::get('login_successed'), $post->redirect);
@@ -207,6 +210,8 @@ class UserController extends \common\controllers\BaseUserController
 
     public function actionRegister()
     {
+
+    	return Message::warning($model->errors,$redirect);
 		if (!Yii::$app->user->isGuest) {
 			return $this->redirect(['user/index']);
         }
@@ -255,9 +260,15 @@ class UserController extends \common\controllers\BaseUserController
          			return Message::display(Language::get('register_successed'), $post->redirect);
         		} else { /* validate ok but login failed... */}
 			} else {
-
-				//var_dump($model->errors);die();
-				return Message::warning($model->errors);
+				
+				if($post->frm == 'register_form'){
+					$redirect = Url::toRoute('user/register');
+				}else{
+					$redirect = $post->redirect;
+				}
+				var_dump($model->errors);
+				var_dump($this->params['notice']);die();
+				return Message::warning($model->errors,$redirect);
 			}
 		}
     }

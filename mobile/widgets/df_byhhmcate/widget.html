@@ -1,13 +1,14 @@
 <div class="categorybox relative clearfix" id="categorybox-{$widget_data.uniqueid}">
     <ul class="content">
-        <li class="item inline-block ml10 mr10 pt10 pb10 fs14 home"><span>首页</span></li>
-        <!--{foreach from=$widget_data.list item=item}-->
-        <li class="item inline-block ml10 mr10 pt10 pb10 fs14"><a href="{url route='byhh/index' cid=$item.cate_id}"><span>{$item.cate_name}</span></a></li>
+        <li class="item inline-block ml10 mr10 pt10 pb10 fs14"><a href="{url route='mindex/index' tab=0}"><span>首页</span></a></li>
+        <!--{foreach from=$widget_data.list item=item key=index}-->
+        <li class="item inline-block ml10 mr10 pt10 pb10 fs14 "><a href="{url route='goodslist/index' tab=$index+1 cate_id=$item.cate_id}"><span>{$item.cate_name}</span></a></li>
         <!--{foreachelse}-->
-        <li class="item inline-block ml10 mr10 pt10 pb10 fs14"><span>绿植</span></li>
-        <li class="item inline-block ml10 mr10 pt10 pb10 fs14"><span>花篮</span></li>
-        <li class="item inline-block ml10 mr10 pt10 pb10 fs14"><span>鲜花</span></li>
-        <li class="item inline-block ml10 mr10 pt10 pb10 fs14"><span>资材</span></li>
+        <li class="item inline-block ml10 mr10 pt10 pb10 fs14"><a href="{url route='goodslist/index' tab=1 cate_id=22}"><span>大型绿植</span></a></li>
+        <li class="item inline-block ml10 mr10 pt10 pb10 fs14"><a href="{url route='goodslist/index' tab=2 cate_id=62}"><span>花篮</span></a></li>
+        <li class="item inline-block ml10 mr10 pt10 pb10 fs14"><a href="{url route='goodslist/index' tab=3 cate_id=64}"><span>花束</span></a></li>
+        <li class="item inline-block ml10 mr10 pt10 pb10 fs14"><a href="{url route='goodslist/index' tab=3 cate_id=65}"><span>鲜花</span></a></li>
+        <li class="item inline-block ml10 mr10 pt10 pb10 fs14"><a href="{url route='goodslist/index' tab=4 cate_id=1313}"><span>小型绿植</span></a></li>
         <!--{/foreach}-->
     </ul>
      
@@ -29,7 +30,10 @@
         border-bottom: 2px transparent solid;
         color: #fff;
     }
-
+.categorybox .item a {
+        
+        color: #fff;
+    }
     .categorybox .item.selected {
         border-color: #fff;
     }
@@ -63,7 +67,7 @@
         /* {/if} */
 
         $("#categorybox-{$widget_data.uniqueid}").find('li').removeClass('selected');
-        $("#categorybox-{$widget_data.uniqueid}").find('li:not(:hidden):first').addClass('selected');
+        $("#categorybox-{$widget_data.uniqueid}").find('li').eq({$widget_data.tab}).addClass('selected');
 
         /* {if $widget_data.txtbold} */
         $("#categorybox-{$widget_data.uniqueid} .item.selected").css('font-weight', 'bold');

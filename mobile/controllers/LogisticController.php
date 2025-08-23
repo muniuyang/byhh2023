@@ -12,23 +12,19 @@
 namespace mobile\controllers;
 
 use Yii;
-//use yii\web\Response;
 use yii\helpers\ArrayHelper;
-use yii\helpers\Url;
 
-use common\models\GoodsModel;
-use common\models\GcategoryModel;
-
- 
-use common\library\Resource;
+use common\library\Basewind;
+use common\library\Language;
+use common\library\Message;
 use common\library\Page;
-use common\library\Weixin;
+
 /**
- * @Id ByhhController.php 2025.08.04 $
+ * @Id LogisticController.php 2018.6.19 $
  * @author mosir
  */
 
-class ByhhController extends \common\controllers\BaseMallController
+class LogisticController extends \common\controllers\BaseMallController
 {
 	/**
 	 * 初始化
@@ -38,19 +34,19 @@ class ByhhController extends \common\controllers\BaseMallController
 	public function init()
 	{
 		parent::init();
-        $this->view  = Page::setView('mall');
-        $this->params = ArrayHelper::merge($this->params, [
-             
-        ]);
+		$this->view  = Page::setView('mall');
+		$this->params = ArrayHelper::merge($this->params, Page::getAssign('mall'));
 	}
-
+	
     public function actionIndex()
     {
-
-		$this->params['page'] = Page::seo();
-		$this->params['page']['title']='博艺花卉内部订购平台';
-
-        return $this->render('../byhh.index.html', $this->params);
-    }
-  
+		$post = Basewind::trimAll(Yii::$app->request->get(), true, ['template_id', 'store_id', 'city_id']);
+	
+		$model = new \frontend\models\LogisticForm();
+		if(!($list = $model->formData($post))) {
+			return Message::warning(Language::get('loaddata_fail'));
+		}
+		
+		return Message::result($list);
+	}
 }

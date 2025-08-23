@@ -1,26 +1,88 @@
 {include file="byhh.header.html"}
-<div id="main" class="clearfix" >
-    <div class="particular">
-        <div class="particular_wrap"> 
-            <p class="{if $notice.done}success{else}defeated{/if}"  >
-                <span style="margin-left:30% ;"></span>
-                <b style="float: left;   font-weight:normal">{$notice.msg}</b>
-                <!--{if !$notice.done}-->
-                <font style="clear: both; display:block; margin:0 0 0 50px;margin-left:40% ;">
-                <!--{foreach from=$notice.links item=item}-->
-               	<a href="{$item.url}" class="mr10">>>{$item.label}</a>
-                <!--{/foreach}-->
-                </font>
-                <!--{/if}-->
-            </p>
+    <div class="layui-container" style="margin-top: 100px;">
+        <div class="layui-row">
+            <div class="layui-col-md6 layui-col-md-offset3">
+                <div id="redirect-box" class="layui-card">
+                    <div class="layui-card-header">跳转提示</div>
+                    <div class="layui-card-body">
+                        <div id="success-box" style="display: none;">
+                            <i class="layui-icon layui-icon-ok-circle" style="font-size: 40px; color: #5FB878;"></i>
+                            <p style="margin-left: 15px; font-size: 16px;">{$notice.msg}，<i id="countdown" class="countdown">3</i>秒后自动跳转...</p>
+                        </div>
+                        <div id="fail-box" style="display: none;">
+                            <i class="layui-icon layui-icon-close-fill" style="font-size: 40px; color: #FF5722;"></i>
+                            <span style="margin-left: 15px; font-size: 16px;">操作失败，<i id="countdown" class="countdown">3</i>秒后返回...</span>
+                        </div>
+                        <div class="layui-progress layui-progress-big" style="margin-top: 20px;">
+                            <div id="progress-bar" class="layui-progress-bar" lay-percent="0%"></div>
+                        </div>
+                        <div class="layui-card-body">
+                            <p>如果您的浏览器没有自动跳转，<a href="{$notice.redirect}" class="layui-btn layui-btn-primary layui-btn-sm">请点击这里</a><a href="javascript:viod(0)" id="cancelJump" class="layui-btn layui-btn-primary layui-btn-sm">取消跳转</a></p>
+                        </div>
+                    </div>
+                </div>
+            </div>
         </div>
     </div>
-</div>
-<!--{if $notice.redirect}-->
-<script type="text/javascript">
-window.setTimeout(function(){
-	location.href = "{$notice.redirect}";
-}, 500);
-</script>
-<!--{/if}-->
+
+     <script type="text/javascript">
+        // 使用示例
+        // 成功跳转示例
+        var progressInterval = 0;
+        var timeLeft = 3;
+        var rslt = "{$notice.done}";
+        var redirect = "{$notice.redirect}";
+        // 失败跳转示例
+        if(rslt){
+            showRedirectMessage(true, redirect);
+        }else{
+            showRedirectMessage(false);
+        }
+        $('.countdown').text(timeLeft); 
+         // 可以添加一个取消跳转的按钮
+        $('#cancelJump').on('click', function(){
+            clearInterval(progressInterval);
+            layer.msg('已取消自动跳转');
+        });
+        function showRedirectMessage(isSuccess, redirectUrl) {
+            layui.use(['layer', 'element'], function() {
+                var element = layui.element;
+                var $ = layui.$;
+                
+                // 显示对应的消息框
+                if (isSuccess) {
+                    $('#success-box').show();
+                    $('#fail-box').hide();
+                } else {
+                    $('#success-box').hide();
+                    $('#fail-box').show();
+                }
+                
+                // 进度条动画
+                progressInterval = setInterval(function() {
+                    timeLeft--;
+                    $('.countdown').text(timeLeft);
+                    var percent = (3 - timeLeft) / 3 * 100;
+                    $('#progress-bar').css('width', percent + '%');
+                    $('#progress-bar').attr('lay-percent', percent.toFixed(0) + '%');
+                    element.progress('progress-bar');
+                    if (timeLeft <= 0) {
+                        clearInterval(progressInterval);
+                        if (isSuccess && redirectUrl) {
+                            window.location.href = redirectUrl;
+                        } else {
+                            history.back();
+                        }
+                    }
+                }, 1000);
+            });
+        }
+    </script>
+
+
+
+
+
+
+
  

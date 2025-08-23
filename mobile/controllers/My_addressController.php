@@ -20,7 +20,7 @@ use common\models\AddressModel;
 use common\models\RegionModel;
 use common\models\OrderExtmModel;
 use common\models\UserModel;
-
+use common\library\Timezone;
 use common\library\Basewind;
 use common\library\Language;
 use common\library\Message;
@@ -219,7 +219,144 @@ class My_addressController extends \common\controllers\BaseUserController
 			return Message::popSuccess(Language::get('address_add_successed'), urldecode(Yii::$app->request->post('redirect', Url::toRoute('my_address/index'))));
 		}
 	}
+	/**
+	 * 创建、更新客户地址（纯净地址信息）
+	 */
+	public function actionCaddress()
+	{
+		if(!Yii::$app->request->isPost)
+		{
+			$post = Basewind::trimAll(Yii::$app->request->get(), true);
+			$this->params['action'] = Url::toRoute(['my_address/caddress', 'from' => 'address']);
+			$redirect = Url::toRoute(['my_address/addresss']);
+			$this->params['regions'] = \common\models\RegionModel::find()->select('region_name')
+			->where(['parent_id' => 0, 'if_show' => 1])->indexBy('region_id')->column();
+			$this->params['address'] = ['defaddr'=>1,'region_id'=>'284','region_name'=>'湖北省 武汉'];
+			$orderInfo = \common\models\AddressCustomerModel::find()->alias('o')
+			->select('o.*')
+			->where(['o.id' => $post->id])->asArray()->one();
+			//var_dump($orderInfo);die;
+			$this->params = array_merge($this->params, ['redirect' => $redirect]);
+			$this->params = array_merge($this->params, ['address_info' => $orderInfo, 'redirect' => $redirect]);
+			return $this->render('../order_printed.addressform.html', $this->params);
+		}else{
+			$post = Basewind::trimAll(Yii::$app->request->post(), true);
+			if(!$post->consignee){
+				return Message::popWarning("请输入收货人!");
+			}
+			if(!$post->address){
+				return Message::popWarning("请输入详细地址!");
+			}
+			if($res = preg_match_all("/云尚|蓝宝石|红宝石|金座|银座|老三镇|金正茂|金昌|翡翠座|小商品|中心商城|品牌|大夹街|暨济商城|新街/",$post->address,$matches)){
+				$regions = ['周边','云尚','蓝宝石','红宝石','金座','银座','老三镇','金正茂','金昌','翡翠座','小商品','中心商城','品牌','大夹街','暨济商城','新街'];
+				$region_no = array_search($matches[0][0], $regions);//找数组里指定值的键
+				//var_dump($res,$region_no,$matches);
+			}else{
+				$region_no = 0;
+			}
+			if(in_array(Yii::$app->user->id,Yii::$app->params['createRights'])){//权限判断[START]JchengCustom
+			
+				$customerModel = \common\models\AddressCustomerModel::find()->alias('o');
+				if($post->id){ //更新
+					$customerModel = $customerModel->where(['o.id' => $post->id]);
+				}else{//插入
+					$customerModel = $customerModel->where(['o.consignee' => $post->consignee]);
+					$customerModel = $customerModel->andWhere(['like','o.add_date' , @date('Y')]);
+				}
+				//var_dump($customerModel->createCommand()->getRawSql());die('33');
+				$customerModel = $customerModel->one();
+				if(!$customerModel){
+					$customerModel = new \common\models\AddressCustomerModel();
+				}
+				$customerModel->consignee = $post->consignee;
+				$customerModel->region_id = $post->region_id;
+				$customerModel->region_name = $post->region_name;
+				$customerModel->address = $post->address;
+				$customerModel->zipcode = $post->zipcode;
+				$customerModel->phone_mob = $post->phone_mob;
+				$customerModel->phone_mob2 = $post->phone_mob2;
+				
+				$customerModel->region_no = $region_no;
+				$customerModel->add_date = @date('Y-m-d',time());
+				$customerModel->up_time = time();//-8*3600;
+				if(!$customerModel->save()){
+					return Message::popWarning($customerModel->errors);
+				}
+			}else{
+				return Message::popWarning("权限不够");
+			}
+			return Message::popSuccess("添加成功", urldecode(Yii::$app->request->post('redirect', Url::toRoute('my_address/addresss'))));
+		}
+	}
+	/**
+	 *  地址列表（纯净地址信息）
+	 */
+	public function actionAddresss()
+	{
+		$post = Basewind::trimAll(Yii::$app->request->get(), true, ['limit', 'page', 'status']);
+		if(!Yii::$app->request->isAjax) 
+		{
+			$this->params['page'] = Page::seo(['title' => Language::get('adresses')]);
+			$this->params['_foot_tags'] = Resource::import([
+				'script' => 'jquery.ui/jquery.ui.js,jquery.ui/i18n/' . Yii::$app->language . '.js,jquery.plugins/jquery.validate.js,dialog/dialog.js,mlselection.js,user.js
+				,jquery.plugins/jquery.form.js,inline_edit.js,jquery.plugins/timepicker/jquery-ui-timepicker-addon.js',
+				'style' =>  'jquery.ui/themes/smoothness/jquery.ui.css,dialog/dialog.css,jquery.plugins/timepicker/jquery-ui-timepicker-addon.css'
+			]);
+			$this->params['filtered'] = $this->getConditions($post);
+			$this->params['defaultMarkets']   = ['周边','云尚','蓝宝石','红宝石','金座','银座','老三镇','金正茂','金昌','翡翠座','小商品','中心商城','品牌','大夹街','暨济商城','新街'];
+			$this->params['defaultisDefects'] = ['不完整地址','完整地址'];
+			return $this->render('../printed.address.html', $this->params);
+		}
+		else
+		{
+
+			//$sql = 'SELECT id from(SELECT * FROM swd_address_customer order by up_time desc) customers group by consignee ORDER BY up_time DESC;';
+			//$query =  Yii::$app->db->createCommand($sql, [':id' => 1]);//->queryAll();
+			//var_dump($query->getRawSql());die;
+			$query =\common\models\AddressCustomerModel::find()->alias('o')->select('o.*');
+			if($post->search_name){
+				$query = $query->andWhere(['like','o.consignee' , $post->search_name]);
+			}
+			if($post->region_no!='' && $post->region_no>=0){
+				$query = $query->andWhere(['=','o.region_no' , $post->region_no]);
+			}
+			if(isset($post->isDefect) && $post->isDefect!='' && in_array($post->isDefect,[0,1])){
+				$query = $query->andWhere(['=','o.is_defect' , $post->isDefect]);
+			}
+			//$query = $query->groupBy('o.consignee');
+			$query = $query->orderBy(['o.up_time' => SORT_DESC,'o.id' => SORT_DESC]);
+			//var_dump($post,$query->createCommand()->getRawSql());die;
+			$page = Page::getPage($query->count(), $post->limit ? $post->limit : 15);
+			$list = $query->offset($page->offset)->limit($page->limit)->asArray()->all();
+			foreach ($list as $key => $value)
+			{
+				$list[$key]['up_time'] = Timezone::localDate('Y-m-d H:i:s', $value['up_time']);
+			}
+			return Json::encode(['code' => 0, 'msg' => '', 'count' => $query->count(), 'data' => $list]);
+		}
 	
+	}
+
+		/**
+	 * 修改订单价格
+	 */
+	public function actionEditcol()
+	{
+		$get = Basewind::trimAll(Yii::$app->request->get(), true);
+		$post = Basewind::trimAll(Yii::$app->request->get(), true, ['id', 'is_defect','is_inline']);
+		if(in_array($post->column, ['is_defect','is_inline'])) 
+		{
+		  	$customerModel = \common\models\AddressCustomerModel::find()->where(['id'=>$post->id])->one();
+			
+		  	$customerModel->{$post->column} = $post->value;
+		  	if(!($status = $customerModel->save())) {
+		  		return Message::warning($customerModel->errors);
+		  	}
+		  	return Message::display(Language::get('edit_ok'));
+		}else{
+			 
+		}
+	}
 	public function actionEdit()
     {
 		$addr_id = intval(Yii::$app->request->get('addr_id'));
@@ -369,7 +506,18 @@ class My_addressController extends \common\controllers\BaseUserController
 			return Message::popSuccess(Language::get('address_edit_successed'), urldecode(Yii::$app->request->post('redirect', Url::toRoute('my_address/index'))));
 		}
 	}
-	
+	private function getConditions($post, $query = null)
+	{	
+		if($query === null) {
+			foreach(array_keys(ArrayHelper::toArray($post)) as $field) {
+				if(in_array($field, ['search_name', 'status', 'add_time_from', 'add_time_to', 'order_amount_from', 'order_amount_to'])) {
+					return true;
+				}
+			}
+			return false;
+		}
+	}
+
 	public function actionSearch()
 	{
 		 

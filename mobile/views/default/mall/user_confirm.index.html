@@ -1,0 +1,333 @@
+{include file="byhh.header.html"}
+ <style>
+
+        body {
+            background-color: #f8f8f8;
+            padding: 15px;
+            font-family: "Microsoft YaHei", sans-serif;
+        }
+        .card-container {
+            width:100%;
+            margin-top: 90px;
+        }
+        .congrat-card {
+            background: linear-gradient(135deg, #f9d423 0%, #ff4e50 100%);
+            border-radius: 15px;
+            padding: 20px;
+            box-shadow: 0 5px 15px rgba(0, 0, 0, 0.1);
+            color: #fff;
+            text-align: center;
+            margin: 20px 0;
+            position: relative;
+            overflow: hidden;
+        }
+        .congrat-card:before {
+            content: "";
+            position: absolute;
+            top: -10px;
+            left: -10px;
+            right: -10px;
+            bottom: -10px;
+            background: linear-gradient(135deg, rgba(255,255,255,0.1) 0%, rgba(255,255,255,0) 100%);
+            z-index: -1;
+            border-radius: 20px;
+        }
+        .congrat-card h2 {
+            font-size: 18px;
+            font-weight: bold;
+            margin: 15px 0;
+            text-shadow: 1px 1px 3px rgba(0,0,0,0.3);
+        }
+        .congrat-card p {
+            font-size: 16px;
+            line-height: 1.6;
+            margin: 10px 0;
+        }
+        .congrat-date {
+            font-size: 14px;
+            margin-top: 20px;
+            opacity: 0.9;
+        }
+    
+        .edit-btn {
+            position: absolute;
+            top: 10px;
+            right: 10px;
+            color: #fff;
+            font-size: 16px;
+            cursor: pointer;
+            z-index: 10;
+        }
+        .decoration {
+            position: absolute;
+            opacity: 0.2;
+        }
+        .decoration-1 {
+            top: 10px;
+            left: 10px;
+            font-size: 40px;
+        }
+        .decoration-2 {
+            bottom: 10px;
+            right: 10px;
+            font-size: 40px;
+        }
+        .card-content-letter {
+            letter-spacing: 5px;
+            
+        }
+
+        .user-cinfo {
+            background: #fff;
+            border-radius: 10px;
+            padding: 15px;
+            box-shadow: 0 3px 10px rgba(0, 0, 0, 0.08);
+        }
+        .user-cinfo h3 {
+            font-size: 18px;
+            margin-bottom: 15px;
+            color: #333;
+            border-bottom: 1px solid #eee;
+            padding-bottom: 10px;
+        }
+        .user-cinfo-item {
+            display: flex;
+            margin-bottom: 10px;
+        }
+        .user-cinfo-label {
+            width: 80px;
+            color: #666;
+            font-size: 14px;
+        }
+        .user-cinfo-content {
+            flex: 1;
+            color: #333;
+            font-size: 14px;
+        }
+
+
+    </style>
+<div class="card-container">
+    <!-- 开业大吉卡片 -->
+  <div class="user-cinfo">
+    <h3 id="card-title" >订单配送确认单【详情】</h3>
+    <div class="congrat-card">
+        
+        <i class="layui-icon edit-btn" id="edit-card">编辑</i>
+        <div class="decoration decoration-1">🎉</div>
+        <div class="decoration decoration-2">🎊</div>
+        
+        <p  style="text-align:left;margin-top:0;">祝: <span id="card-name">XXX</span></p>
+        <p  class="card-content-letter"> <span id="card-content"> 开业大吉，生意兴隆 ！</span></p>
+        <p  style="text-align:right"> <span id="card-wish">XXX</span> 贺</p>
+        <div class="congrat-date card-content-letter">配送时间:<span id="card-date">2023年10月1日</span></div>
+    </div>
+  </div>
+  <!-- 用户信息 -->
+  <div class="congrat-card user-cinfo" >
+      <h3>收货方信息</h3><i class="layui-icon edit-btn" style="color:#01AAED" id="edit-info">编辑</i>
+      <div class="user-cinfo-item">
+          <div class="user-cinfo-label">姓名：</div>
+          <div class="user-cinfo-content" id="user-name">张三</div>
+      </div>
+      <div class="user-cinfo-item">
+          <div class="user-cinfo-label">联系电话：</div>
+          <div class="user-cinfo-content" id="user-phone">13800138000</div>
+      </div>
+      <div class="user-cinfo-item">
+          <div class="user-cinfo-label">收货地址：</div>
+          <div class="user-cinfo-content" id="user-address">黄金会员</div>
+      </div>
+      <div class="user-cinfo-item">
+          <div class="user-cinfo-label">配送时间：</div>
+          <div class="user-cinfo-content" id="user-date">¥5,880.00</div>
+      </div>
+      <div class="user-cinfo-item">
+          <div class="user-cinfo-label">落款(赠|贺)：</div>
+          <div class="user-cinfo-content" id="user-wish">¥5,880.00</div>
+      </div>
+      <div class="user-cinfo-item">
+          <div class="user-cinfo-label">备注：</div>
+          <div class="user-cinfo-content" id="user-note">常购买服装类商品，偏好休闲风格</div>
+      </div>
+  </div>
+<!-- 编辑卡片内容的表单 -->
+
+<div id="edit-form2" style="display: none; padding: 20px;">
+    <form class="layui-form">
+        <div class="layui-form-item">
+            <label class="layui-form-label">收货者(祝)</label>
+            <div class="layui-input-block">
+                <input type="text" id="edit-name2" placeholder="请输入收货者(祝)称" autocomplete="off" class="layui-input" value="天龙纺织">
+            </div>
+        </div>
+        <div class="layui-form-item">
+            <label class="layui-form-label">收货地址</label>
+            <div class="layui-input-block">
+                <input type="text" class="layui-input editable" id="edit-address2" value="云尚A区045号">
+            </div>
+        </div>
+        <div class="layui-form-item">
+          <label class="layui-form-label">联系电话</label>
+          <div class="layui-input-block">
+              <input type="text" class="layui-input editable" id="edit-phone2" value="13800138000">
+          </div>
+        </div>
+       
+        <div class="layui-form-item">
+            <label class="layui-form-label">备注</label>
+            <div class="layui-input-block">
+                <input type="text" class="layui-input editable" id="edit-note2" value="请在工作日送货">
+            </div>
+        </div>
+        <div class="layui-form-item">
+            <label class="layui-form-label">配送时间</label>
+            <div class="layui-input-block">
+                <input type="text" id="edit-date2" placeholder="请输入配送日期时间" autocomplete="off" class="layui-input pick_date" value="2023-10-1 13:23::23">
+            </div>
+        </div>
+        <div class="layui-form-item">
+            <label class="layui-form-label">落款(赠/贺)</label>
+            <div class="layui-input-block">
+                <input type="text" id="edit-wish2" placeholder="请输入赠送者(赠/贺)名称" autocomplete="off" class="layui-input" value="博艺花卉">
+            </div>
+        </div>
+        <div class="layui-form-item">
+            <div class="layui-input-block">
+                <button type="button" class="layui-btn" id="save2-edit">保存修改</button>
+                <button type="button" class="layui-btn layui-btn-primary" id="cancel2-edit">取消</button>
+            </div>
+        </div>
+    </form>
+</div>
+ 
+
+<!-- 编辑卡片内容的表单 -->
+<div id="edit-form" style="display: none; padding: 20px;">
+    <form class="layui-form">
+         
+        <div class="layui-form-item">
+            <label class="layui-form-label">收货者(祝)</label>
+            <div class="layui-input-block">
+                <input type="text" id="edit-name" placeholder="请输入收货者(祝)称" autocomplete="off" class="layui-input" value="天龙纺织">
+            </div>
+        </div>
+        <div class="layui-form-item">
+            <label class="layui-form-label">贺词内容</label>
+            <div class="layui-input-block">
+                <textarea id="edit-content" placeholder="请输入贺词内容" class="layui-textarea">恭贺贵店开张大吉，生意兴隆通四海，财源茂盛达三江！</textarea>
+            </div>
+        </div>
+        <div class="layui-form-item">
+            <label class="layui-form-label">赠送者(赠/贺)</label>
+            <div class="layui-input-block">
+                <input type="text" id="edit-wish" placeholder="请输入赠送者(赠/贺)名称" autocomplete="off" class="layui-input" value="博艺花卉">
+            </div>
+        </div>
+        <div class="layui-form-item">
+            <label class="layui-form-label">配送时间</label>
+            <div class="layui-input-block">
+                <input type="text" id="edit-date" placeholder="请输入配送日期时间" autocomplete="off" class="layui-input pick_date" value="2023-10-1 13:23::23">
+            </div>
+        </div>
+        <div class="layui-form-item">
+            <div class="layui-input-block">
+                <button type="button" class="layui-btn" id="save-edit">保存修改</button>
+                <button type="button" class="layui-btn layui-btn-primary" id="cancel-edit">取消</button>
+            </div>
+        </div>
+    </form>
+</div>
+ {literal} 
+ <script>
+  $(function(){
+    $('.pick_date').datetimepicker({
+     timeText: '时间',
+     hourText: '小时',
+     minuteText: '分钟',
+     secondText: '秒',
+     currentText: '现在',
+     closeText: '完成',
+     showSecond: true, //显示秒  
+     timeFormat: 'HH:mm:ss' ,//格式化时间
+   });
+  })
+    layui.use(['layer', 'form'], function(){
+        var layer = layui.layer;
+        var form = layui.form;
+        
+        // 编辑卡片按钮点击事件
+        document.getElementById('edit-card').onclick = function(){
+            layer.open({
+                type: 1,
+                title: '编辑卡片内容',
+                area: ['90%', '80%'],
+                content: $('#edit-form')
+            });
+        };
+        // 保存编辑
+        $('#save-edit').click(function(){
+            // 获取表单值
+            var name = $('#edit-name').val();
+            var content = $('#edit-content').val();
+            var wish = $('#edit-wish').val();
+            var date = $('#edit-date').val();
+            
+            // 更新卡片内容
+            console.log(name)
+            $('#card-name').text(name);
+            $('#card-content').text(content);
+            $('#card-wish').text(wish);
+            $('#card-date').text(date);
+            // 关闭弹层
+            layer.closeAll();
+            // 提示保存成功
+            layer.msg('修改保存成功', {icon: 1});
+        });
+        // 取消编辑
+        document.getElementById('cancel-edit').onclick = function(){
+            layer.closeAll();
+        };
+
+
+        //用户编辑2
+        $('#edit-info').click(function(){
+           layer.open({
+                type: 1,
+                title: '编辑卡片内容',
+                area: ['90%', '80%'],
+                content: $('#edit-form2')
+            });
+        });
+        $('#save2-edit').click(function(){
+            // 获取表单值
+            var _name = $('#edit-name2').val();
+            var _address = $('#edit-address2').val();
+            var _phone = $('#edit-phone').val();
+            var _date = $('#edit-date2').val();
+            var _note = $('#edit-note2').val();
+            var _wish = $('#edit-wish2').val();
+           
+            
+            // 更新卡片内容
+            console.log(name)
+            $('#user-name').text(_name);
+            $('#user-address').text(_address);
+            $('#user-phone').text(_phone);
+            $('#user-date').text(_date);
+            $('#user-note').text(_note);
+            $('#user-wish').text(_wish);
+
+             // 关闭弹层
+            layer.closeAll();
+            // 提示保存成功
+            layer.msg('修改保存成功', {icon: 1});
+        });
+        $('#cancel2-edit').click(function(){
+            layer.closeAll();
+        });
+    });
+ 
+</script>
+ {/literal} 
+{include file="byhh.footer.html"} 

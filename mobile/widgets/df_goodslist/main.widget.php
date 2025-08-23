@@ -29,6 +29,10 @@ class Df_goodslistWidget extends BaseWidget
 
     public function getData()
     {
+        $post = \common\library\Basewind::trimAll(Yii::$app->request->get(), false);
+        $this->options = array_merge($this->options,$post);
+
+//var_dump($this->options);die;
         $query = GoodsModel::find()->alias('g')->select('g.goods_id,goods_name,price,mkPrice,default_image,gst.sales')
             ->joinWith('goodsStatistics gst', false)
             ->where(['if_show' => 1, 'closed' => 0]);
@@ -54,6 +58,7 @@ class Df_goodslistWidget extends BaseWidget
         } else {
             $query->orderBy(['g.goods_id' => SORT_DESC]);
         }
+      //echo $query->createCommand()->getRawSql();
 
         if(empty($list = $query->asArray()->all())) {
             $list = array([],[],[],[]);

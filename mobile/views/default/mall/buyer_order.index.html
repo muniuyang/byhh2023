@@ -7,7 +7,7 @@
         <div class="public_index table">
           <table>
             <tr class="line_bold">
-              <th colspan="7"> <div class="search_div clearfix align1">
+              <th colspan="8"> <div class="search_div clearfix align1">
                   <form method="get" class="float-left clearfix">
                   	<input type="hidden" name="type" value="{$smarty.get.type}" />
                     <span>{$lang.add_time}: </span>
@@ -39,7 +39,7 @@
               <th>{$lang.evaluation}</th>
             </tr>
             <tr class="sep-row">
-              <td colspan="7"></td>
+              <td colspan="8"></td>
             </tr>
             
             <!--{if $orders}-->
@@ -47,10 +47,10 @@
             
             <!--{foreach from=$orders item=order}-->
             <tr class="sep-row">
-              <td colspan="7"></td>
+              <td colspan="8"></td>
             </tr>
             <tr class="line-hd">
-              <th colspan="7"> <p> <input type="checkbox" value="{$order.order_id}" class="checkitem" {if $order.status neq Def::ORDER_PENDING && $order.status neq Def::ORDER_SUBMITTED}disabled="disabled"{/if} />
+              <th colspan="8"> <p> <input type="checkbox" value="{$order.order_id}" class="checkitem" {if $order.status neq Def::ORDER_PENDING && $order.status neq Def::ORDER_SUBMITTED}disabled="disabled"{/if} />
                   <label>{$lang.order_sn}：</label>
                  
                   <label>{$lang.add_time}：</label>
@@ -112,20 +112,27 @@
             <!--{/foreach}-->
             
             <tr class="sep-row">
-              <td colspan="7"></td>
+              <td colspan="8">
+                
+              </td>
             </tr>
             <tr class="operations btion">
-              <th colspan="7"> <p class="position1 clearfix">
+              <th colspan="8"> <p class="position1 clearfix">
                   <input type="checkbox" id="all2" class="checkall float-left mt5" />
                   <label for="all2" class="float-left mr20 ml5" style="margin-top:2px;">{$lang.checkall}</label>
-                  <a href="javascript:;" class="delete" ectype="batchopt" uri="{url route='buyer_order/cancel'}" name="order_id">{$lang.cancel_order}</a> <a href="javascript:;" class="mergepay J_MergePay" uri="{url route='cashier/index'}" name="order_id">{$lang.mergepay}</a> </p>
+                  <a href="javascript:;" class="delete" ectype="batchopt" uri="{url route='buyer_order/cancel'}" name="order_id">{$lang.cancel_order}</a> 
+                  <a href="javascript:;" class="mergepay J_MergePay" uri="{url route='cashier/index'}" name="order_id">{$lang.mergepay}</a> </p>
+                <div class="position2 clearfix center"> </div>
+              </th>
+            </tr>
+             <tr class="operations btion">
+              <th colspan="8"> 
                 <div class="position2 clearfix center">{include file="page.bottom.html"}</div>
               </th>
             </tr>
-            
             <!--{else}-->
             <tr class="sep-row">
-              <td colspan="7"><div class="notice-word">
+              <td colspan="8"><div class="notice-word">
                   <p>{$lang.no_records}</p>
                 </div></td>
             </tr>
@@ -190,4 +197,4 @@ function getCheckItemIds()
 }
 </script>
 <iframe id="iframe" name="iframe" src="about:blank" frameborder="0" width="0" height="0" style="display:none"></iframe>
-{include file="user.footer.html"} 
+{include file="byhh.footer.html"} 

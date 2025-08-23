@@ -8,7 +8,7 @@
       <img src="{res file='/images/notice_style1.png' baseUrl=$widget_data.baseUrl}" />
       <!--{/if}-->
     </div>
-    <div class="flex1 fs12 split pl10 ml10 overflow">{$widget_data.list.0.title|default:'文章标题'}</div>
+    <div class="flex1 fs12 split pl10 ml10 overflow"><a href="{url route='article/view' callback='gscallback' id=$widget_data.list.0.article_id}" >{$widget_data.list.0.title|default:'文章标题'}</a></div>
   </div>
 </div>
 

@@ -347,10 +347,12 @@ class TemplateController extends \common\controllers\BaseAdminController
 			$data['index'] = array('title' => Language::get('index'), 'url' => Url::toRoute(['default/index'], $siteUrl), 'path' => $mobileUrl, 'action' => array());
 			$data['community'] = array('title' => Language::get('community'), 'url' => Url::toRoute(['community/index'], $siteUrl), 'path' => $mobileUrl ? $mobileUrl . '/pages/community/index/index' : '', 'action' => array());
 			/*自定义jcheng*/
-			$data['detail'] = array('title' => Language::get('detail'), 'url' => Url::toRoute(['detail/index'], $siteUrl), 'path' => $mobileUrl ? $mobileUrl . '/pages/detail/index/index' : '', 'action' => array());
+			$data['mindex'] = array('title' => Language::get('mindex'), 'url' => Url::toRoute(['mindex/index'], $siteUrl), 'path' => $mobileUrl ? $mobileUrl . '/pages/mindex/index/index' : '', 'action' => array());
+			$data['goodslist'] = array('title' => Language::get('goodslist'), 'url' => Url::toRoute(['goodslist/index'], $siteUrl), 'path' => $mobileUrl ? $mobileUrl . '/pages/goodslist/index/index' : '', 'action' => array());
+			$data['goodsdetail'] = array('title' => Language::get('goodslist'), 'url' => Url::toRoute(['goodslist/index'], $siteUrl), 'path' => $mobileUrl ? $mobileUrl . '/pages/goodslist/index/index' : '', 'action' => array());
 			/*/自定义jcheng*/
 		}
-		
+		//var_dump($data);die;
 		return $data;
     }
 	

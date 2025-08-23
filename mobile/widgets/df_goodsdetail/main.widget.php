@@ -29,7 +29,7 @@ class Df_goodsdetailWidget extends BaseWidget
 
     public function getData()
     {
-        var_dump($this->params);die;
+        //var_dump($this->params);die;
         $query = GoodsModel::find()->alias('g')->select('g.goods_id,goods_name,price,mkPrice,default_image,gst.sales')
             ->joinWith('goodsStatistics gst', false)
             ->where(['if_show' => 1, 'closed' => 0]);

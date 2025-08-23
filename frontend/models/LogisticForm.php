@@ -32,7 +32,7 @@ class LogisticForm extends Model
 		if(isset($post->template_id) && $post->template_id) {
 			$delivery = DeliveryTemplateModel::find()->where(['template_id' => $post->template_id])->asArray()->one();
 		}
-		
+		 
 		// 如果商品没有设置运费模板，取店铺默认的运费模板
 		if(empty($delivery)) {
 			if(isset($post->store_id) && $post->store_id) {
@@ -54,11 +54,13 @@ class LogisticForm extends Model
 			'logistic_fee' => DeliveryTemplateModel::getCityLogistic($delivery, $post->city_id),
 			//'city_name'  => RegionModel::getRegionName($post->city_id),
 		];
-		
+		 
 		if(Basewind::getCurrentApp() == 'pc') {
 			$result['city_name'] = RegionModel::getRegionName($post->city_id);
 		}
-		
+		if(Basewind::getCurrentApp() == 'wap'){ //jcheng自定义
+			$result['city_name'] = RegionModel::getRegionName($post->city_id);
+		}
 		return $result;
 	}
 }

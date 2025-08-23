@@ -1,16 +1,4 @@
  
-<style type="text/css">
-
-</style>
-<div id="dialog_object_my_address_add"
- class="dialog_wrapper ui-draggable" style=" width: 100%; ">
-  <div class="dialog_body" style="position: relative;">
-    <h3 class="dialog_head ui-draggable-handle" style="cursor: move;">
-    <span class="dialog_title"><span class="dialog_title_icon">新增地址</span></span>
-    <span class="dialog_close_button layui-icon layui-icon-close layui-font-16"></span></h3>
-
-
-  <div class="dialog_content" style="margin: 0px; padding: 0px;">
 			<div class="eject_con">
 			  <div class="add" style=" padding: 0 20px;">
 			    <div id="warning"></div>
@@ -22,7 +10,7 @@
 						
 			            <input type="text" class="text width_normal I_Consignee consignee" name="consignee" value="{$address.consignee|escape}"/>
 						<!-- {if $defaultAddress} -->
-						<select class="querySelect chooseUser" name="choose_user">
+						<select class="querySelect chooseUser" name="choose_user" style="width: 60px;">
 									<option value="">-收货人-</option>
 									{html_options options=$defaultAddress}
 						</select>
@@ -40,7 +28,7 @@
 			            <input type="hidden" name="region_name" value="{$address.region_name|escape}" class="mls_names" />
 			            <!-- {if $address.region_id} --> 
 			            <span>{$address.region_name|escape}</span>
-			            <input type="button" value="{$lang.edit}" class="edit_region layui-btn layui-btn-primary layui-btn-sm box-align-center" />
+			            <input type="button" value="{$lang.edit}" style="line-height: 23px;" class="edit_region layui-btn layui-btn-primary layui-btn-sm box-align-center" />
 			            <select style="display:none" onchange="hide_error();">
 			              <option>{$lang.select_pls}</option>
 							{html_options options=$regions}      
@@ -70,7 +58,7 @@
 						 
 					    <input type="text" class="text width_normal signature" name="signature" value="{$address.signature|escape}"/>
 						<!-- {if $defaultSignature} -->
-						<select class="querySelect chooseSignature" name="choose_signature">
+						<select class="querySelect chooseSignature" name="choose_signature" style="width: 60px;">
 											<option value="">-落款-</option>
 											{html_options options=$defaultSignature}
 						</select>
@@ -116,7 +104,7 @@
 			         </p>
 					</li>
 			        <li>
-						<h3>祝福语内容:</h3>
+						 
 			          <p>
 			            <textarea id="remark_input" class="text width_normal content defaultContents"  name="content" 
 			            value="{$address.content|escape}"   style="width:270px;height:90px;" placeholder="如：”开业大吉，生意兴隆“">{$address.content|escape}</textarea>
@@ -126,7 +114,7 @@
 			          </p>
 					 <!-- {if $defaultContents} -->
 			          <p>
-					  <select class="querySelect chooseContents" name="choose_contents">
+					  <select class="querySelect chooseContents" name="choose_contents" style="width: 60px;">
 						<option value="">--选择祝福语--</option>
 						{html_options options=$defaultContents}
 					  </select> 
@@ -238,6 +226,4 @@
 				}); 
 			});
 			</script>
-</div>
-</div>
  

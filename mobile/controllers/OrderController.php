@@ -68,21 +68,21 @@ class OrderController extends \common\controllers\BaseUserController
 
 	private function build($otype = 'normal', $redirect = null)
 	{
-
-
+ 
 		$get = Basewind::trimAll(Yii::$app->request->get(), true, ['store_id', 'id']);
 		/*********************[START]JchengCustom with local**********************/
 		if(in_array(Yii::$app->user->id,Yii::$app->params['createRights'])){//权限判断[START]JchengCustom
 
 			//  收货地址判断
 			if(!AddressModel::find()->exists()) {
+			 
 				return Message::warning(Language::get('please_add_address'), false, ['label' => Language::get('add_address'), 'url' => Url::toRoute(['my_address/index', 'redirect' => $redirect])]);
 			} 
 		}else{
 			 
 			//  收货地址判断
 			if(!AddressModel::find()->where(['userid' => Yii::$app->user->id])->exists()) {
-				//var_dump($redirect);die('dddd');
+			 
 				return $this->redirect(['my_address/index']);
 				//return Message::warning(Language::get('please_add_address'), false, ['label' => Language::get('add_address'), 'url' => Url::toRoute(['my_address/add', 'redirect' => $redirect])]);
 			}
@@ -92,14 +92,14 @@ class OrderController extends \common\controllers\BaseUserController
 		$model = new \frontend\models\OrderForm(['otype' => $otype]);
 		//var_dump($get) ;
 		if(($goods_info = $model->getGoodsInfo($get)) === false) {
-			var_dump($goods_info) ;die('dddd');
+			 
 			return Message::warning($model->errors);
 		}
 		// 如果是自己店铺的商品，则不能购买
 		if ($this->visitor['store_id'] && in_array($this->visitor['store_id'], $goods_info['storeIds'])) {
 			return Message::warning(Language::get('can_not_buy_yourself'));
 		}
-		//var_dump($goods_info);die;
+		 
 		if(!Yii::$app->request->isPost)
 		{
 			// 获取订单模型
@@ -117,8 +117,7 @@ class OrderController extends \common\controllers\BaseUserController
             	'style' =>  'jquery.ui/themes/smoothness/jquery.ui.css,dialog/dialog.css,jquery.plugins/timepicker/jquery-ui-timepicker-addon.css'
 			]);
 			
-		
-			//var_dump($this->params);die;
+		 
 			$this->params['page'] = Page::seo(['title' => Language::get('confirm_order')]);
 			/**********************[START]JchengCustom with local**********************/
 			if(in_array(Yii::$app->user->id,Yii::$app->params['createRights'])){//权限判断[START]JchengCustom	

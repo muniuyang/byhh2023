@@ -62,14 +62,14 @@ class Df_goodsappointWidget extends BaseWidget
 
 
         $url =  isset(Yii::$app->params['frontendUrl']) ? Yii::$app->params['frontendUrl'] :  $selfurl;
-var_dump($list); 
+//var_dump($list); 
         return array_merge(['list' => empty($list) ? [] : $list, 'baseUrl'=>$url,'baseUrl2' => Basewind::mobileUrl()], $this->options);
         //return array_merge(['list' => $list, 'baseUrl' => Basewind::mobileUrl()], $this->options);
     }
 
     public function parseConfig($input)
     {
-         var_dump($input);die;
+         //var_dump($input);die;
         return $input;
     }   
 }

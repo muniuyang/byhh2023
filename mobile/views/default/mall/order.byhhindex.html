@@ -1,0 +1,410 @@
+{include file="byhh.header.html"}
+     
+<style type="text/css">
+	#page-layout-orderbyhh-index{
+		width:100%;
+	}
+</style>
+ 
+<div id="main" style="width:100%">
+  <div id="rightCon" class="clearfix layui-body" style="left:0;top:0px;">
+    <div class="scroller" style="padding:0;">
+      <div class="search-form clearfix" style=" position:fixed;z-index: 116;padding:10; top:60px;width:100%;">
+      	<div  style="position:fixed;z-index: 6666;background: #fff;height:130px;padding-top:20px;width:100%;display:inline-block;">
+
+        <form method="get" id="formSearch">
+        <div class="webkit-box box-align-center">
+          <input type="hidden" name="r" value="orderbyhh/index" />
+          <label class="mr5">类型</label>
+          <select class=" classSelect" name="field">
+            <option value="">--选择类型--</option>
+            {html_options options=$search_options selected=$smarty.get.field}
+          </select>
+        &nbsp;&nbsp;&nbsp;&nbsp; <input class=" mr10 _buyerSelect" style="width:60px;" placeholder="输入···" type="text" name="search_name" value="{$smarty.get.search_name|escape}" />
+      
+		<input type="submit" class="layui-btn layui-bg-blue layui-btn-sm block width7 " value="{$lang.query}" />
+		<!--{if $filtered}-->
+		<a class="layui-btn layui-btn-primary layui-btn-sm box-align-center" href="{url route='orderbyhh/index'}">{$lang.cancel_query}</a>
+		<!--{/if}-->
+		<input type="hidden" class="downChoose" name='down'  value="all" />
+			
+        </div>
+ 
+        <!-- <div class="webkit-box box-align-center mt20">  </div> -->
+        </form>
+
+      </div>
+      	
+      </div>
+	  
+	  {literal}
+	  <style type="text/css">
+		.layui-table-tips-main{
+		max-height:450px;
+		/*min-height:400px;*/
+		}
+		.layui-table-main img{width:40px;height:40px}
+		.layui-table-view .layui-form {
+		margin-bottom: 0; /* 移除默认的底部距离 */
+		}
+
+		.layui-table-box .layui-table-body table {
+		margin-top: 42px; /* 为表格顶部留出足够空间放置分页 */
+		}
+
+
+		.layui-table-tool {
+		margin:0;
+		position: fixed;
+		top: 120px;
+		left:25%;
+
+		padding:0;
+		height:38px;
+		min-height:38;
+		line-height:38px;
+		z-index: 999999;
+		transform: translateX(-25%); /* 水平居中分页 */
+		border-color: #ffffff;
+		}
+		.layui-btn-container .layui-btn {
+		margin-bottom: 0px;
+		}
+
+		.layui-table-tool-self,.layui-table-tool-panel {
+		top: 0px;
+		z-index: 999999999;
+		}
+		.layui-table-box .layui-table-header{
+
+		position: fixed;
+		top: 170px;
+		z-index: 666;
+
+		}
+
+
+		.layui-table-body{
+		margin-top:52px;
+		}
+		/* 调整分页样式 */
+		.layui-table-page {
+		/*background-color: #ffffff;*/
+		margin: 0 ;
+		padding:0;
+
+		height:auto;
+		text-align: center;
+		width:100%;
+		z-index: 999982;
+		/*transform: translateX(25%);  水平居中分页 */
+		border-color: #ffffff;
+		}
+		.layui-table-box .layui-table-body table {
+		margin-top: 0px;
+		}
+		.layui-table-tool .layui-btn-container {
+		margin-bottom: -20px;
+		}
+		.layui-table,.layui-table-view {
+		margin-top:97px  ;
+		margin-bottom: 47px;
+		}
+		.layui-table-tool {padding-left:5px;}
+		.layui-table-page>div {
+		/  transform: translateX(2%); /* 水平居中分页 */
+		}
+		.layui-table-cell {
+
+		padding: 0 ; 
+
+		}
+		.layui-table-tool-temp {
+		padding-right: 0px;
+		}
+
+
+	  </style>
+	  {/literal} 
+	  
+	  
+      <div class="tablegrid1">
+		 
+          <table class="layui-hide" id="tablegrid" lay-filter="tablegrid"></table>
+		   
+      </div>
+    </div>
+  </div>
+</div>
+<script type="text/html" id="toolbar">
+	<div class="layui-btn-container">
+			<a class="layui-btn layui-btn-primary layui-bg-orange" href="javascript:;" uri="{url route='orderbyhh/cuser'}" dialog_width="400" dialog_title="创建用户" ectype="dialog"
+	dialog_id="seller_order_adjust_fee" id="order{$order.orderExtm.order_id}_action_adjust_fee" ><i class="layui-icon layui-icon-username"></i>用户</a> 
+ <a class="layui-btn layui-btn-primary layui-bg-green" href="javascript:;" uri="{url route='my_address/caddress'}" dialog_width="400" dialog_title="创建地址" ectype="dialog"
+	dialog_id="seller_order_adjust_fee" id="order{$order.orderExtm.order_id}_action_address" ><i class="layui-icon layui-icon-location"></i>创建</a>
+	<button class="layui-btn layui-btn-primary layui-bg-blue" lay-event="address-list"><i class="layui-icon layui-icon-export"></i>地址</button>
+	</div>
+	</div>
+</script>
+
+ 
+<script type="text/html" id="colBar">
+  <a class="ml5 mr5 blue pointer layui-btn layui-bg-green layui-btn-sm" lay-event="view">查看</a>
+</script>
+<script>
+  layui.use('table', function () 
+  {
+    var table = layui.table;
+
+    table.render({
+	elem: '#tablegrid',
+	title:'订单表'
+	//,skin: 'line'
+	,page: true // 开启分页
+	, url: url(['orderbyhh/index', $("#formSearch").serializeJson()])
+	, toolbar: '#toolbar'
+	,limit:90
+	, defaultToolbar: ['filter', /*'exports',*/ 'print']
+	, title: '订单列表'
+	//, size: 'lg'
+	,done: function(res, curr, count){
+		 var that = $("#tablegrid").siblings();
+		 console.log('tr==>',that);
+		     res.data.forEach(function (item, index) {
+				  console.log('item==>',item);
+		         if (item.is_error === '1') {
+		            var tr = that.find(".layui-table tbody tr[data-index='" + index + "']");
+		            tr.css("background-color", "rgb(147 147 50 / 18%)");
+		         }
+				if (item.isDaynewlast === true) {
+				   var tr = that.find(".layui-table tbody tr[data-index='" + index + "']");
+				   tr.css("background-color", "rgb(65 253 13 / 25%)");
+				} 
+		    });
+	      // 将分页的元素移动到指定位置
+	      //document.getElementById('tablegrid-page').innerHTML = '';
+	     // document.getElementById('tablegrid').parentNode.insertBefore(document.getElementById('tablegrid-page'), document.getElementById('tablegrid').nextSibling);
+		//console.log('To:',res, curr, count)
+	
+			// 自定义页码布局
+			/*
+	    var laypage = table.render({
+	        elem: 'tablegrid-page' //注意，这里的 elem 是一个模拟的id，不存在于实际的html中，仅用于指引laypage
+	        ,count: count //数据总数
+	        ,limit: res.limit //每页显示的数量
+	        ,curr: curr //当前页
+	        ,layout: ['count', 'prev', 'page', 'next', 'limit', 'skip'] //自定义布局
+	        ,jump: function(obj, first){
+	          //obj包含了分页的所有参数，比如：
+	          //console.log(obj.curr); //当前页码
+	          //console.log(obj.limit); //每页显示条数
+	          //首次不执行
+	          if(!first){
+	            //do something
+	          }
+	        }
+		})
+		*/
+	
+	}
+	, cols: [[
+ 
+   { field: 'goods_image', title: '图片', width: 35,templet:function(res){
+				return "<img src="+res.goods_image+"   />" ;
+			}}
+ , { field: 'isPrinted', title: '错单', width: 50,hide:false,  align: 'center',templet:function(res){
+		return '<em class="'+(res.is_error==0 ? 'no':'yes')+'" ectype="inline_edit" controller="orderbyhh" fieldname="is_error" fieldid="'+res.order_id
+		+'" fieldvalue="'+res.is_error+'" title="可编辑"><i class="fa '
+		+(res.is_error==0 ? 'fa-ban':'fa-check-circle')+'"></i>'+(res.is_error==0 ? '否':'是')+'</em>';
+	  }}
+	, { field: 'consignee', title: '收货人', width: 100 ,hide:false,sort: false,align: 'left',style:'color: #FF8800;',templet:function(res){
+		if(res.msg == '预订'){
+			res.consignee = "<span style=color:#00aaff>"+res.consignee+"</span>";
+		} 
+		return "<em class='layui-icon layui-icon-dialogue consignee' lay-event='viewContent'    style='color:#00aaff;'></em>"+res.consignee;//+'('+res.buyer_name+')' ;
+	
+	
+	}}
+	, { field: 'address', title: '收货地址', width: 140 ,hide:false,sort: false,align: 'left',style:'color: #202120;',templet:function(res){
+		if(res.msg == '预订'){
+			res.address = "<span style=color:#00aaff>"+res.address+"</span>";
+		} 
+		return '<a href="JavaScript:;" dialog_width="400"  dialog_title="修改收货人信息" ectype="dialog" '
+		 +"uri={url route='orderbyhh/extro' redirect=$redirect }?order_id="+res.order_id
+		 +" dialog_id='my_address_extro' name='order_id'>"
+		 +"<i class='layui-icon layui-icon-edit'  style='cursor: pointer;color:#ff0000;'></i></a>"+ res.address;
+	}}
+	, { field: 'signature', title: '签名落款', width: 95 ,hide:false,sort: false,align: 'left',style:'color: #FF8800;',templet:function(res){
+		if(res.msg == '预订'){
+			res.signature = "<span style=color:#00aaff>"+res.signature+"</span>";
+		} 
+		return  "<i class='layui-icon layui-icon-link'  style='cursor: pointer;color:#ff0000;'></i></a>"+ "<a href='javascript:;' lay-event='goodsView'>"+res.signature+"</a>"
+	}}
+	
+	
+
+	, { field: 'real_name', title: '订花人', width: 120 ,hide:false,sort: false,align: 'left',style:'color: #00AA00;',templet:function(res){
+		if(res.msg == '预订'){
+			res.real_name = "<span style=color:#00aaff>"+res.real_name+"</span>";
+		} 
+		return '<a href="JavaScript:;" dialog_width="400"  title="修改订花人"  dialog_title="修改订花人信息" ectype="dialog" '
+		 +"uri={url route='orderbyhh/editbuyer' redirect=$redirect }?order_id="+res.order_id
+		 +" dialog_id='my_address_extro' name='order_id'>"
+		 +"<i class='layui-icon layui-icon-edit'  style='cursor: pointer;color:#ff0000;'></i></a>"+ res.real_name;		
+	}}
+
+	  , { field: 'isPrinted', title: '已打印', width: 50, hide:true,sort: false, align: 'center',templet:function(res){
+	  	//console.log(res);
+	  	//res.LAY_INDEX+
+	  	return '<em class="'+(res.is_printed==0 ? 'no':'yes')+'" ectype="inline_edit" controller="orderbyhh" fieldname="is_printed" fieldid="'+res.order_id
+	  	+'" fieldvalue="'+res.is_printed+'" title="可编辑"><i class="fa '
+	  	+(res.is_printed==0 ? 'fa-ban':'fa-check-circle')+'"></i>'+(res.is_printed==0 ? '否':'是')+'</em>';
+	    }}
+	  
+	, { field: 'real_name', title: '配送时间', width: 210 ,hide:false,sort: false,align: 'center',style:'color: #666;',templet:function(res){
+		var _conent =  res.send_date;
+		if(res.msg == '预订'){
+			_conent = '<a href="JavaScript:;"  dialog_width="400"   title="修改配送时间" dialog_title="修改配送时间" ectype="dialog" '
+			+"uri={url route='orderbyhh/extro' redirect=$redirect }?from=send_date&order_id="+res.order_id
+			+" dialog_id='my_address_extro' name='order_id'>"
+			+"<i class='layui-icon layui-icon-edit'  style='cursor: pointer;color:#ff0000;'></i></a>"
+			+"<span style='cursor: pointer;color:#00aaff'>["+res.msg+"]</span>"+ res.send_date+"送";
+		}else if(res.msg == '今天'){
+			_conent = '<a href="JavaScript:;"  dialog_width="400" title="修改配送时间"  dialog_title="修改配送时间" ectype="dialog" '
+			+"uri={url route='orderbyhh/extro' redirect=$redirect }?from=send_date&order_id="+res.order_id
+			+" dialog_id='my_address_extro' name='order_id'>"
+			+"<i class='layui-icon layui-icon-edit'  style='cursor: pointer;color:#ff0000;'></i></a>"
+			+"<span style='cursor: pointer;color:#ff5500'>["+res.msg+"]</span>"+ res.send_date+"送";
+		}else if(res.msg == '昨天'){
+			_conent = '<a href="JavaScript:;"  dialog_width="400" title="修改配送时间"  dialog_title="修改配送时间" ectype="dialog" '
+			+"uri={url route='orderbyhh/extro' redirect=$redirect }?from=send_date&order_id="+res.order_id
+			+" dialog_id='my_address_extro' name='order_id'>"
+			+"<i class='layui-icon layui-icon-edit'  style='cursor: pointer;color:#ff0000;'></i></a>"
+			+"<span style='cursor: pointer;color:#1BBC9D'>["+res.msg+"]</span>"+ res.send_date+"送";
+		}else if(res.msg == '前天'){
+			_conent = '<a href="JavaScript:;"  dialog_width="400" title="修改配送时间"  dialog_title="修改配送时间" ectype="dialog" '
+			+"uri={url route='orderbyhh/extro' redirect=$redirect }?from=send_date&order_id="+res.order_id
+			+" dialog_id='my_address_extro' name='order_id'>"
+			+"<i class='layui-icon layui-icon-edit'  style='cursor: pointer;color:#ff0000;'></i></a>"
+			+"<span style='cursor: pointer;color:#00aaff'>["+res.msg+"]</span>"+ res.send_date+"送";
+		}else{
+			_conent = '<a href="JavaScript:;"  dialog_width="400" title="修改配送时间"  dialog_title="修改配送时间" ectype="dialog" '
+			+"uri={url route='orderbyhh/extro' redirect=$redirect }?from=send_date&order_id="+res.order_id
+			+" dialog_id='my_address_extro' name='order_id'>"
+			+"<i class='layui-icon layui-icon-edit'  style='cursor: pointer;color:#ff0000;'></i></a>"
+			+"<span style='cursor: pointer;color:#55ff00'>["+res.msg+"]</span>"+ res.send_date+"送";
+		}
+		return  _conent;		
+	}}
+	, { field: 'order_amount', title: '金额', width: 70, hide:true,sort: false, align: 'center',templet:function(res){
+		return "<span style='color:#00AA00;' controller='orderbyhh' fieldid='"+res.order_id+"' fieldname='order_amount'  ectype='inline_edit' >"+res.order_amount+"</span>"
+	} }
+
+, { field: 'isYear', title: '年结', width: 50, hide:true,sort: false, align: 'center',templet:function(res){
+		return '<em class="'+(res.is_year==0 ? 'no':'yes')+'" ectype="inline_edit" controller="orderbyhh" fieldname="is_year" fieldid="'+res.order_id
+		+'" fieldvalue="'+res.is_year+'" title="可编辑"><i class="fa '
+		+(res.is_year==0 ? 'fa-ban':'fa-check-circle')+'"></i>'+(res.is_year==0 ? '否':'是')+'</em>';
+	  }}
+
+ 
+	, { fixed: 'right', title: '操作', toolbar: '#colBar',   align: 'center'},
+	
+	
+      ]]
+      , page: {
+        theme: 'blue'
+      }
+    });
+ 
+    //监听头工具栏事件
+    table.on('toolbar(tablegrid)', function (obj) {
+      var checkStatus = table.checkStatus(obj.config.id);
+      var items = new Array();
+	  console.log(checkStatus.data);
+      $.each(checkStatus.data, function (i, item) {
+        items.push(item.order_id);
+      });
+
+      if (obj.event === 'export') {
+		  if (checkStatus.data.length <= 0) {
+		    //return alert("请选择要导出的数据^_^");
+			$('.downChoose').val('all');
+			window.location.href = url(['orderbyhh/export', $.extend($("#formSearch").serializeJson(), { id: items.join(',') })]);
+		  }else{
+			  $('.downChoose').val('select');
+			 window.location.href = url(['orderbyhh/export', $.extend($("#formSearch").serializeJson(), { id: items.join(',') })]);
+		  }
+		}else if(obj.event === 'printeds'){
+			window.open(url(['order_printed/view', $.extend($("#formSearch").serializeJson(), { order_ids: items.join(',') ,ptf:115})]));
+		}else if(obj.event === 'address-list'){
+		  //window.open(url(['order_printed/addresss', $.extend($("#formSearch").serializeJson(), { id: items.join(',') })]));
+
+		  window.location.href=url(['my_address/addresss', $.extend($("#formSearch").serializeJson(), { id: items.join(',') })]);
+		}
+    });
+
+    //监听行工具事件
+    table.on('tool(tablegrid)', function (obj) {
+		var data = obj.data;
+		if(obj.event === 'open_printed'){
+			window.open(url(['order_printed/lists', { order_id: data.order_id ,cate_id:22}]));
+		}else if(obj.event === 'other_printed'){
+			window.open(url(['order_printed/lists', { order_id: data.order_id,cate_id:21 }]));
+		}else if(obj.event === 'goodsPay'){
+			//window.open(url(['cashier/index', { order_id: data.order_id }]));
+			//return console.log(url(['cashier/index', { order_id: data.order_id ,'from':'orderbyhh'}]));
+			location.href = url(['cashier/index', { order_id: data.order_id ,'from':'orderbyhh'}]);
+		}else if(obj.event === 'goodsView'){
+			//window.open(url(['goods/index', { id: data.goods_id }]));
+			window.location.href=url(['goods/index', { id: data.goods_id }]);
+		}else if(obj.event === 'goodsClass'){
+
+		}else if(obj.event === 'view'){
+			window.open(url(['buyer_order/view', { order_id: data.order_id }]));
+		}else if(obj.event === 'viewContent'){
+			$('.content-box').text(data.content);
+			$('#p_content').show();
+		}else if(obj.event === 'edit'){
+			alert("功能暂未开通！")
+		}else if(obj.event === 'del'){
+			alert("功能暂未开通！")
+		}else{
+
+		}
+    });
+  });
+
+  $(function () {
+	$('.layui-icon-close').click(function(){
+		$('#p_content').hide();
+	})
+	$('.goods_name').change(function(){
+		 
+		$('.infoTableInput').val($(this).find("option:selected").text());
+		window.open(url(['goods', { id:$(this).find("option:selected").val() }]));
+		
+	});
+    $('#add_time_from').datepicker({ dateFormat: 'yy-mm-dd' });
+    $('#add_time_to').datepicker({ dateFormat: 'yy-mm-dd' });
+	$('.buyerSelect').change(function(){
+		$(".classSelect option[value='real_name']").attr("selected", true);    //设置Select的Text值为"买家实名"的项选中 
+		$('._buyerSelect').val($(this).find("option:selected").text());
+	});
+	// $("table thead tr").eq(0).css('background-color', 'rgb(239, 181, 181)');
+ 
+  });
+</script>
+<iframe id="iframe" name="iframe" src="about:blank" frameborder="0" width="0" height="0" style="display:none"></iframe>
+
+
+<div class="layui-layer layui-layer-tips layui-table-tips" id="p_content" type="tips" times="1" showtime="-1" 
+contype="object" style="z-index: 19891015; position: absolute; left: 650px;width:300px; top: 260px;display:none;">
+	<div id="" class="layui-layer-content">
+		<div class="layui-table-tips-main" style="margin-top: -48px;padding: 30px;">
+			<p class="content-box"></p>
+		</div>
+		<i class="layui-icon layui-table-tips-c layui-icon-close"></i>
+	</div>
+	<span class="layui-layer-setwin"></span>
+</div>
+{include file="byhh.footer.html"}

@@ -7,7 +7,7 @@
           <!--{if !$widget_data.list.0.goods_id}-->
           <i class="iconfont icon-icon_pic"></i>
           <!--{else}-->
-          <img src="{$item.default_image|url_format}">
+          <a href="{url route='/goods' callback='gscallback' id=$item.goods_id}" > <img src="{$item.default_image|url_format}"></a>
           <!--{/if}-->
         </p>
         <div class="extra mt10 ml10 mr10 pb10">

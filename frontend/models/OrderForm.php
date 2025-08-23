@@ -54,7 +54,7 @@ class OrderForm extends Model
 				$post->extraParams = (Object) array('meal_id' => $post->id); // for PC
 			}
 		}
-
+		//var_dump($post);die;
 		list($goodsList, $extra) = Business::getInstance('order')->build($this->otype, $post)->getOrderGoodsList();
 		if(empty($goodsList)) {
 			$this->errors = Language::get('goods_empty');

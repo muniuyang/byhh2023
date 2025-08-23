@@ -9,5 +9,5 @@ return array(
     'website'   => 'https://www.shopwind.net',
     'version'   => '1.0',
     'configurable'  => true,
-	'belongs'  => 'default.index,default.community'
+	'belongs'  => 'default.*'
 );

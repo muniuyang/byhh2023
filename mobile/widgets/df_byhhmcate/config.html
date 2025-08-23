@@ -2,6 +2,35 @@
     <h3 class="title mt20 mb20 pb20"><strong class="fs18">分类导航</strong></h3>
     <div class="content">
         <div class="item webkit-box">
+            <label class="gray">数据来源</label>
+            <p class="flex1 ml10 value">{if $options.source eq 'choice'}手动选择{else}默认{/if}</p>
+            <input type="hidden" name="source" value="{$options.source|default:'default'}" />
+            <span class="switch first {if !in_array($options.source, ['choice'])} selected {/if} J_Switch"
+                title="默认" data-value="default"><i class="iconfont icon-cache"></i></span>
+            <span class="switch {if $options.source eq 'choice'} selected {/if} J_Switch" title="手动选择"
+                data-value="choice"><i class="iconfont icon-select"></i></span>
+        </div>
+        <div class="item webkit-box" {if $options.source neq 'choice' }style="display:none" {/if}>
+            <label class="gray">手动选择</label>
+            <p class="flex1"></p>
+            <input type="hidden" name="items" value="{$options.items|default:''}" />
+            <div class="pointer" ectype="dialog" dialog_id="goods" dialog_width="560" dialog_title="选择指定商品"
+                uri="{url route='gselector/appointmcate' callback='gscallback'}">
+                <!--{if $options.items}-->
+                <span>已选择({count(explode(',', $options.items))})</span>
+                <!--{else}-->
+                <span>请选择</span>
+                <!--{/if}-->
+                <i class="layui-icon layui-icon-right layui-font-14"></i>
+            </div>
+        </div>
+        <div class="item webkit-box" {if $options.source eq 'choice' }style="display:none" {/if}>
+            <label class="gray">商品数量</label>
+            <input type="hidden" name="quantity" value="{$options.quantity|default:0}" />
+            <div class="flex1 ml20 slider1" style="margin-top:15px"></div>
+        </div>
+ 
+        <div class="item webkit-box">
             <label class="gray">背景颜色</label>
             <p class="flex1 ml10 color">{$options.bgcolor|default:'#fc2b34'}</p>
             <input type="hidden" name="bgcolor" value="{$options.bgcolor|default:'#fc2b34'}" />
@@ -88,5 +117,29 @@
         colorRender('.picker3', function(dom, value) {
             save_widget();
         });
+        $('.J_Switch').click(function () {
+            var value = $(this).attr('data-value');
+            $(this).parent('.item').find('input').val(value);
+            save_widget();
+        });
+ 
     });
+    function gscallback(dom, value) {
+        var dialog = $('*[dialog_id="' + dom + '"]');
+
+
+
+        if (dom == 'category') {
+            dialog.parent('.item').find('input[name="cate_id"]').val(value.id);
+            dialog.parent('.item').find('input[name="cate_name"]').val(value.name);
+            dialog.find('span').text(value.name);
+        }
+        else if (dom == 'goods') {
+            var values = unique(value);
+            dialog.parent('.item').find('input[name="items"]').val(values.join(','));
+            dialog.find('span').text(value == '' ? '请选择' : '已选择(' + values.length + ')');
+        }
+         
+        save_widget(false);
+    }
 </script>

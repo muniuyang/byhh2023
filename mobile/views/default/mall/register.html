@@ -5,7 +5,7 @@
 #footer .foot-group .footnav{ margin-left:0;margin-top:0;}
 #footer .foot-group .footnav ul{ width:454px; margin:0 auto;}
 #footer a:hover{ color:#f60; text-decoration:none;}
-.w{ width:1000px;}
+.w{ }
 #site-nav{ display:none}
 </style>
 <div id="main" class="w-full">
@@ -14,43 +14,44 @@
       <div class="w-full auth-body">
       <div class="form w clearfix">
         <form id="register_form" method="post">
+            <input type="hidden"  class="input" value="register_form"  name="frm" />
           <div class="each">
           <dl class="clearfix">
-            <dt>用<span style="margin:0 7px">户</span>名</dt>
+             
             <dd>
-              <input type="text" id="username" class="input"  name="username" />
+              <input type="text" id="username" class="input" placeholder="用户名"  name="username" />
               <i class="i-name"></i> </dd>
           </dl>
           </div>
           <dl class="clearfix">
-            <dt>密<span style="margin:0 15px"></span>码</dt>
+             
             <dd>
-              <input class="input" type="password" id="password" name="password" />
+              <input class="input" type="password" id="password" placeholder="密码" name="password" />
               <i class="i-psw"></i> </dd>
           </dl>
           <dl class="clearfix">
-            <dt>确认密码</dt>
+            
             <dd>
-              <input class="input" type="password" id="confirmPassword" name="confirmPassword" />
+              <input class="input" type="password" id="confirmPassword" placeholder="确认密码" name="confirmPassword" />
               <i class="i-psw"></i> </dd>
           </dl>
           <dl class="clearfix">
-            <dt>电子邮箱</dt>
+             
             <dd>
-              <input class="input" type="text" id="email" name="email" />
+              <input class="input" type="text" id="email" placeholder="电子邮箱"  name="email" />
               <i class="i-email"></i> </dd>
           </dl>
           <dl class="clearfix">
-            <dt>手<span style="margin:0 7px">机</span>号</dt>
+             
             <dd>
-              <input type="text" name="phone_mob" id="phone_mob" class="input" />
+              <input type="text" name="phone_mob" id="phone_mob" placeholder="手机号"  class="input" />
               <i class="i-phone"></i> </dd>
           </dl>
           <!--{if $phone_captcha}-->
           <dl class="clearfix">
-            <dt>短信验证码</dt>
+            
             <dd class="captchaCode clearfix">
-              <input type="text" name="check_code" id="check_code" class="input float-left" />
+              <input type="text" name="check_code" id="check_code" placeholder="短信验证码"  class="input float-left" />
               <input type="button" id="send_phonecode" class="float-left btn-captcha" value="{$lang.get_captcha}" />
             </dd>
           </dl>
@@ -58,14 +59,14 @@
           
           <!--{if $app->params['captcha_status']['register']}-->
           <dl class="clearfix">
-            <dt>验<span style="margin:0 7px">证</span>码</dt>
+             
             <dd class="captcha clearfix">
-              <input type="text" class="input float-left" name="captcha" id="captcha1" />
+              <input type="text" class="input float-left" name="captcha"  placeholder="验证码"  id="captcha1" />
               <a href="javascript:;" class="float-left mt5" style="margin-right:2px;"><img onclick="change_captcha($(this))" id="captcha" src="{url route='default/captcha' v=uniqid('', true)}" class="float-left" height="38" /></a> </dd>
           </dl>
           <!--{/if}-->
           <dl class="clearfix">
-            <dt>&nbsp;</dt>
+             
             <dd class="mall-eula">
               <input id="clause" type="checkbox" name="agree" value="1" class="agree-checkbox" checked="checked" />
               <span style="margin-right:85px;">{$lang.i_have_read} <a href="{url route='article/view' id=1}" target="_blank">《{$lang.mall_eula}》</a></span> </dd>

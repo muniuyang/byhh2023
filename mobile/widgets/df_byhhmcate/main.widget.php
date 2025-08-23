@@ -28,14 +28,21 @@ class Df_byhhmcateWidget extends BaseWidget
 
     public function getData()
     {
-        $post = \common\library\Basewind::trimAll(Yii::$app->request->get(), true);
-        //var_dump($post->cid);
-        $list = GcategoryModel::find()->select('cate_id, cate_name')
-            ->where(['if_show' => 1, 'parent_id' => 0])
-            ->orderBy(['sort_order' => SORT_ASC, 'cate_id' => SORT_ASC])
-            ->limit(6)->asArray()->all();
-        
-        
+        $post = \common\library\Basewind::trimAll(Yii::$app->request->get(), false);
+         $query = GcategoryModel::find()->select('cate_id, cate_name')
+            ->where(['if_show' => 1])
+            ->orderBy([ 'cate_id' => SORT_ASC]);
+         if($this->options['source'] == 'choice') {
+            $query->andWhere(['in', 'cate_id', explode(',', $this->options['items'])]);
+        } else {
+            $query->limit($this->options['quantity'] > 0 ? $this->options['quantity'] : 3);
+        }
+        if(empty($list = $query->asArray()->all())) {
+            $list = array([],[],[]);
+        }
+     // echo $query->createCommand()->getRawSql();
+        $this->options = array_merge($this->options,$post);
+        //var_dump($this->options);
         return array_merge(['list' => $list], $this->options);
     }
 

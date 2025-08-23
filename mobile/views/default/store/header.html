@@ -1,4 +1,127 @@
 {include file="top.html"}
-<div id="header">
-  
+<script type="text/javascript" src="{lib file='layui/layui.js' }" charset="{$app->charset}"></script>
+<script type="text/javascript">
+    var _user = { accCart: "{url route='cart/index'}", accIdx: "{url route='user/index'}", accSet: "{url route='user/profile'}", accPass: "{url route='user/password'}", accOut: "{url route='user/logout'}"};
+
+</script>
+ {literal}
+    <style>
+ body{font-family:"Helvetica Neue",Helvetica,Arial,sans-serif;padding-top:60px;background-color:#f2f2f2;margin:0;}.fixed-header{position:fixed;top:0;left:0;width:100%;height:60px;background-color:#393D49;color:#fff;z-index:999;box-shadow:0 2px 10px rgba(0,0,0,0.2);display:flex;justify-content:space-between;align-items:center;padding:0 15px;}.logo{font-size:20px;font-weight:bold;color:#fff;display:flex;align-items:center;}.logo .layui-icon{margin-right:8px;font-size:22px;}.nav-menu{display:flex;list-style:none;margin:0;padding:0;}.nav-menu li{position:relative;}.nav-menu li a{color:#fff;padding:0 15px;height:60px;line-height:60px;display:block;text-decoration:none;transition:all 0.3s;font-size:14px;}.nav-menu li a:hover{background-color:rgba(255,255,255,0.1);}.nav-menu li a .layui-icon{margin-right:5px;font-size:16px;}.user-info{position:relative;cursor:pointer;padding:0 10px;height:60px;display:flex;align-items:center;}.user-info:hover{background-color:rgba(255,255,255,0.1);}.user-avatar{width:36px;height:36px;border-radius:50%;margin-right:8px;border:2px solid #009688;object-fit:cover;}.user-name{margin-right:5px;max-width:80px;overflow:hidden;text-overflow:ellipsis;white-space:nowrap;font-size:14px;}.mobile-menu-btn{display:none;font-size:20px;cursor:pointer;padding:0 10px;}.mobile-menu{position:fixed;top:60px;left:0;width:100%;background-color:#393D49;z-index:998;display:none;box-shadow:0 2px 5px rgba(0,0,0,0.2);}.mobile-menu ul{list-style:none;padding:0;margin:0;}.mobile-menu ul li{border-bottom:1px solid rgba(255,255,255,0.1);}.mobile-menu ul li a{display:block;padding:12px 20px;color:#fff;text-decoration:none;font-size:14px;}.mobile-menu ul li a .layui-icon{margin-right:10px;}.main-content{padding:15px;min-height:2000px;}@media (max-width:768px){.nav-menu{display:none;}.mobile-menu-btn{display:block;}.user-name{display:none;}.logo span{display:none;}}@media (min-width:769px){.mobile-menu{display:none !important;}}
+    </style>
+
+ {/literal} 
+<!-- 固定Header -->
+<header class="fixed-header">
+    <!-- Logo --><a href="{url route='mindex/index'}">
+    <div class="logo">
+        <i class="layui-icon layui-icon-app"></i>
+        <span>管理系统</span>
+    </div>
+    </a>
+    <!-- PC端导航菜单 -->
+    <ul class="nav-menu">
+        <li><a href="#"><i class="layui-icon layui-icon-home"></i>首页</a></li>
+        <li><a href="#"><i class="layui-icon layui-icon-app"></i>应用</a></li>
+        <li><a href="#"><i class="layui-icon layui-icon-chart"></i>数据</a></li>
+        <li><a href="#"><i class="layui-icon layui-icon-set"></i>设置</a></li>
+    </ul>
+    
+    <!-- 右侧区域 -->
+    <div style="display: flex; align-items: center;">
+        <!-- 消息通知（PC端） -->
+        <div class="layui-inline" style="margin-right: 10px; display: none;" id="pc-notice">
+            <a href="#" class="layui-icon layui-icon-notice" style="color: #fff; font-size: 20px;"></a>
+        </div>
+        <!-- 用户信息 -->
+            {if $visitor.userid}
+                <div class="user-info" id="userInfo">
+                    <img src="{$visitor.portrait|url_format}" class="user-avatar">
+                    <span class="user-name">{$visitor.username}</span>
+                    <i class="layui-icon layui-icon-down" style="font-size: 12px;"></i>
+                </div>
+             {else}
+                 <div class="user-info">
+                    <img src="https://randomuser.me/api/portraits/men/32.jpg" class="user-avatar">
+                    <a class="red" href="{url route='user/login'}"><span class="user-name">登录/注册</span></a>
+                    <i class="layui-icon layui-icon-down" style="font-size: 12px;"></i>
+                 </div>
+             {/if}
+        <!-- 移动端菜单按钮 -->
+        <div class="mobile-menu-btn" id="mobileMenuBtn">
+            <i class="layui-icon layui-icon-more-vertical"></i>
+        </div>
+    </div>
+</header>
+
+<!-- 移动端菜单 -->
+<div class="mobile-menu" id="mobileMenu">
+    <ul>
+        <li><a href="#"><i class="layui-icon layui-icon-home"></i>首页</a></li>
+        <li><a href="#"><i class="layui-icon layui-icon-app"></i>应用</a></li>
+        <li><a href="#"><i class="layui-icon layui-icon-chart"></i>数据</a></li>
+        <li><a href="#"><i class="layui-icon layui-icon-set"></i>设置</a></li>
+        <li><a href="#"><i class="layui-icon layui-icon-notice"></i>消息通知</a></li>
+        <li><a href="#"><i class="layui-icon layui-icon-user"></i>个人中心</a></li>
+        <li><a href="#"><i class="layui-icon layui-icon-logout"></i>退出登录</a></li>
+    </ul>
 </div>
+
+
+    <!-- 引入Layui JS -->
+
+
+     {literal}
+    <script>
+
+        
+        layui.use(['jquery', 'dropdown'], function(){
+            var $ = layui.jquery;
+            var dropdown = layui.dropdown;
+            
+            // 初始化下拉菜单
+            dropdown.render({
+                elem: '#userInfo',
+                data: [
+                    {title: '个人中心', icon: 'layui-icon-user',href:_user.accIdx},
+                    {title: '购物车', icon: 'layui-icon-set',href:_user.accCart},
+                    {title: '账户设置', icon: 'layui-icon-set',href:_user.accSet},
+                    {title: '修改密码', icon: 'layui-icon-password',href:_user.accPass},
+                    {title: '退出登录', icon: 'layui-icon-logout',href:_user.accOut}
+                ],
+                id: 'user-dropdown',
+                style: 'min-width: 120px;',
+                position: 'bottom',
+                click: function(obj){
+                    console.log(obj);
+                    // 这里可以处理菜单项点击事件
+                }
+            });
+            
+            // 移动端菜单切换
+            $('#mobileMenuBtn').on('click', function(e){
+                e.stopPropagation();
+                $('#mobileMenu').toggle();
+            });
+            
+            // 点击页面其他区域关闭移动菜单
+            $(document).on('click', function(){
+                $('#mobileMenu').hide();
+            });
+            
+            // 根据屏幕宽度显示/隐藏PC端通知图标
+            function adjustLayout() {
+                if ($(window).width() > 768) {
+                    $('#pc-notice').show();
+                } else {
+                    $('#pc-notice').hide();
+                }
+            }
+            
+            // 初始调整
+            adjustLayout();
+            
+            // 窗口大小改变时调整
+            $(window).on('resize', adjustLayout);
+        });
+    </script>
+     {/literal}

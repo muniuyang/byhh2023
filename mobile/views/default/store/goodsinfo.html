@@ -1,8 +1,8 @@
 <div class="w-shop mb20 clearfix">
-	<div class="zoom-pics">
-		<div class="big_pic mb10 mt20 mr20 ml20" style="min-width: 300px;"> <a class="javascript:;"> <img
+	<div class="zoom-pics" style="background: #eee;width:100%;">
+		<div class="big_pic mb10 mt10 mr10 ml10" style="min-width: 300px;border:0;"> <a class="javascript:;"> <img
 					src="/{$goods.goodsImage.0.thumbnail|default:$app->params['default_goods_image']}"
-					width="100%" height="420" id="main_img" class="main_img" /> </a> </div>
+					width="100%" style="border-radius:8px;" height="420" id="main_img" class="main_img" /> </a> </div>
 		 
 		<script>
 			$(function() {
@@ -26,11 +26,10 @@
 			</div>
 		</div>
 	</div>
-	<div class="ml20 goods-attr float-left " style="min-width:300px;
-	">
+	<div class="  goods-attr float-left " style="width:100%;">
 		<div class="goods-name fs16">
 			{$goods.goods_name|escape}
-			<p class="fs12 red mb20 mt5"><!--{foreach from=$goods.tags item=tag}-->{$tag}&nbsp;<!--{/foreach}--></p>
+			<p class="fs12 red mb10 mt5"><!--{foreach from=$goods.tags item=tag}-->{$tag}&nbsp;<!--{/foreach}--></p>
 		</div>
 		<div class="attribute clearfix">
 			<div class="attr-detail float-left">

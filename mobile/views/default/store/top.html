@@ -21,6 +21,7 @@
 <link type="text/css" href="{res file='css/header.css'}" rel="stylesheet" />
 <link type="text/css" href="{res file='css/main.css'}" rel="stylesheet" />
 <link type="text/css" href="{res file='css/footer.css'}" rel="stylesheet" />
+<link type="text/css" href="{lib file='layui/css/layui.css' }" rel="stylesheet" />
 <link type="text/css" href="{res file='css/shop.css'}" rel="stylesheet" />
 
 <script type="text/javascript">
@@ -41,18 +42,4 @@ var MOBILE_CLIENT = true;
 <!--<editmode></editmode>-->
 </head>
 <body id="page-layout-{$app->controller->id|default:'default'}-{$app->controller->action->id|default:'index'}">
-	<div id="site-nav" class="w-full">
-   <div class="shoptop w clearfix">
-      <div class="login_info clearfix">
-         <span class="ml10" >您好, </span>
-         {if $visitor.userid}
-         <!-- <img class="float-left" src="{$visitor.portrait|url_format}" width="24" height="24" /> -->
-         <a class="blue" href="{url route='user/index'}">{$visitor.username}</a>
-         <a class="ml5" href="{url route='user/logout'}">{$lang.logout}</a>
-         {else}
-         <a class="red" href="{url route='user/login'}">请登录</a>
-         {/if}
-      </div>
-       
-   </div>
-</div>
+ 

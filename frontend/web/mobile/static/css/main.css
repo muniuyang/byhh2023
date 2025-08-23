@@ -924,12 +924,12 @@
 
 .clothing .cl-content .con-left {
     height: 100%;
-    width: 475px;
+   
     float: left;
 }
 
 .clothing .con-left .con-left-slide {
-    width: 232px;
+   
     height: 100%;
     float: left;
     position: relative;
@@ -937,7 +937,7 @@
 
 .clothing .con-left .con-left-slide img {
     height: 570px;
-    width: 232px;
+    
 }
 
 .clothing .con-left .hd {
@@ -1173,15 +1173,14 @@
 /* 下面这个代码的框架是和clothing一样的 只是在大框新增了一个名称来重新定义样式  有某个部分不同*/
 
 .electrical .con-left .con-left-slide {
-    width: 474px;
+  
     height: 280px;
     position: relative;
     float: left;
 }
 
 .electrical .con-left .con-left-slide img {
-    width: 474px;
-    height: 280px;
+     height: 280px;
 }
 
 .electrical .cl-title {
@@ -1223,13 +1222,13 @@
 
 .electrical .con-left .con-adv a {
     display: block;
-    width: 232px;
+     
     height: 280px;
     float: left;
 }
 
 .electrical .con-left .con-adv img {
-    width: 232px;
+     
     height: 280px;
 }
 
@@ -1805,7 +1804,7 @@
 
 #page-search-goods .col-main {
     float: left;
-    width: 990px;
+  
 }
 
 #page-search-goods .col-sub a {}
@@ -3892,7 +3891,7 @@
 
 .page-auth .col-sub {
     float: right;
-    width: 400px;
+     width: 100%; 
     color: #666;
 }
 
@@ -3900,9 +3899,9 @@
     text-align: left;
     padding: 5px;
     font-size: 18px;
-    padding-left: 40px;
+    padding-left: 22px;
     margin: 0 0 15px 0;
-    width: 330px;
+     
     font-family: 'yahei'
 }
 
@@ -3910,17 +3909,20 @@
     font-size: 14px;
     color: #E4393C;
     padding-left: 20px;
+    margin-right: 28px;
     float: right;
 }
 
 .page-auth .form .content {
-    width: 400px
+    width: 100%
 }
 
 .page-auth .form dl {
-    width: 100%;
-    /*height:55px;*/
-    margin-bottom: 20px
+    
+     
+    margin-bottom:20px;
+    margin-left:20px;
+    margin-right: 20px;
 }
 
 .page-auth .form dt,
@@ -3954,7 +3956,7 @@
     line-height: 16px;
     overflow: hidden;
     padding: 10px 28px 10px 5px;
-    width: 300px;
+    width: 100%
     background: none;
 }
 
@@ -4117,7 +4119,7 @@
 }
 
 #page-login .form dd {
-    margin-left: 35px;
+   
 }
 
 #page-login .find-password {
@@ -4255,10 +4257,14 @@
     line-height: 30px;
     font-size: 14px;
 }
+#page-article .content img {
+     width:100%;
+     height: 400px;
+}
 
 #page-article .col-sub {
     float: left;
-    width: 231px;
+   width:100%;
 }
 
 #page-article .col-sub .title {
@@ -4325,7 +4331,7 @@
 
 #page-article .col-main {
     float: right;
-    width: 959px;
+    width: 100%;
 }
 
 #page-article .col-main .title {

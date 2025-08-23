@@ -46,10 +46,10 @@ class DefaultController extends \common\controllers\BaseMallController
     public function actionIndex()
     {
 		$this->params['index'] = true;
-					
-		//return $this->redirect(['/byhh/index']);
-		$this->params['page'] = Page::seo();
-		$this->params['redirect'] = Url::toRoute(['byhh/index', 'order_id' => 1]);
+					$this->params['page'] = Page::seo();
+		
+		return $this->redirect(['/mindex/index']);
+		//$this->params['redirect'] = Url::toRoute(['byhh/index', 'order_id' => 1]);
 
         return $this->render('../index.html', $this->params);
     }
